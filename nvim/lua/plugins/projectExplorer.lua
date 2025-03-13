@@ -25,7 +25,7 @@ return {
 		require("project_explorer").setup(opts)
 	end,
 	keys = {
-		{ "<leader>fp", "<cmd>ProjectExplorer<cr>", desc = "Project Explorer" },
+		{ "<leader>p", "<cmd>ProjectExplorer<cr>", desc = "Project Explorer" },
 	},
 	lazy = false,
 }
