@@ -40,6 +40,11 @@ function DiaryModeRun()
 	DiaryWindows.marginLeft = vim.api.nvim_open_win(EmptyBuffer, false, { split = "left" })
 	DiaryWindows.marginRight = vim.api.nvim_open_win(EmptyBuffer, false, { split = "right" })
 
+	vim.api.nvim_win_set_option(DiaryWindows.marginLeft, "number", false)
+	vim.api.nvim_win_set_option(DiaryWindows.marginLeft, "relativenumber", false)
+	vim.api.nvim_win_set_option(DiaryWindows.marginRight, "number", false)
+	vim.api.nvim_win_set_option(DiaryWindows.marginRight, "relativenumber", false)
+
 	RunRunning = false
 end
 
