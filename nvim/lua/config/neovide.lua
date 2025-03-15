@@ -1,1 +1,1 @@
-vim.o.guifont = "Cousine Nerd Font Mono:h10" -- text below applies for VimScript
+vim.o.guifont = "Cousine Nerd Font Mono:h8" -- text below applies for VimScript

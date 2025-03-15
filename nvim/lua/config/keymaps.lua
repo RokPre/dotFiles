@@ -31,7 +31,7 @@ keymap("v", ">", ">gv", opts) -- indent right
 keymap("v", "<", "<gv", opts) -- indent left
 
 -- Undo/redo
-keymap(modes, "<S-u>", "<C-r>", opts)
+keymap(noimodes, "<S-u>", "<C-r>", opts)
 
 -- Save C-s
 keymap("i", "<C-s>", "<Esc>:w<CR>", opts)
@@ -139,13 +139,14 @@ keymap("v", "<leader>[", "<Esc>`<i[<Esc>`>la]<Esc>", opts)
 keymap("v", "<leader>{", "<Esc>`<i{<Esc>`>la}<Esc>", opts)
 keymap("v", '<leader>"', '<Esc>`<i"<Esc>`>la"<Esc>', opts)
 keymap("v", "<leader>'", "<Esc>`<i'<Esc>`>la'<Esc>", opts)
+keymap("v", "<leader>`", "<Esc>`<i`<Esc>`>la`<Esc>", opts)
 
 -- Checkboxes
 keymap("n", "<C-c>", ":lua require('toggle-checkbox').toggle()<CR>", opts)
 keymap("i", "<C-c>", "<Esc>:lua require('toggle-checkbox').toggle()<CR>i", opts)
 
 -- Obsidian
-keymap("n", "<C-d>", ":ObsidianToday<CR>", opts)
+keymap("n", "<C-d>", ":DiaryModeToggle", opts)
 
 keymap("i", "<A-BS>", "<C-W>", opts)
 keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it up.

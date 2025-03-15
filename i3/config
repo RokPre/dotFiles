@@ -29,8 +29,8 @@ exec_always --no-startup-id feh --bg-fill /home/lasim/sync/rice/wallpapers/mount
 bindsym Mod1+space exec --no-startup-id rofi -show run
 
 # Launch kitty
-bindsym $mod+t exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim -- -c "terminal"
-bindsym $mod+Ctrl+t exec /home/lasim/.local/kitty.app/bin/kitty
+bindsym $mod+t exec /home/lasim/.local/kitty.app/bin/kitty
+bindsym $mod+Ctrl+t exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim -- -c "terminal"
 
 # Launch vivaldi
 bindsym $mod+i exec vivaldi
@@ -40,9 +40,10 @@ bindsym $mod+o exec obsidian
 
 # Launch neovide
 bindsym $mod+n exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim
+bindsym $mod+Ctrl+n exec /home/lasim/.local/kitty.app/bin/kitty /opt/nvim-linux-x86_64/bin/nvim
 
 # Launch daily note in neovide
-bindsym $mod+d exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim -- -c "ObsidianToday"
+bindsym $mod+d exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim -- -c "DiaryModeToggle"
 
 # File explorer
 # bindsym $mod+e exec nautilus
