@@ -129,10 +129,23 @@ function FocusModeUpdate()
 			end
 		end
 
+		-- Window reordering
+		if vim.api.nvim_win_is_valid(Windows.marginRight) then
+			if vim.api.nvim_win_get_position(Windows.marginRight)[2] ~= margin + current_win_width then
+				vim.api.nvim_set_current_win(Windows.marginRight)
+				vim.cmd("wincmd L")
+			end
+		end
+		if vim.api.nvim_win_is_valid(Windows.marginLeft) then
+			if vim.api.nvim_win_get_position(Windows.marginLeft)[2] ~= 0 then
+				vim.api.nvim_set_current_win(Windows.marginLeft)
+				vim.cmd("wincmd H")
+			end
+		end
+		-- Always set active window to the current window
 		if vim.api.nvim_win_is_valid(Windows.current_win) then
 			vim.api.nvim_set_current_win(Windows.current_win)
 		end
-		-- TODO: Reorder |marginLeft|CurrentWindow|marginRight|
 	end
 
 	-- Finishing touches
