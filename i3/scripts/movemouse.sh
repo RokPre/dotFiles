@@ -8,7 +8,7 @@ target_x=$((X + WIDTH / 2))
 target_y=$((Y + HEIGHT / 2))
 
 # Log the target position
-echo "Moved mouse to $target_x $target_y" >> ~/.config/i3/scripts/mousemove.log
+# echo "Moved mouse to $target_x $target_y" >> ~/.config/i3/scripts/mousemove.log
 
 # Get current mouse position
 eval $(xdotool getmouselocation --shell)

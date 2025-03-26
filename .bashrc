@@ -115,6 +115,8 @@ if ! shopt -oq posix; then
 	fi
 fi
 
+source ~/sync/dotFiles/nnn/nnn.sh
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
@@ -133,3 +135,4 @@ source ~/.bash_alias
 export ROS_MASTER_URI=http://192.168.50.63:11311
 export ROS_HOSTNAME=192.168.50.63
 export TURTLEBOT3_MODEL=waffle_pi
+

@@ -1,7 +1,7 @@
 return {
 	{ import = "plugins.bufferLine" },
 	{ import = "plugins.ccc" },
-	{ import = "plugins.clean" },
+	-- { import = "plugins.clean" },
 	{ import = "plugins.cmp" },
 	{ import = "plugins.colorizer" },
 	{ import = "plugins.conform" },

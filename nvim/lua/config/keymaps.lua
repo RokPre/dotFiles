@@ -63,8 +63,10 @@ keymap("v", "p", '"0P', opts) -- Visual mode
 -- Paste from clipboard for neovide
 keymap("n", "<C-S-v>", '"+p', opts)
 
--- Buffer close
+-- Buffer buffer
 keymap("n", "<C-W>", "<Cmd>bd!<Cr>", opts)
+keymap("n", "<C-A-h>", "<Cmd>bprev<Cr>", opts)
+keymap("n", "<C-A-l>", "<Cmd>bnext<Cr>", opts)
 -- keymap("n", "<C-W>", "<Nop>", { noremap = true, silent = true })
 
 -- Windows
@@ -146,7 +148,7 @@ keymap("n", "<C-c>", ":lua require('toggle-checkbox').toggle()<CR>", opts)
 keymap("i", "<C-c>", "<Esc>:lua require('toggle-checkbox').toggle()<CR>i", opts)
 
 -- Obsidian
-keymap("n", "<C-d>", ":DiaryModeToggle", opts)
+keymap("n", "<C-d>", ":DiaryModeToggle<CR>", opts)
 
 keymap("i", "<A-BS>", "<C-W>", opts)
 keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it up.

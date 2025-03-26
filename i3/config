@@ -24,7 +24,7 @@ font pango:Cousine Nerd Font Mono 16
 # font, it doesn’t scale on retina/hidpi displays.
 
 # Set background
-exec_always --no-startup-id feh --bg-fill /home/lasim/sync/rice/wallpapers/mountainVeryHD.jpg
+exec_always --no-startup-id feh --bg-fill /home/lasim/sync/rice/wallpapers/plants.jpg
 
 bindsym Mod1+space exec --no-startup-id rofi -show run
 
@@ -34,6 +34,7 @@ bindsym $mod+Ctrl+t exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/
 
 # Launch vivaldi
 bindsym $mod+i exec vivaldi
+# TODO: Add gnome keyring daemon
 
 # Launch obsidian
 bindsym $mod+o exec obsidian
@@ -136,8 +137,7 @@ bindsym $mod+Ctrl+j resize grow height 10 px or 10 ppt
 bindsym $mod+Ctrl+k resize shrink height 10 px or 10 ppt
 bindsym $mod+Ctrl+l resize grow width 10 px or 10 ppt
 
-bindsym $mod+Delete exec i3lock -c 222436
-
+bindsym $mod+Delete exec i3lock -c 3d361d
 
 # back to normal: Enter or Escape
 # bindsym Return mode "default"
@@ -157,6 +157,13 @@ for_window [class="^.*"] border pixel 0
 exec --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1
 exec --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1
 
+# Volumen control
+bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%-
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+
+
 # Second display
-# exec --no-startup-id xrandr --output HDMI-1 --auto --above eDP-1
-exec --no-startup-id xrandr --output HDMI-1 --auto --left-of eDP-1
+exec --no-startup-id sh -c "xrandr --output HDMI-1 --above eDP-1"
+
+# Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
+exec --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1

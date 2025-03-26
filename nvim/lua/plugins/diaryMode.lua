@@ -1,3 +1,10 @@
+-- This plugin open your daily notes. Today and yesterdays notes. Then there are margin on the left and right.
+-- It requires the Obsidian plugin to work.
+-- The user should be able to navigate between the notes of their obsiidan vault. So opening new buffers is allowed.
+-- TODO: Prevent the user from oepning new windows
+-- TODO: Prevent the user from closing the windows
+-- TODO: Prevent the user from moving the windows
+
 local vim = vim
 vim.g.DiaryMode = false
 vim.g.Margin = false
@@ -13,6 +20,7 @@ function DiaryModeRun()
 	-- Save the session_file for later
 	vim.cmd("mksession! " .. session_file)
 
+	vim.cmd("cd /home/lasim/sync/vault/Dnevnik")
 	-- Close all buffers
 	local bufs = vim.api.nvim_list_bufs()
 	for _, buf in ipairs(bufs) do
@@ -86,9 +94,7 @@ local function updateMarginWin(margin)
 end
 
 function DiaryModeUpdate()
-	print("DiaryModeUpdate")
 	if RunRunning or UpdateRunning then
-		print("Its not my time to shine yet")
 		return
 	end
 
@@ -104,7 +110,6 @@ function DiaryModeUpdate()
 
 		-- Open yesterday
 		if not vim.api.nvim_win_is_valid(DiaryWindows.yesterday) then
-			print("Creating window for yesterday")
 			DiaryWindows.yesterday =
 				vim.api.nvim_open_win(DiaryBuffers.Yesterday, false, { split = "left", width = 80 })
 			vim.api.nvim_win_set_option(DiaryWindows.yesterday, "wrap", true)
