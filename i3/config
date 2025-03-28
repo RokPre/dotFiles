@@ -163,7 +163,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+
 
 # Second display
-exec --no-startup-id sh -c "xrandr --output HDMI-1 --above eDP-1"
+exec --no-startup-id sh -c "xrandr --output HDMI-1 --left-of eDP-1"
+# exec --no-startup-id sh -c "xrandr --output HDMI-1 --above eDP-1"
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
 exec --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1

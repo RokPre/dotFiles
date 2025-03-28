@@ -29,3 +29,4 @@ This code could be used for more general purposes. Lets say i am editing a markd
 - [ ] Nvim oil: "t" open path in terminal
 - [ ] Nvim: Window movement. Move window by one. Right now its move window all the way to the right, left, up or down.
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)
+- [ ] Nvim: w3m terminal browser plugin
