@@ -19,7 +19,7 @@ This code could be used for more general purposes. Lets say i am editing a markd
 - [ ] Nvim: Render markdown pdf [link](https://www.reddit.com/r/neovim/s/PR1J883bu4)
 - [ ] Nvim: Image viewer in nvim
 - [ ] Nvim: Equation view in nivim [link](https://www.reddit.com/r/neovim/s/PR1J883bu4)
-- [ ] Nvim: Fix paste in in terminal and insert mode
+- [x] Nvim: Fix paste in in terminal and insert mode
 - [ ] Nvim: Toggle checkboxes error not writable buffer
 - [ ] Nvim: macros keyboard shortcut
 - [ ] Nvim: New tab Ctrl+t open homepage

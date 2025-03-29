@@ -4,6 +4,7 @@ require("config.keymaps")
 require("config.other")
 require("config.commands")
 require("config.autoCMD")
+require("config.markdown")
 
 -- My "plugins"
 require("plugins.diaryMode")

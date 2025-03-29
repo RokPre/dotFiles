@@ -62,11 +62,11 @@ keymap("v", "p", '"0P', opts) -- Visual mode
 
 -- Paste from clipboard for neovide
 keymap("n", "<C-S-v>", '"+p', opts)
+keymap("i", "<C-S-v>", '<Cmd>normal!"+pa<CR>', opts)
+keymap("t", "<C-S-v>", '<C-\\><C-N>"+pa', opts)
 
 -- Buffer buffer
 keymap("n", "<C-W>", "<Cmd>bd!<Cr>", opts)
-keymap("n", "<C-A-h>", "<Cmd>bprev<Cr>", opts)
-keymap("n", "<C-A-l>", "<Cmd>bnext<Cr>", opts)
 vim.keymap.del("n", "<C-W><C-d>", opts)
 vim.keymap.del("n", "<C-W>d", opts)
 -- keymap("n", "<C-W>", "<Nop>", { noremap = true, silent = true })
