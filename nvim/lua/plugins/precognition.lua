@@ -6,8 +6,8 @@ return {
 		showBlankVirtLine = true,
 		highlightColor = { link = "Comment" },
 		hints = {
-			Caret = { text = "gh", prio = 2 },
-			Dollar = { text = "gl", prio = 1 },
+			Caret = { text = "^", prio = 2 },
+			Dollar = { text = "$", prio = 1 },
 			MatchingPair = { text = "%", prio = 5 },
 			Zero = { text = "0", prio = 1 },
 			w = { text = "w", prio = 10 },

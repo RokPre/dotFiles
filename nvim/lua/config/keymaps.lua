@@ -5,28 +5,62 @@ local noimodes = { "n", "v", "o" }
 
 local wk = require("which-key")
 
--- Navigation
-keymap(noimodes, "gh", "^", opts)
-keymap(noimodes, "gl", "$", opts)
 wk.add({
 	{ "gh", desc = "Beginning of line", mode = noimodes },
 	{ "gl", desc = "End of line", mode = noimodes },
 	{ "<Leader><Leader>", desc = "Find files", mode = noimodes },
+	{ "<Leader>g", desc = "Git files", mode = noimodes },
+	{ "<Leader>b", desc = "List buffers", mode = noimodes },
 })
 
+-- Navigation
+keymap(noimodes, "gh", "^", opts)
+keymap(noimodes, "gl", "$", opts)
+
+-- Folder and file navigation
+local builtin = require("telescope.builtin")
+local function safe_git_files()
+	local current_dir = vim.fn.getcwd()
+	local buffer_dir = vim.fn.expand("%:p:h")
+	local git_dir = vim.fn.finddir(".git", buffer_dir .. ";")
+	git_dir = git_dir:sub(0, -5)
+
+	if git_dir == "" then -- Empty string means no .git directory found
+		print("Showing dir files for: " .. buffer_dir)
+		vim.cmd("cd " .. buffer_dir)
+		builtin.find_files()
+		vim.cmd("cd " .. current_dir)
+	else
+		print("Showing git files for: " .. git_dir)
+		vim.cmd("cd " .. git_dir)
+		builtin.git_files()
+		vim.cmd("cd " .. current_dir)
+	end
+end
 keymap(noimodes, "<Leader><Leader>", ":Telescope find_files<CR>", opts)
+keymap(noimodes, "<Leader>g", safe_git_files, opts)
+keymap(noimodes, "<Leader>b", builtin.buffers, opts)
+keymap(noimodes, "<Leader>cwd", function()
+	vim.cmd("cd " .. vim.fn.expand("%:p:h"))
+	print("CWD: " .. vim.fn.expand("%:p:h"))
+end, { silent = false })
+
+if pcall(require, "oil") then
+	keymap("n", "<Leader>e", "<Cmd>Oil<CR>", opts)
+else
+	keymap("n", "<Leader>e", "<Cmd>e .<CR>", opts)
+end
 
 -- Scroll
 -- Vertical scroll is handled by neoscroll plugin
 keymap(modes, "<A-s>", "5z<Left>", opts)
 keymap(modes, "<A-g>", "5z<Right>", opts)
 
--- Move text
+-- Move highlighted text between lines
 keymap("n", "<C-j>", ":m .+1<CR>==", opts) -- move line up(n)
 keymap("n", "<C-k>", ":m .-2<CR>==", opts) -- move line down(n)
 keymap("v", "<C-j>", ":m '>+1<CR>gv=gv", opts) -- move line up(v)
 keymap("v", "<C-k>", ":m '<-2<CR>gv=gv", opts) -- move line down(v)
-
 keymap("v", ">", ">gv", opts) -- indent right
 keymap("v", "<", "<gv", opts) -- indent left
 
@@ -34,7 +68,8 @@ keymap("v", "<", "<gv", opts) -- indent left
 keymap(noimodes, "<S-u>", "<C-r>", opts)
 
 -- Save C-s
-keymap("i", "<C-s>", "<Esc>:w<CR>", opts)
+keymap("i", "<C-s>", "<Esc><Cmd>w<CR>", opts)
+keymap("n", "<C-s>", "<Cmd>w<CR>", opts)
 
 -- Search
 keymap("n", "<C-f>", "*", opts)
@@ -44,10 +79,13 @@ keymap("v", "<C-f>", '"zy/<C-R>z<CR>', opts)
 keymap("n", "<C-u>", "~", opts)
 keymap("v", "<C-u>", "~", opts)
 
--- Chera highlight
+-- Search highlight hide
 keymap("n", "<Esc>", ":noh<CR>", { noremap = false, silent = true })
 
--- Disable default behavior of 'd' to not copy to clipboard
+-- Disable default behavior of 'd' to not copy to system clipboard
+-- Yank to system clipboard and "0.
+-- Cuts to "0.
+-- Pastes from "0.
 keymap("n", "d", '"0d', opts) -- Normal mode
 keymap("v", "d", '"0d', opts) -- Visual mode
 keymap("n", "D", '"0D', opts) -- Normal mode
@@ -60,16 +98,15 @@ keymap("v", "p", '"0p', opts) -- Visual mode
 keymap("n", "P", '"0P', opts) -- Normal mode
 keymap("v", "p", '"0P', opts) -- Visual mode
 
--- Paste from clipboard for neovide
+-- Paste from system clipboard
 keymap("n", "<C-S-v>", '"+p', opts)
 keymap("i", "<C-S-v>", '<Cmd>normal!"+pa<CR>', opts)
 keymap("t", "<C-S-v>", '<C-\\><C-N>"+pa', opts)
 
--- Buffer buffer
+-- Close buffer
 keymap("n", "<C-W>", "<Cmd>bd!<Cr>", opts)
 vim.keymap.del("n", "<C-W><C-d>", opts)
 vim.keymap.del("n", "<C-W>d", opts)
--- keymap("n", "<C-W>", "<Nop>", { noremap = true, silent = true })
 
 -- Windows
 -- Navigate between windows
@@ -107,78 +144,33 @@ keymap("n", "<A-C-m>", ":wincmd o<CR>", opts)
 keymap("n", "<A-n>", "(", opts)
 keymap("n", "<A-m>", ")", opts)
 
--- Marks
-keymap("n", "m", "`", opts)
-keymap("v", "m", "`", opts)
-
-keymap("n", "<C-m>", "m", opts)
-
-keymap("n", "<Leader>m", ":Telescope marks<CR>", opts)
-keymap("n", "<Leader>t", ":TodoTelescope<CR>", opts)
-
-local function delete_mark_on_current_line()
-	local current_line = vim.fn.line(".")
-	local marks = "abcdefghijklmnopqrstuvwxyz123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789" -- Local marks to check
-	local change = false
-
-	for mark in marks:gmatch(".") do
-		local pos = vim.fn.getpos("'" .. mark) -- Get the position of the mark
-		if pos[2] == current_line then -- Check if the mark is on the current line
-			vim.cmd("delmarks " .. mark)
-			change = true
-		end
-	end
-	if change then
-		vim.cmd("redraw!")
-	else
-		vim.notify("No marks found on current line")
-	end
-end
-
-keymap("n", "dm", delete_mark_on_current_line, opts)
-
 -- Parentheses
 keymap("v", "<leader>(", "<Esc>`<i(<Esc>`>la)<Esc>", opts)
+keymap("v", "<leader>)", "<Esc>`<i(<Esc>`>la)<Esc>", opts)
 keymap("v", "<leader>[", "<Esc>`<i[<Esc>`>la]<Esc>", opts)
+keymap("v", "<leader>]", "<Esc>`<i[<Esc>`>la]<Esc>", opts)
 keymap("v", "<leader>{", "<Esc>`<i{<Esc>`>la}<Esc>", opts)
+keymap("v", "<leader>}", "<Esc>`<i{<Esc>`>la}<Esc>", opts)
 keymap("v", '<leader>"', '<Esc>`<i"<Esc>`>la"<Esc>', opts)
 keymap("v", "<leader>'", "<Esc>`<i'<Esc>`>la'<Esc>", opts)
 keymap("v", "<leader>`", "<Esc>`<i`<Esc>`>la`<Esc>", opts)
 
--- Checkboxes
-keymap("n", "<C-c>", ":lua require('toggle-checkbox').toggle()<CR>", opts)
-keymap("i", "<C-c>", "<Esc>:lua require('toggle-checkbox').toggle()<CR>i", opts)
-
--- Obsidian
-keymap("n", "<C-d>", ":DiaryModeToggle<CR>", opts)
-
 keymap("i", "<A-BS>", "<C-W>", opts)
 keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it up.
 
-function openOrSwitchTerm()
-	-- Check if a terminal is already open in any window
-	for _, win in ipairs(vim.api.nvim_list_wins()) do
-		local buf = vim.api.nvim_win_get_buf(win)
-		if vim.bo[buf].buftype == "terminal" then
-			vim.api.nvim_set_current_win(win) -- Switch to terminal window
-			-- print("Terminal already open in another window")
-			return
-		end
-	end
-	-- Check if a terminal buffer exists
-	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if vim.bo[buf].buftype == "terminal" then
-			vim.cmd("buffer " .. buf) -- Switch to existing terminal buffer
-			-- print("Terminal already open in another buffer")
-			return
-		end
-	end
-	vim.cmd("terminal")
-end
-
--- Correct way to set the keymap
-keymap("n", "<A-t>", ":lua openOrSwitchTerm()<CR>", opts)
-keymap("t", "<A-t>", "<C-\\><C-n>", opts)
-keymap("t", "<Esc>", "<C-\\><C-n>", opts)
-
 keymap("n", "<C-p>", ":CccPick<CR>", opts)
+
+-- Folding folding folds
+vim.api.nvim_set_keymap("n", "h", "", {
+	noremap = true,
+	callback = function()
+		local col = vim.api.nvim_win_get_cursor(0)[2]
+		local line = vim.fn.getline(".")
+		local first_non_blank = #vim.fn.matchstr(line, "^\\s*")
+		if col <= first_non_blank then
+			vim.cmd("normal! zc ")
+		else
+			vim.api.nvim_feedkeys("h", "n", false)
+		end
+	end,
+})

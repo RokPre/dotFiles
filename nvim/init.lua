@@ -1,15 +1,19 @@
+-- Plugins
 require("config.lazy")
-require("config.theme")
+require("config.pluginlist")
+
 require("config.keymaps")
-require("config.other")
-require("config.commands")
-require("config.autoCMD")
+require("config.lazy")
 require("config.markdown")
+require("config.neovide")
+require("config.other")
+require("config.terminal")
+require("config.theme")
 
 -- My "plugins"
-require("plugins.diaryMode")
-require("plugins.focusMode")
-require("plugins.history")
+require("myPlugins.diaryMode")
+require("myPlugins.focusMode")
+require("myPlugins.reopenBuffer")
 
 if vim.g.neovide then
 	require("config.neovide")

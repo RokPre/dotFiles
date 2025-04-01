@@ -31,12 +31,23 @@ function FocusModeRun()
 
 	-- Calculates the width for the margin windows
 	local total_width = vim.o.columns
-	local current_win_width = vim.g.focusModeSize or 80
-	local margin = math.floor((total_width - current_win_width) / 2)
+
+	local current_win_width = 80
+	if vim.g.focusModeSize ~= nil then
+		current_win_width = vim.g.focusModeSize
+	end
+	-- For line numbers
+	local padding = 0
+	if vim.g.focusModePadding ~= nil then
+		padding = vim.g.focusModePadding
+	end
+	current_win_width = current_win_width + padding
+	local marginLeft = math.floor((total_width - current_win_width) / 2)
+	local marginRight = math.ceil((total_width - current_win_width) / 2)
 
 	if total_width > current_win_width then
-		Windows.marginLeft = Open_margin(margin, "left")
-		Windows.marginRight = Open_margin(margin, "right")
+		Windows.marginLeft = Open_margin(marginLeft, "left")
+		Windows.marginRight = Open_margin(marginRight, "right")
 	else
 		Windows.marginLeft = nil
 		Windows.marginRight = nil
@@ -71,8 +82,18 @@ function FocusModeUpdate()
 	Flags.update = true
 
 	local total_width = vim.o.columns
-	local current_win_width = vim.g.focusModeSize or 80
-	local margin = math.floor((total_width - current_win_width) / 2)
+	local current_win_width = 80
+	if vim.g.focusModeSize ~= nil then
+		current_win_width = vim.g.focusModeSize
+	end
+	-- For line numbers
+	local padding = 0
+	if vim.g.focusModePadding ~= nil then
+		padding = vim.g.focusModePadding
+	end
+	current_win_width = current_win_width + padding
+	local marginLeft = math.floor((total_width - current_win_width) / 2)
+	local marginRight = math.ceil((total_width - current_win_width) / 2)
 
 	local win_list = {}
 
@@ -106,10 +127,12 @@ function FocusModeUpdate()
 		vim.schedule(function()
 			if #win_list > 1 then
 				if not vim.api.nvim_win_is_valid(win_list[2]) then
-					Windows.marginLeft = Open_margin(margin, "left")
+					print("maring Left: ", marginLeft)
+					Windows.marginLeft = Open_margin(marginLeft, "left")
 				end
 				if not vim.api.nvim_win_is_valid(win_list[3]) then
-					Windows.marginRight = Open_margin(margin, "right")
+					print("maring Right: ", marginRight)
+					Windows.marginRight = Open_margin(marginRight, "right")
 				end
 			end
 
@@ -122,16 +145,24 @@ function FocusModeUpdate()
 		end)
 	end
 
+	print("More than one window: ", #win_list > 1)
+	print("not scheduledRunning: ", not Flags.scheduledRunning)
+	print(#win_list > 1 and not Flags.scheduledRunning)
 	if #win_list > 1 and not Flags.scheduledRunning then
-		for _, win in ipairs(win_list) do
-			if win ~= Windows.current_win then
-				vim.api.nvim_win_set_width(win, margin)
-			end
+		print("Test")
+		-- Window resizing
+		if vim.api.nvim_win_is_valid(win_list[2]) then
+			print("maring Left: ", marginLeft)
+			vim.api.nvim_win_set_width(win_list[2], marginLeft)
+		end
+		if vim.api.nvim_win_is_valid(win_list[3]) then
+			print("maring Right: ", marginRight)
+			vim.api.nvim_win_set_width(win_list[3], marginRight)
 		end
 
 		-- Window reordering
 		if vim.api.nvim_win_is_valid(Windows.marginRight) then
-			if vim.api.nvim_win_get_position(Windows.marginRight)[2] ~= margin + current_win_width then
+			if vim.api.nvim_win_get_position(Windows.marginRight)[2] ~= marginLeft + current_win_width then
 				vim.api.nvim_set_current_win(Windows.marginRight)
 				vim.cmd("wincmd L")
 			end
@@ -179,6 +210,13 @@ end, {})
 
 vim.api.nvim_create_user_command("FocusModeSize", function(opts)
 	vim.g.focusModeSize = tonumber(opts.args) or 80
+	if vim.g.focusMode then
+		FocusModeUpdate()
+	end
+end, { nargs = 1 })
+
+vim.api.nvim_create_user_command("FocusModePadding", function(opts)
+	vim.g.focusModePadding = tonumber(opts.args) or 2
 	if vim.g.focusMode then
 		FocusModeUpdate()
 	end
