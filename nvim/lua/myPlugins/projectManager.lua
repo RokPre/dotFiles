@@ -1,6 +1,7 @@
+-- TODO: Load into session of selected project
 local home_dir = os.getenv("HOME")
-if not _G.git_repos_ignore_list then
-	_G.git_repos_ignore_list = {}
+if not _G.project_manager_ignore_list then
+	_G.project_manager_ignore_list = {}
 end
 
 local list_file = vim.fn.stdpath("config") .. "/.project_manager_ignore_list.lua"
@@ -8,9 +9,9 @@ local list_file = vim.fn.stdpath("config") .. "/.project_manager_ignore_list.lua
 -- Load ignore list from file if it exists
 local ok, ignore_list_from_file = pcall(dofile, list_file)
 if ok and type(ignore_list_from_file) == "table" then
-	_G.git_repos_ignore_list = ignore_list_from_file
+	_G.project_manager_ignore_list = ignore_list_from_file
 else
-	_G.git_repos_ignore_list = {}
+	_G.project_manager_ignore_list = {}
 end
 
 -- Helper function to update the ignore list file with the current table
@@ -18,7 +19,7 @@ local function update_ignore_file()
 	local f = io.open(list_file, "w")
 	if f then
 		-- Write the table so that it can be loaded as a Lua module if needed
-		f:write("return " .. vim.inspect(_G.git_repos_ignore_list))
+		f:write("return " .. vim.inspect(_G.project_manager_ignore_list))
 		f:close()
 	else
 		print("Error opening file: " .. list_file)
@@ -46,7 +47,7 @@ local function find_git_repos()
 
 	local repo_dirs = {}
 	for _, git_dir in ipairs(git_repos) do
-		if not contains(_G.git_repos_ignore_list, git_dir) then
+		if not contains(_G.project_manager_ignore_list, git_dir) then
 			table.insert(repo_dirs, git_dir)
 		end
 	end
@@ -88,13 +89,13 @@ local function add_to_ignore_list()
 		print("Not in a git repository")
 		return
 	end
-	for _, ignored_repo in ipairs(_G.git_repos_ignore_list) do
+	for _, ignored_repo in ipairs(_G.project_manager_ignore_list) do
 		if ignored_repo == git_root then
 			print("Repository already in ignore list: " .. git_root)
 			return
 		end
 	end
-	table.insert(_G.git_repos_ignore_list, git_root)
+	table.insert(_G.project_manager_ignore_list, git_root)
 	print("Added repository to ignore list: " .. git_root .. "\n")
 	update_ignore_file()
 end
@@ -106,9 +107,9 @@ local function remove_from_ignore_list()
 		return
 	end
 	local found = false
-	for i, ignored_repo in ipairs(_G.git_repos_ignore_list) do
+	for i, ignored_repo in ipairs(_G.project_manager_ignore_list) do
 		if ignored_repo == git_root then
-			table.remove(_G.git_repos_ignore_list, i)
+			table.remove(_G.project_manager_ignore_list, i)
 			found = true
 			break
 		end

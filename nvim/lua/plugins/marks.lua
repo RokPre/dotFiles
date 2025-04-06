@@ -26,7 +26,6 @@ keymap("v", "m", "`", opts)
 keymap("n", "<C-m>", "m", opts)
 keymap("n", "dm", delete_mark_on_current_line, opts)
 keymap("n", "<Leader>m", ":Telescope marks<CR>", opts)
-keymap("n", "<Leader>t", ":TodoTelescope<CR>", opts)
 
 return {
 	"chentoast/marks.nvim",

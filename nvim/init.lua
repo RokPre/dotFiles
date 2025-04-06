@@ -15,6 +15,7 @@ require("myPlugins.diaryMode")
 require("myPlugins.focusMode")
 require("myPlugins.reopenBuffer")
 require("myPlugins.projectManager")
+require("myPlugins.todoList")
 
 if vim.g.neovide then
 	require("config.neovide")

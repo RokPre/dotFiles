@@ -1,3 +1,4 @@
+--TODO: Check if which-key is available.
 local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
 local modes = { "n", "i", "v", "t", "o" }
@@ -18,6 +19,16 @@ wk.add({
 	{ "<Leader>pr", desc = "Remove from ignore", mode = noimodes },
 	{ "<Leader>pv", desc = "View ignore list", mode = noimodes },
 	{ "<Leader>cwd", desc = "Set cwd", mode = noimodes },
+	{ "<Leader>t", desc = "Todo list", mode = noimodes },
+	{ "<Leader>tt", desc = "Current buffer", mode = noimodes },
+	{ "<Leader>tb", desc = "Open buffers", mode = noimodes },
+	{ "<Leader>tc", desc = "Cwd", mode = noimodes },
+	{ "<Leader>tg", desc = "Current git repositorie", mode = noimodes },
+	{ "<Leader>th", desc = "Home directory", mode = noimodes },
+	{ "<Leader>ts", desc = "System files", mode = noimodes },
+	{ "<Leader>ti", desc = "Add to ignore list", mode = noimodes },
+	{ "<Leader>tr", desc = "Remove from ignore list", mode = noimodes },
+	{ "<Leader>tv", desc = "View ignore list", mode = noimodes },
 })
 
 -- Navigation

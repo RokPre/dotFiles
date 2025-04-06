@@ -29,7 +29,7 @@ return {
 	{ import = "plugins.telescope" }, -- Fuzzy finder
 	{ import = "plugins.theme" }, -- Theme
 	{ import = "plugins.treeSitter" }, -- Code parser
-	{ import = "plugins.todoComments" }, -- Todo comments
+	-- { import = "plugins.todoComments" }, -- Todo comments
 	{ import = "plugins.toggleCheckboxes" }, -- Checkboxes
 	{ import = "plugins.ufo" }, -- Code folding
 	{ import = "plugins.undoTree" }, -- Better undos
