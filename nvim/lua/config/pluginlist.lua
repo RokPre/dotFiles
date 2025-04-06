@@ -23,7 +23,6 @@ return {
 	{ import = "plugins.rainbowDelimiters" },
 	{ import = "plugins.remote" }, -- ssh remote
 	{ import = "plugins.renderMarkdown" },
-	{ import = "plugins.projectExplorer" }, -- Project explorer
 	{ import = "plugins.snacks" }, -- Many small plugins
 	{ import = "plugins.superMaven" }, -- AI code completion
 	{ import = "plugins.tabOut" }, -- Use tab for navigation
@@ -39,5 +38,6 @@ return {
 	{ import = "plugins.w3m" }, -- Web browser
 	{ import = "plugins.webDevIcons" }, -- Web icons
 	{ import = "plugins.whichKey" }, -- Keymaps menu
+	{ import = "plugins.winShift" }, -- Keymaps menu
 	{ import = "plugins.zen" }, -- Zen mode
 }

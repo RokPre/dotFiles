@@ -9,8 +9,15 @@ wk.add({
 	{ "gh", desc = "Beginning of line", mode = noimodes },
 	{ "gl", desc = "End of line", mode = noimodes },
 	{ "<Leader><Leader>", desc = "Find files", mode = noimodes },
+	{ "<Leader>u", desc = "Undo tree", mode = noimodes },
 	{ "<Leader>g", desc = "Git files", mode = noimodes },
 	{ "<Leader>b", desc = "List buffers", mode = noimodes },
+	{ "<Leader>p", desc = "Project manager", mode = noimodes },
+	{ "<Leader>pp", desc = "View projects", mode = noimodes },
+	{ "<Leader>pi", desc = "Add to ignore", mode = noimodes },
+	{ "<Leader>pr", desc = "Remove from ignore", mode = noimodes },
+	{ "<Leader>pv", desc = "View ignore list", mode = noimodes },
+	{ "<Leader>cwd", desc = "Set cwd", mode = noimodes },
 })
 
 -- Navigation
@@ -128,10 +135,17 @@ keymap("n", "<A-b>", ":wincmd s<CR>", opts)
 keymap("n", "<A-w>", ":close<CR>", opts)
 
 -- Move windows around
-keymap("n", "<A-S-h>", ":wincmd H<CR>", opts)
-keymap("n", "<A-S-j>", ":wincmd J<CR>", opts)
-keymap("n", "<A-S-k>", ":wincmd K<CR>", opts)
-keymap("n", "<A-S-l>", ":wincmd L<CR>", opts)
+if pcall(require, "winshift") then
+	keymap("n", "<A-S-h>", "<Cmd>WinShift left<CR>", opts)
+	keymap("n", "<A-S-j>", "<Cmd>WinShift down<CR>", opts)
+	keymap("n", "<A-S-k>", "<Cmd>WinShift up<CR>", opts)
+	keymap("n", "<A-S-l>", "<Cmd>WinShift right<CR>", opts)
+else
+	keymap("n", "<A-S-h>", "<Cmd>wincmd H<CR>", opts)
+	keymap("n", "<A-S-j>", "<Cmd>wincmd J<CR>", opts)
+	keymap("n", "<A-S-k>", "<Cmd>wincmd K<CR>", opts)
+	keymap("n", "<A-S-l>", "<Cmd>wincmd L<CR>", opts)
+end
 
 -- Resize windows
 keymap("n", "<A-C-j>", ":wincmd +<CR>", opts)
@@ -174,3 +188,8 @@ vim.api.nvim_set_keymap("n", "h", "", {
 		end
 	end,
 })
+
+-- dashboard
+vim.keymap.set("n", "<leader>d", function()
+	require("snacks.dashboard").open()
+end, { desc = "Open Snacks Dashboard" })

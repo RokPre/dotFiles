@@ -127,11 +127,11 @@ function FocusModeUpdate()
 		vim.schedule(function()
 			if #win_list > 1 then
 				if not vim.api.nvim_win_is_valid(win_list[2]) then
-					print("maring Left: ", marginLeft)
+					-- print("maring Left: ", marginLeft)
 					Windows.marginLeft = Open_margin(marginLeft, "left")
 				end
 				if not vim.api.nvim_win_is_valid(win_list[3]) then
-					print("maring Right: ", marginRight)
+					-- print("maring Right: ", marginRight)
 					Windows.marginRight = Open_margin(marginRight, "right")
 				end
 			end
@@ -145,18 +145,18 @@ function FocusModeUpdate()
 		end)
 	end
 
-	print("More than one window: ", #win_list > 1)
-	print("not scheduledRunning: ", not Flags.scheduledRunning)
-	print(#win_list > 1 and not Flags.scheduledRunning)
+	-- print("More than one window: ", #win_list > 1)
+	-- print("not scheduledRunning: ", not Flags.scheduledRunning)
+	-- print(#win_list > 1 and not Flags.scheduledRunning)
 	if #win_list > 1 and not Flags.scheduledRunning then
-		print("Test")
+		-- print("Test")
 		-- Window resizing
 		if vim.api.nvim_win_is_valid(win_list[2]) then
-			print("maring Left: ", marginLeft)
+			-- print("maring Left: ", marginLeft)
 			vim.api.nvim_win_set_width(win_list[2], marginLeft)
 		end
 		if vim.api.nvim_win_is_valid(win_list[3]) then
-			print("maring Right: ", marginRight)
+			-- print("maring Right: ", marginRight)
 			vim.api.nvim_win_set_width(win_list[3], marginRight)
 		end
 

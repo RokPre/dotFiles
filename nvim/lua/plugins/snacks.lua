@@ -27,7 +27,7 @@ return {
           { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
           { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
           { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-          { icon = " ", key = "p", desc = "Project Explorer", action = "<cmd>ProjectExplorer<cr>" },
+          { icon = " ", key = "p", desc = "Project Explorer", action = "<cmd>ProjectManagerFindGitRepos<cr>" },
           { icon = " ", key = "d", desc = "Daily note", action = "<cmd>ObsidianToday<cr>" },
           { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
           { icon = " ", key = "s", desc = "Restore Session", section = "session" },

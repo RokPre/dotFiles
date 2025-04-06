@@ -8,6 +8,10 @@ File explorer: [oil.nvim](https://github.com/stevearc/oil.nvim)
 Note taking: [obsidian](https://obsidian.md)
 
 # Log
+## 2025-04-04 16:00
+Made my own simple project explorer. Removed the plugin project manager.
+Added winshift plugin, for better window movement.
+
 ## 2025-03-30 13:00
 Made some changes, moved some files around. Fixed checkboxes in terminal mode
 Improved the markdown file with auto cmd for checkboxes and line wrap and line break.
@@ -26,15 +30,16 @@ This code could be used for more general purposes. Lets say i am editing a markd
 - [ ] I3: Add borders to programs6
 - [ ] Make custom color sheme
 - [ ] Nvim: Render markdown pdf [link](https://www.reddit.com/r/neovim/s/PR1J883bu4)
-- [ ] Nvim: Equation view in nivim [link](https://www.reddit.com/r/neovim/s/PR1J883bu4)
-- [ ] Nvim: Toggle checkboxes error not writable buffer
 - [ ] Nvim: New tab Ctrl+t open homepage
 - [ ] Nvim obsidian: Fix keyboard shortcuts
-- [ ] Nvim: Implement to no-neck-pain like plugin myself for md files
-- [ ] Nvim: Window movement. Move window by one. Right now its move window all the way to the right, left, up or down.
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)
-- [ ] Nvim: When entering a buffer set the current working directory to the git directory of that file, if not in get repo, set it to parent directory.
-- [ ] Nvim: Reopen last closed buffer
+- [ ] Nvim: Debuging [link](https://youtu.be/fvRwG17XsaA)
+- [ ] Nvim: Custom snippets [link](https://youtu.be/Y3XWijJgdJs)
+Nvim: Snippets for python and such. (eg: print("x", x))
+- [x] Nvim: Window movement. Move window by one. Right now its move window all the way to the right, left, up or down. Winshift.nvim
+- [x] Nvim: Toggle checkboxes error not writable buffer
+- [x] Nvim: Implement to no-neck-pain like plugin myself for md files.
+- [x] Nvim: Reopen last closed buffer
 - [x] Nvim: w3m terminal browser plugin
 - [x] Nvim: Ctrl+w close buffer remove delay
 - [x] Nvim: Image viewer in nvim (done with snacks.image)
