@@ -2,6 +2,7 @@
 -- TODO: If there are no todos, do not display the ui.
 -- TODO: Sort the todos by the date of the last eidt date of the file, that the todo is in.
 -- TODO: make the cahce location stdpath("cache")
+-- TODO: Fix ignore list
 local ignore_list_file_path = vim.fn.stdpath("config") .. "/.todoList.lua"
 local ignore_list_cache = vim.fn.stdpath("cache") .. "/.todoList.lua"
 

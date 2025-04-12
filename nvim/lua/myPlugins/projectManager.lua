@@ -1,9 +1,4 @@
 -- SessionManager .config/nvim/lua/myPlugins/projectManager.lua
--- TODO: Add caching for faster load times.
--- TODO: Add function to update project list cache.
--- TODO: Update project list on launch, option to enable and dissable.
--- TODO: Make code prettier and more conssistent.
--- TODO: Add ignore patter to ignore list. For example, if git repo is any folder that contains .bak, ignore it.
 local home_dir = os.getenv("HOME")
 local ignore_list_file = vim.fn.stdpath("config") .. "/.project_manager_ignore_list.lua"
 local ignore_pattern_file = vim.fn.stdpath("config") .. "/.project_manager_ignore_pattern.lua"
@@ -14,29 +9,34 @@ local sessionManager = require("myPlugins.sessionManager")
 -- Load data from files --
 --------------------------
 
--- Load cache from file if it exists
-local ok_cache, cache_from_file = pcall(dofile, cache)
-if ok_cache and type(cache_from_file) == "table" then
-	_G.project_manager_cache = cache_from_file
-else
-	_G.project_manager_cache = {}
+local function load_cache()
+	-- Load cache from file if it exists
+	local ok_cache, cache_from_file = pcall(dofile, cache)
+	if ok_cache and type(cache_from_file) == "table" then
+		_G.project_manager_cache = cache_from_file
+	else
+		_G.project_manager_cache = {}
+	end
 end
 
--- Load ignore pattern from file if it exists
-local ok_pattern, ignore_pattern_from_file = pcall(dofile, ignore_pattern_file)
-if ok_pattern and type(ignore_pattern_from_file) == "table" then
-	_G.project_manger_ignore_pattern = ignore_pattern_from_file
-else
-	_G.project_manger_ignore_pattern = {}
+local function load_ignore_pattern()
+	-- Load ignore pattern from file if it exists
+	local ok_pattern, ignore_pattern_from_file = pcall(dofile, ignore_pattern_file)
+	if ok_pattern and type(ignore_pattern_from_file) == "table" then
+		_G.project_manager_ignore_pattern = ignore_pattern_from_file
+	else
+		_G.project_manager_ignore_pattern = {}
+	end
 end
-vim.print(_G.project_manger_ignore_pattern)
 
--- Load ignore list from file if it exists
-local ok, ignore_list_from_file = pcall(dofile, ignore_list_file)
-if ok and type(ignore_list_from_file) == "table" then
-	_G.project_manager_ignore_list = ignore_list_from_file
-else
-	_G.project_manager_ignore_list = {}
+local function load_ignore_list()
+	-- Load ignore list from file if it exists
+	local ok, ignore_list_from_file = pcall(dofile, ignore_list_file)
+	if ok and type(ignore_list_from_file) == "table" then
+		_G.project_manager_ignore_list = ignore_list_from_file
+	else
+		_G.project_manager_ignore_list = {}
+	end
 end
 
 -- Helper function to check if a value is in a table
@@ -49,13 +49,29 @@ local function contains(tbl, val)
 	return false
 end
 
+local function contains_ignore_pattern(val, ignore_patterns)
+	for _, pattern in ipairs(ignore_patterns) do
+		if val:find(pattern) then
+			return true
+		end
+	end
+	return false
+end
+
+local function get_project_name(path)
+	-- Modify the the options that the ui shows.
+	return vim.fn.fnamemodify(path, ":t")
+	-- return path:gsub(home_dir, "~")
+end
+
 local function show_projects()
 	-- Shows the projects that are stored in the cache
 	local repo_dirs = _G.project_manager_cache
 	vim.ui.select(repo_dirs, {
 		prompt = "Select a Git repository to open:",
 		format_item = function(item)
-			return item:gsub(home_dir, "~")
+			-- return item:gsub(home_dir, "~")
+			return get_project_name(item)
 		end,
 	}, function(selected)
 		if not selected then
@@ -82,7 +98,7 @@ local function update_cache()
 	for _, git_dir in ipairs(git_repos) do
 		if
 			not contains(_G.project_manager_ignore_list, git_dir)
-			and not contains(_G.project_manger_ignore_pattern, git_dir)
+			and not contains_ignore_pattern(git_dir, _G.project_manager_ignore_pattern)
 		then
 			table.insert(repo_dirs, git_dir)
 		end
@@ -109,7 +125,7 @@ end
 ---------------------------
 
 -- Helper function to update the ignore list file with the current table
-local function update_ignore_file()
+local function update_ignore_list()
 	local f = io.open(ignore_list_file, "w")
 	if f then
 		f:write("return {\n")
@@ -121,6 +137,7 @@ local function update_ignore_file()
 	else
 		print("Error opening file: " .. ignore_list_file)
 	end
+	update_cache()
 end
 
 local function add_to_ignore_list()
@@ -137,7 +154,7 @@ local function add_to_ignore_list()
 	end
 	table.insert(_G.project_manager_ignore_list, git_root)
 	print("Added repository to ignore list: " .. git_root .. "\n")
-	update_ignore_file()
+	update_ignore_list()
 end
 
 local function remove_from_ignore_list()
@@ -156,7 +173,7 @@ local function remove_from_ignore_list()
 	end
 	if found then
 		print("Removed repository from ignore list: " .. git_root)
-		update_ignore_file()
+		update_ignore_list()
 	else
 		print("Repository not found in ignore list: " .. git_root)
 	end
@@ -197,6 +214,34 @@ local function view_ignore_list()
 		style = "minimal",
 		border = "rounded",
 	})
+
+	vim.api.nvim_create_augroup("ViewIgnoreList", { clear = true })
+	vim.api.nvim_create_autocmd("BufWinLeave", {
+		group = "ViewIgnoreList",
+		callback = function()
+			update_ignore_list()
+			vim.api.nvim_del_augroup_by_name("ViewIgnoreList")
+		end,
+	})
+end
+
+local function update_ignore_pattern()
+	-- Works more like format, not update. When you write to the file `.project_manager_ignore_pattern.lua`, is when you update it.
+	-- I could make it so that when you write to the file, it load the table form the file back into the
+	-- _G.project_manager_ignore_pattern variable.
+	load_ignore_pattern()
+	local f = io.open(ignore_pattern_file, "w")
+	if f then
+		f:write("return {\n")
+		for _, item in ipairs(_G.project_manager_ignore_pattern) do
+			f:write("  " .. string.format("%q", item) .. ",\n")
+		end
+		f:write("}\n")
+		f:close()
+	else
+		print("Error opening file: " .. ignore_list_file)
+	end
+	update_cache()
 end
 
 local function view_ignore_pattenrs()
@@ -234,7 +279,21 @@ local function view_ignore_pattenrs()
 		style = "minimal",
 		border = "rounded",
 	})
+
+	vim.api.nvim_create_augroup("ViewIgnorePatterns", { clear = true })
+	vim.api.nvim_create_autocmd("BufWinLeave", {
+		group = "ViewIgnorePatterns",
+		callback = function()
+			update_ignore_pattern()
+			vim.api.nvim_del_augroup_by_name("ViewIgnorePatterns")
+		end,
+	})
 end
+
+load_cache()
+load_ignore_pattern()
+load_ignore_list()
+update_cache()
 
 vim.api.nvim_create_user_command("ProjectManagerShowProjects", show_projects, {})
 vim.api.nvim_create_user_command("ProjectManagerUpdateList", update_cache, {})
