@@ -7,8 +7,10 @@ return {
 	"/home/lasim/sync/keyboard/keyboardsNotMine/crkbd",
 	"/home/lasim/sync/keyboard/keyboardsNotMine/even44",
 	"/home/lasim/sync/keyboard/keyboardsNotMine/lily58",
+	"/home/lasim/sync/FS/pametnaTovarna_2025_04_11_13.47.bak/TB3",
+	"/home/lasim/sync/FS/pametnaTovarna_2025_04_11_13.47.bak/TB3/qr_park",
+	"/home/lasim/sync/FS/pametnaTovarna_2025_04_11_13.47.bak/TB3/codeFromTB3/qr_park_tb",
+	"/home/lasim/sync/FS/pametnaTovarna_2025_04_11_13.47.bak/_2025-04-11_13-45-17.bak/TB3",
+	"/home/lasim/sync/FS/pametnaTovarna_2025_04_11_13.47.bak/_2025-04-11_13-45-17.bak/TB3/qr_park",
+	"/home/lasim/sync/FS/pametnaTovarna_2025_04_11_13.47.bak/_2025-04-11_13-45-17.bak/TB3/codeFromTB3/qr_park_tb",
 }
-
-
-
-

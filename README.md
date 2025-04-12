@@ -8,6 +8,10 @@ File explorer: [oil.nvim](https://github.com/stevearc/oil.nvim)
 Note taking: [obsidian](https://obsidian.md)
 
 # Log
+## 2025-07-04 20:00
+I have made new plugin for nvim. Session manager. It saves sessions automatically and you can resotre them very simply. You can also list all of them. Also made the change, that if you open a project with the projectMangaer.lua it will load the session.
+
+Removed the persistence plugin by folke, because i made my own.
 ## 2025-04-04 16:00
 Made my own simple project explorer. Removed the plugin project manager.
 Added winshift plugin, for better window movement.
@@ -35,7 +39,11 @@ This code could be used for more general purposes. Lets say i am editing a markd
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)
 - [ ] Nvim: Debuging [link](https://youtu.be/fvRwG17XsaA)
 - [ ] Nvim: Custom snippets [link](https://youtu.be/Y3XWijJgdJs)
-Nvim: Snippets for python and such. (eg: print("x", x))
+- [ ] Nvim: Snippets for python and such. (eg: print("x", x))
+- [ ] Nvim: Added description to all keybindings, do need to reuqire("which-key") to show them.
+- [ ] Nvim: Simple snippet for inserting date, time or date and time.
+- [ ] Nvim: Text objects inside function.
+- [ ] https://www.reddit.com/r/neovim/s/DLL5FFQ7hr
 - [x] Nvim: Window movement. Move window by one. Right now its move window all the way to the right, left, up or down. Winshift.nvim
 - [x] Nvim: Toggle checkboxes error not writable buffer
 - [x] Nvim: Implement to no-neck-pain like plugin myself for md files.

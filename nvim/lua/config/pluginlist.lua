@@ -19,7 +19,7 @@ return {
 	{ import = "plugins.noice" },
 	{ import = "plugins.obsidian" }, -- Obsidian.md support
 	{ import = "plugins.oil" }, -- File explorer
-	{ import = "plugins.persistence" },
+	-- { import = "plugins.persistence" },
 	{ import = "plugins.rainbowDelimiters" },
 	{ import = "plugins.remote" }, -- ssh remote
 	{ import = "plugins.renderMarkdown" },

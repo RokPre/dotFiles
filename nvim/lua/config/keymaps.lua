@@ -13,11 +13,11 @@ wk.add({
 	{ "<Leader>u", desc = "Undo tree", mode = noimodes },
 	{ "<Leader>g", desc = "Git files", mode = noimodes },
 	{ "<Leader>b", desc = "List buffers", mode = noimodes },
-	{ "<Leader>p", desc = "Project manager", mode = noimodes },
-	{ "<Leader>pp", desc = "View projects", mode = noimodes },
-	{ "<Leader>pi", desc = "Add to ignore", mode = noimodes },
-	{ "<Leader>pr", desc = "Remove from ignore", mode = noimodes },
-	{ "<Leader>pv", desc = "View ignore list", mode = noimodes },
+	-- { "<Leader>p", desc = "Project manager", mode = noimodes },
+	-- { "<Leader>pp", desc = "View projects", mode = noimodes },
+	-- { "<Leader>pi", desc = "Add to ignore", mode = noimodes },
+	-- { "<Leader>pr", desc = "Remove from ignore", mode = noimodes },
+	-- { "<Leader>pv", desc = "View ignore list", mode = noimodes },
 	{ "<Leader>cwd", desc = "Set cwd", mode = noimodes },
 	{ "<Leader>t", desc = "Todo list", mode = noimodes },
 	{ "<Leader>tt", desc = "Current buffer", mode = noimodes },
@@ -29,6 +29,11 @@ wk.add({
 	{ "<Leader>ti", desc = "Add to ignore list", mode = noimodes },
 	{ "<Leader>tr", desc = "Remove from ignore list", mode = noimodes },
 	{ "<Leader>tv", desc = "View ignore list", mode = noimodes },
+	{ "<Leader>s", desc = "Session manager", mode = noimodes },
+	{ "<Leader>ss", desc = "Save session", mode = noimodes },
+	{ "<Leader>sl", desc = "Load session", mode = noimodes },
+	{ "<Leader>sa", desc = "All sessions", mode = noimodes },
+	{ "<Leader>sc", desc = "Clear sessions", mode = noimodes },
 })
 
 -- Navigation
@@ -122,9 +127,9 @@ keymap("i", "<C-S-v>", '<Cmd>normal!"+pa<CR>', opts)
 keymap("t", "<C-S-v>", '<C-\\><C-N>"+pa', opts)
 
 -- Close buffer
-keymap("n", "<C-W>", "<Cmd>bd!<Cr>", opts)
-vim.keymap.del("n", "<C-W><C-d>", opts)
-vim.keymap.del("n", "<C-W>d", opts)
+keymap("n", "<C-w>", "<Cmd>bd!<Cr>", opts)
+vim.api.nvim_del_keymap("n", "<C-W><C-d>")
+vim.api.nvim_del_keymap("n", "<C-W>d")
 
 -- Windows
 -- Navigate between windows
@@ -143,7 +148,7 @@ keymap("n", "<A-v>", ":wincmd v<CR>", opts)
 keymap("n", "<A-b>", ":wincmd s<CR>", opts)
 
 -- Close window
-keymap("n", "<A-w>", ":close<CR>", opts)
+keymap("n", "<A-w>", "<Cmd>w! | close<CR>", opts)
 
 -- Move windows around
 if pcall(require, "winshift") then
@@ -201,6 +206,15 @@ vim.api.nvim_set_keymap("n", "h", "", {
 })
 
 -- dashboard
-vim.keymap.set("n", "<leader>d", function()
+keymap("n", "<leader>d", function()
 	require("snacks.dashboard").open()
 end, { desc = "Open Snacks Dashboard" })
+
+-- Codeblocks
+keymap("n", "<A-C-c>", "<Cmd>insert``<Cr>", { remap = true })
+keymap("i", "<A-C-c>", "``", { remap = true })
+keymap("v", "<A-C-c>", "``", { remap = true })
+
+keymap("n", "<A-S-c>", "<Cmd>insert```\n```<Cr>", { remap = true })
+keymap("i", "<A-S-c>", "```\n```", { remap = true })
+keymap("v", "<A-S-c>", "```\n```", { remap = true })

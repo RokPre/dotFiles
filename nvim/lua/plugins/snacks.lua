@@ -30,7 +30,7 @@ return {
           { icon = " ", key = "p", desc = "Project Explorer", action = "<cmd>ProjectManagerFindGitRepos<cr>" },
           { icon = " ", key = "d", desc = "Daily note", action = "<cmd>ObsidianToday<cr>" },
           { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
-          { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+          { icon = " ", key = "s", desc = "Restore Session", action = "<Cmd>ListSession<cr>" },
           { icon = " ", key = "x", desc = "Lazy Extras", action = ":LazyExtras" },
           { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
           { icon = " ", key = "q", desc = "Quit", action = ":qa" },

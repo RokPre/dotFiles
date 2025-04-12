@@ -1,7 +1,7 @@
 local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
 
-function openOrSwitchTerm()
+local function openOrSwitchTerm()
 	-- Check if a terminal is already open in any window
 	for _, win in ipairs(vim.api.nvim_list_wins()) do
 		local buf = vim.api.nvim_win_get_buf(win)
@@ -23,7 +23,7 @@ function openOrSwitchTerm()
 end
 
 -- Correct way to set the keymap
-keymap("n", "<A-t>", ":lua openOrSwitchTerm()<CR>", opts)
+keymap("n", "<A-t>", openOrSwitchTerm, opts)
 keymap("t", "<A-t>", "<C-\\><C-n>", opts)
 keymap("t", "<Esc>", "<C-\\><C-n>", opts)
 
