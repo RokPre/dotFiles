@@ -290,10 +290,64 @@ local function view_ignore_pattenrs()
 	})
 end
 
-load_cache()
-load_ignore_pattern()
-load_ignore_list()
-update_cache()
+local function open_readme()
+	local current_file = vim.fn.expand("%:p")
+	local current_dir = vim.fn.fnamemodify(current_file, ":h")
+
+	local git_root_cmd = "cd " .. vim.fn.shellescape(current_dir) .. " && git rev-parse --show-toplevel 2>/dev/null"
+	local git_root = vim.fn.system(git_root_cmd):gsub("\n", "")
+
+	if git_root == "" then
+		print("Not inside a git repo.")
+		return
+	end
+
+	local find_cmd = "cd " .. vim.fn.shellescape(git_root) .. " && find . -name README.md"
+	local output = vim.fn.system(find_cmd)
+
+	-- split lines into a table
+	local files = {}
+	for line in output:gmatch("[^\r\n]+") do
+		local normalized_path = vim.fn.fnamemodify(git_root .. "/" .. line:gsub("^%./", ""), ":p")
+		table.insert(files, normalized_path)
+	end
+
+	table.sort(files, function(a, b)
+		return #a < #b
+	end)
+
+	if #files == 0 then
+		print("No README.md file found")
+	elseif #files == 1 then
+		vim.cmd("e " .. vim.fn.fnameescape(files[1]))
+	else
+		if vim.ui.select then
+			vim.ui.select(files, {
+				prompt = "Select a README.md file to open:",
+				format_item = function(item)
+					return item:gsub(git_root .. "/", "")
+				end,
+			}, function(selected)
+				if selected then
+					vim.cmd("e " .. vim.fn.fnameescape(selected))
+				elseif not selected then
+					return
+				end
+			end)
+		else
+			print("No UI support for selecting files")
+		end
+	end
+end
+
+local function init()
+	load_cache()
+	load_ignore_pattern()
+	load_ignore_list()
+	update_cache()
+end
+
+init()
 
 vim.api.nvim_create_user_command("ProjectManagerShowProjects", show_projects, {})
 vim.api.nvim_create_user_command("ProjectManagerUpdateList", update_cache, {})
@@ -301,6 +355,7 @@ vim.api.nvim_create_user_command("ProjectManagerAddToIgnoreList", add_to_ignore_
 vim.api.nvim_create_user_command("ProjectManagerRemoveFromIgnoreList", remove_from_ignore_list, {})
 vim.api.nvim_create_user_command("ProjectManagerViewIgnoreList", view_ignore_list, {})
 vim.api.nvim_create_user_command("ProjectManagerViewIgnorePatterns", view_ignore_pattenrs, {})
+vim.api.nvim_create_user_command("ProjectManagerOpenReadme", open_readme, {})
 
 local keymap = vim.keymap.set
 keymap("n", "<Leader>p", "<Nop>", { noremap = true, silent = true, desc = "Project manager" })
@@ -310,3 +365,4 @@ keymap("n", "<Leader>pi", add_to_ignore_list, { noremap = true, silent = true, d
 keymap("n", "<Leader>pr", remove_from_ignore_list, { noremap = true, silent = true, desc = "Remove from ignore list" })
 keymap("n", "<Leader>pv", view_ignore_list, { noremap = true, silent = true, desc = "View ignore list" })
 keymap("n", "<Leader>pw", view_ignore_pattenrs, { noremap = true, silent = true, desc = "View ignore pattern list" })
+keymap("n", "<Leader>pR", open_readme, { noremap = true, silent = true, desc = "View projects README" })
