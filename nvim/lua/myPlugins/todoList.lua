@@ -1,46 +1,70 @@
--- TODO: Add caching, for faster startup
--- TODO: If there are no todos, do not display the ui.
--- TODO: Sort the todos by the date of the last eidt date of the file, that the todo is in.
--- TODO: make the cahce location stdpath("cache")
--- TODO: Fix ignore list
+-- TODO: Add ignore pattern
+-- TODO: Add support for FIXME:
 local ignore_list_file_path = vim.fn.stdpath("config") .. "/.todoList.lua"
-local ignore_list_cache = vim.fn.stdpath("cache") .. "/.todoList.lua"
+local todo_list_cache = vim.fn.stdpath("cache") .. "/.todoList.lua"
 
--- Load the ignore list file
-local iok, ignore_list = pcall(dofile, ignore_list_file_path)
-if iok and type(ignore_list) == "table" then
-	_G.todo_list_ignore_list = ignore_list
-else
-	_G.todo_list_ignore_list = {}
-	print("Didnt find an ignore list file")
-end
-
--- Load the cache file
-local cok, cache = pcall(dofile, ignore_list_cache)
-if cok and type(cache) == "table" then
-	_G.todo_list_cache = cache
-else
-	_G.todo_list_cache = {}
-	print("Didn't find cache file")
-end
-
-local function contains(tbl, val)
-	for _, v in ipairs(tbl) do
-		if v == val then
-			return true
-		end
+local function load_file(file_path)
+	local data = {}
+	local ok, from_file = pcall(dofile, file_path)
+	if ok and type(from_file) == "table" then
+		data = from_file
 	end
-	return false
+	return data
+end
+
+local function write_file(file, variable)
+	local f = io.open(file, "w")
+	if f then
+		f:write("return " .. vim.inspect(variable))
+		f:close()
+	else
+		vim.print("Error opening file: " .. file)
+	end
+end
+
+_G.todo_list_ignore_list = load_file(ignore_list_file_path)
+_G.todo_list_cache = load_file(todo_list_cache)
+
+local function cache_clear()
+	vim.print("Clearing cache")
+	_G.todo_list_cache = {}
+	write_file(todo_list_cache, _G.todo_list_cache)
+end
+
+local function cache_view()
+	-- TODO: view_cache. Load the cahce file not the variable.
+	-- TODO: update the cache varibale after saving the cache file.
+	local cache_dump = vim.inspect(_G.todo_list_cache)
+	local lines = vim.split(cache_dump, "\n")
+
+	-- Create a new scratch buffer
+	local buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+	vim.api.nvim_buf_set_name(buf, "TODO Cache")
+
+	-- Set key mapping to close the window on pressing q
+	vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>bd!<CR>", { noremap = true, silent = true })
+
+	-- Calculate floating window size and position
+	local width = math.floor(vim.o.columns * 0.8)
+	local height = math.floor(vim.o.lines * 0.8)
+	local row = math.floor((vim.o.lines - height) / 2)
+	local col = math.floor((vim.o.columns - width) / 2)
+
+	-- Open the floating window
+	vim.api.nvim_open_win(buf, true, {
+		relative = "editor",
+		width = width,
+		height = height,
+		row = row,
+		col = col,
+		style = "minimal",
+		border = "rounded",
+	})
 end
 
 local function display_todos(todos)
-	-- opts.display_file_name, if true, will display the file name, or the buffer name, depending on what is availbale. (When dissplaying todos most of the time)
-	--                 if false, will display the line number of the TODO. (Used for showing todos in current buffer)
-	if #todos == 0 then
-		print("No todos found")
-		return 1
-	end
-
+	-- TODO: Input validation
 	vim.ui.select(todos, {
 		prompt = "Select a TODO to open:",
 		format_item = function(todo)
@@ -55,127 +79,128 @@ local function display_todos(todos)
 	end)
 end
 
-local function find_todos_buffers(buffers, opts)
-	-- Desc: Finds all todos in a list of buffers
-	-- Args: buffers (table): List of buffer numbers
-	-- Output: todos (table): List of todos
-	-- TODO: Input verification
-	local todos = {}
-	local ignored_todos = {}
-
-	if type(buffers) ~= "table" then
-		buffers = { buffers }
-	end
-
-	for _, bufnr in ipairs(buffers) do
-		local buffer_name = vim.api.nvim_buf_get_name(bufnr)
-		if contains(_G.todo_list_ignore_list, buffer_name) and opts.use_ignore_list then
-			table.insert(ignored_todos, buffer_name)
-			goto ignorebuffer
-		end
-
-		local line_count = vim.api.nvim_buf_line_count(bufnr)
-		for lnum = 1, line_count do
-			local lines = vim.api.nvim_buf_get_lines(bufnr, lnum - 1, lnum, false)
-			local line = lines[1]
-			if line and line:find("TODO:") then
-				table.insert(todos, {
-					name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":t"),
-					file = vim.api.nvim_buf_get_name(bufnr),
-					lnum = lnum,
-					col = line:find("TODO:"),
-					text = line,
-				})
-			end
-		end
-		::ignorebuffer::
-	end
-	if display_todos(todos) == 1 then
-		if #ignored_todos ~= 0 then
-			vim.print("Some buffers where ignored")
+local function contains(tbl, val)
+	for _, v in ipairs(tbl) do
+		if vim.fn.fnamemodify(v, ":p") == vim.fn.fnamemodify(val, ":p") then
+			return true
 		end
 	end
+	return false
 end
 
-local function find_todos_file(file)
-	vim.print(file)
+local function filter_ignore_list(files)
+	local filtered = {}
+	for _, file in ipairs(files) do
+		if not contains(_G.todo_list_ignore_list, file) then
+			table.insert(filtered, file)
+		end
+	end
+	return filtered
+end
+
+local function get_todos(files)
 	local todos = {}
-	-- Check if the file is a regular file
-	if vim.fn.getftype(file) == "file" then
-		-- print(file)
-		-- Open the file and check for TODO:
-		local lines = vim.fn.readfile(file)
-		for lnum, line in ipairs(lines) do
-			if line:find("TODO:") then
-				table.insert(todos, {
-					name = vim.fn.fnamemodify(file, ":t"), -- store the actual file path
-					file = file,
-					lnum = lnum, -- line number where TODO: appears
-					col = line:find("TODO:"), -- column where TODO: starts
-					text = line, -- the actual line with TODO:
-				})
+	local file_todos, file_cache, line_todo
+	local update_cache
+	for _, file in ipairs(files) do
+		update_cache = false
+		file_todos = {}
+		file_cache = _G.todo_list_cache[file]
+
+		if file_cache and file_cache.mtime > vim.loop.fs_stat(file).mtime.sec then
+			file_todos = file_cache.todos
+			for _, todo in ipairs(file_todos) do
+				table.insert(todos, todo)
+			end
+		elseif vim.fn.filereadable(file) == 1 then
+			local lines = vim.fn.readfile(file)
+			for lnum, line in ipairs(lines) do
+				if line:find("TODO:") then
+					line_todo = {
+						file = file,
+						name = vim.fn.fnamemodify(file, ":t"), -- store the actual file path
+						text = line,
+						lnum = lnum,
+						col = line:find("TODO:"), -- TODO: Only save the text after the todo up to 128 characters
+					}
+					table.insert(file_todos, line_todo)
+					table.insert(todos, line_todo)
+					update_cache = true
+				end
+			end
+			if update_cache then
+				_G.todo_list_cache[file] = {
+					mtime = os.time(),
+					todos = file_todos,
+				}
 			end
 		end
+	end
+	if update_cache then
+		write_file(todo_list_cache, _G.todo_list_cache)
 	end
 	return todos
 end
 
-local function find_todos_path(path)
-	local todos = {}
-	local ignored_todos = {}
-	local cmd = "find " .. vim.fn.shellescape(path) .. " -type f"
-	local files = vim.fn.systemlist(cmd)
-	for _, file in ipairs(files) do
-		if not contains(_G.todo_list_ignore_list, file) then
-			todos = vim.fn.extend(todos, find_todos_file(file))
-			table.insert(ignored_todos, file)
-		end
-	end
-	if display_todos(todos) == 1 then
-		if #ignored_todos ~= 0 then
-			vim.print("Some files where ignored")
-		end
-	end
+local function f_current_buffer()
+	local file_path = vim.api.nvim_buf_get_name(0)
+	local files = { file_path }
+	local todos = get_todos(files)
+	display_todos(todos)
 end
 
-local function find_todos_git(path)
-	-- Desc: Shows the toods for a git repository based on the path of provided
-	-- Args: path (string): Path to a file inside a git repository
-	-- Output: todos (table): List of todos
-	-- TODO: Input verification
-	local todos = {}
-	local cmd = "git -C '" .. path .. "' rev-parse --show-toplevel 2>/dev/null"
-	local in_repo = vim.fn.system(cmd)
+local function f_current_buffers()
+	local bufsnrs = vim.api.nvim_list_bufs()
+	local files = {}
+	for _, bufnr in ipairs(bufsnrs) do
+		if vim.api.nvim_buf_is_loaded(bufnr) and vim.api.nvim_buf_get_name(bufnr) ~= "" then
+			table.insert(files, vim.api.nvim_buf_get_name(bufnr))
+		end
+	end
+	local todos = get_todos(files)
+	display_todos(todos)
+end
 
+local function f_folder(path)
+	local cmd = "find " .. vim.fn.shellescape(path) .. " -type f"
+	local files = vim.fn.systemlist(cmd)
+	files = filter_ignore_list(files)
+	local todos = get_todos(files)
+	display_todos(todos)
+end
+
+local function f_git()
+	local current_file = vim.fn.expand("%:p:h")
+	local cmd = "git -C '" .. current_file .. "' rev-parse --show-toplevel 2>/dev/null"
+	local in_repo = vim.fn.system(cmd)
 	if in_repo == "" then
-		print(in_repo)
 		print("File is not in a git repository")
 		return
 	end
 
 	local git_root = vim.fn.trim(in_repo)
-	print("git_root:", git_root)
+	local git_files = {}
 
 	cmd = "git -C " .. git_root .. " ls-files"
 	local files = vim.fn.system(cmd)
 	files = vim.fn.split(files, "\n")
-
-	for _, file in ipairs(files) do
-		if not contains(_G.todo_list_ignore_list, file) then
-			todos = vim.fn.extend(todos, find_todos_file(git_root .. "/" .. file))
-		end
+	for i, file in ipairs(files) do
+		git_files[i] = git_root .. "/" .. file
 	end
+	git_files = filter_ignore_list(git_files)
+	local todos = get_todos(git_files)
 	display_todos(todos)
 end
 
------------------
--- Ignore list --
------------------
+-- Ignore list
 local function ignore_list_update()
 	local f = io.open(ignore_list_file_path, "w")
 	if f then
-		-- Write the table so that it can be loaded as a Lua module if needed
-		f:write("return " .. vim.inspect(_G.todo_list_ignore_list))
+		-- This is just so that the file is formated nicely with proper indentation.
+		f:write(
+			"return{\n\t" .. vim.inspect(_G.todo_list_ignore_list):gsub("{ ", ""):gsub(", ", ",\n\t"):gsub(" }", "\n}")
+		)
+
 		f:close()
 	else
 		print("Error opening file: " .. ignore_list_file_path)
@@ -202,40 +227,20 @@ local function ignore_list_remove()
 		end
 	end
 	if found then
-		print("Removed repository from ignore list: " .. current_buffer_path)
+		print("Removed from ignore list: " .. current_buffer_path)
 		ignore_list_update()
 	else
-		print("Repository not found in ignore list: " .. current_buffer_path)
+		print("Did not find in igonre list: " .. current_buffer_path)
 	end
 end
 
 local function ignore_list_view()
-	local f = io.open(ignore_list_file_path, "r")
-	if not f then
-		print("Error opening file: " .. ignore_list_file_path)
-		return
-	end
-
-	local content = f:read("*all")
-	f:close()
-	local lines = vim.split(content, "\n")
-
-	-- Create a new normal buffer and assign the file path
-	local buf = vim.api.nvim_create_buf(true, false)
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-	vim.api.nvim_buf_set_name(buf, ignore_list_file_path)
-
-	-- Set key mapping to close the window on pressing q
-	vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>bd!<CR>", { noremap = true, silent = true })
-
-	-- Calculate floating window size and position
 	local width = math.floor(vim.o.columns * 0.8)
 	local height = math.floor(vim.o.lines * 0.8)
 	local row = math.floor((vim.o.lines - height) / 2)
 	local col = math.floor((vim.o.columns - width) / 2)
 
-	-- Open the floating window
-	vim.api.nvim_open_win(buf, true, {
+	local win = vim.api.nvim_open_win(0, true, {
 		relative = "editor",
 		width = width,
 		height = height,
@@ -244,46 +249,41 @@ local function ignore_list_view()
 		style = "minimal",
 		border = "rounded",
 	})
+
+	vim.api.nvim_win_call(win, function()
+		vim.cmd("edit " .. vim.fn.fnameescape(ignore_list_file_path))
+	end)
+
+	local buf = vim.api.nvim_win_get_buf(win)
+
+	vim.api.nvim_create_autocmd("WinClosed", {
+		pattern = tostring(win),
+		callback = function()
+			_G.todo_list_ignore_list = load_file(ignore_list_file_path)
+		end,
+	})
+
+	vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>w|bd<CR>", { noremap = true, silent = true })
 end
-
-vim.api.nvim_create_user_command("TodoList", function()
-	find_todos_buffers(vim.api.nvim_get_current_buf(), { ignore_list = false })
-end, {})
-vim.api.nvim_create_user_command("TodoListBuffers", function()
-	find_todos_buffers(vim.api.nvim_list_bufs(), { ignore_list = true })
-end, {})
-vim.api.nvim_create_user_command("TodoListGit", function()
-	find_todos_git(vim.fn.expand("%:p:h"))
-end, {})
-vim.api.nvim_create_user_command("TodoListCWD", function()
-	find_todos_path(vim.fn.getcwd())
-end, {})
-vim.api.nvim_create_user_command("TodoListHome", function()
-	find_todos_path(vim.fn.getenv("HOME"))
-end, {})
-
-vim.api.nvim_create_user_command("TodoListAddToIgnoreList", ignore_list_add, {})
-vim.api.nvim_create_user_command("TodoListRemoveFromIgnoreList", ignore_list_remove, {})
-vim.api.nvim_create_user_command("TodoListViewIgnoreList", ignore_list_remove, {})
 
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
-keymap("n", "<Leader>tt", function()
-	find_todos_buffers(vim.api.nvim_get_current_buf(), { use_ignore_list = false })
-end, opts)
-keymap("n", "<Leader>tb", function()
-	find_todos_buffers(vim.api.nvim_list_bufs(), { use_ignore_list = true })
-end, opts)
-keymap("n", "<Leader>tg", function()
-	find_todos_git(vim.fn.expand("%:p:h"))
-end, opts)
+keymap("n", "<Leader>tt", f_current_buffer, opts)
+keymap("n", "<Leader>tb", f_current_buffers, opts)
 keymap("n", "<Leader>tc", function()
-	find_todos_path(vim.fn.getcwd())
+	local cwd = vim.fn.getcwd()
+	f_folder(cwd)
 end, opts)
-keymap("n", "<Leader>th", function()
-	find_todos_path(vim.fn.getenv("HOME"))
-end, opts)
+keymap("n", "<Leader>tg", f_git, opts)
 
 keymap("n", "<Leader>ti", ignore_list_add, opts)
 keymap("n", "<Leader>tr", ignore_list_remove, opts)
 keymap("n", "<Leader>tv", ignore_list_view, opts)
+
+keymap("n", "<Leader>tC", cache_clear, opts)
+keymap("n", "<Leader>tV", cache_view, opts)
+
+-- debug
+keymap("n", "<Leader>td", function()
+	f_folder("/home/lasim/debug/")
+end, opts)

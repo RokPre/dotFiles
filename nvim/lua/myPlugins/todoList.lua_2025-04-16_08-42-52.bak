@@ -1,0 +1,436 @@
+-- TODO: Add caching, for faster startup
+-- TODO: If there are no todos, do not display the ui.
+-- TODO: Sort the todos by the date of the last eidt date of the file, that the todo is in.
+-- TODO: make the cahce location stdpath("cache")
+-- TODO: Fix ignore list
+-- TODO: Add async cache updating. ripgrep or something else.
+-- TODO: Use the structure of the cache defined in luates.lua
+-- TODO: Add ignore pattrn
+
+local ignore_list_file_path = vim.fn.stdpath("config") .. "/.todoList.lua"
+local todo_list_cache = vim.fn.stdpath("cache") .. "/.todoList.lua"
+
+local function load_file(file_path)
+	local data = {}
+	local ok, from_file = pcall(dofile, file_path)
+	if ok and type(from_file) == "table" then
+		data = from_file
+	end
+	return data
+end
+
+_G.todo_list_ignore_list = load_file(ignore_list_file_path)
+_G.todo_list_cache = load_file(todo_list_cache)
+
+-- Write varible to file.
+local function update_file(file, variable)
+	print("fn update_file")
+	vim.print(file)
+	-- vim.print(variable)
+	local f = io.open(file, "w")
+	if f then
+		f:write("return " .. vim.inspect(variable))
+		f:close()
+	else
+		print("Error opening file: " .. file)
+	end
+end
+
+-- Helper function
+local function contains(tbl, val)
+	for _, v in ipairs(tbl) do
+		if v == val then
+			return true
+		end
+	end
+	return false
+end
+
+local function read_caches_todos(type, path)
+	local outdated = false
+	local todos = {}
+
+	-- print("fn read_caches_todos")
+	-- print("type", type)
+	-- print("path", path)
+	-- vim.print("todo_list_cache", _G.todo_list_cache)
+	-- vim.print(_G.todo_list_cache[type][path]["mtime"])
+
+	if not (_G.todo_list_cache and _G.todo_list_cache[type] and _G.todo_list_cache[type][path]) then
+		print("no cache found for this combo: ", type, path)
+		outdated = true
+		return todos, outdated -- no cache found
+	end
+
+	local data = _G.todo_list_cache[type][path]
+	todos = data.todos or {}
+
+	-- TODO: Does not work for folders. Only changes if a file was added or removed. Need to add way to chech if any file has changed in dir.
+	local stat = vim.loop.fs_stat(path)
+	print("path", path)
+	print("stat.mtime.sec")
+	print(stat.mtime.sec)
+	if not stat then
+		print("not fs_stat")
+		return todos, outdated -- path no longer exists
+	end
+
+	if data.mtime < stat.mtime.sec then
+		print("outdated")
+		outdated = true
+	end
+
+	return todos, outdated
+end
+
+local function update_cache(cache_type, path, todos)
+	print("fn update_cache")
+	print(cache_type)
+	print(path)
+	if not path or not cache_type then
+		vim.notify("update_cache: missing path or cache_type", vim.log.levels.ERROR)
+		return
+	end
+
+	_G.todo_list_cache[cache_type] = _G.todo_list_cache[cache_type] or {}
+	_G.todo_list_cache[cache_type][path] = {
+		mtime = os.time(),
+		todos = todos,
+	}
+
+	update_file(todo_list_cache, _G.todo_list_cache)
+end
+
+local function find_todos_buffers(buffers, single_buffer)
+	-- Desc: Finds all todos in a list of buffers
+	-- Args: buffers (table): List of buffer numbers
+	-- Output: todos (table): List of todos
+	-- TODO: Input verification
+	local todos = {}
+	-- local ignored_todos = {}
+
+	if single_buffer then
+		buffers = { buffers }
+	end
+
+	for _, bufnr in ipairs(buffers) do
+		local buffer_name = vim.api.nvim_buf_get_name(bufnr)
+
+		-- print("buffer_name", buffer_name)
+		if not single_buffer and contains(_G.todo_list_ignore_list, buffer_name) then
+			-- table.insert(ignored_todos, buffer_name)
+			goto ignorebuffer
+		end
+
+		local line_count = vim.api.nvim_buf_line_count(bufnr)
+		for lnum = 1, line_count do
+			local lines = vim.api.nvim_buf_get_lines(bufnr, lnum - 1, lnum, false)
+			local line = lines[1]
+			if line and line:find("TODO:") then
+				table.insert(todos, {
+					file = buffer_name,
+					name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":t"),
+					text = line,
+					lnum = lnum,
+					col = line:find("TODO:"),
+				})
+			end
+		end
+		if #todos > 0 then
+			update_cache("files", buffer_name, todos)
+		end
+		::ignorebuffer::
+	end
+	return todos
+end
+
+local function find_todos_file(file, save_to_cache)
+	local todos = {}
+	-- Check if the file is a regular file
+	if vim.fn.getftype(file) == "file" then
+		-- print(file)
+		-- Open the file and check for TODO:
+		local lines = vim.fn.readfile(file)
+		for lnum, line in ipairs(lines) do
+			if line:find("TODO:") then
+				table.insert(todos, {
+					file = file,
+					name = vim.fn.fnamemodify(file, ":t"), -- store the actual file path
+					text = line, -- the actual line with TODO:
+					lnum = lnum, -- line number where TODO: appears
+					col = line:find("TODO:"), -- column where TODO: starts
+				})
+			end
+		end
+	end
+	if save_to_cache then
+		update_cache("files", file, todos)
+	end
+	return todos
+end
+
+local function find_todos_folder(path)
+	print("fn find_todos_folder")
+	print("path: ", path)
+	local todos = {}
+	local cmd = "find " .. vim.fn.shellescape(path) .. " -type f"
+	local files = vim.fn.systemlist(cmd)
+	for _, file in ipairs(files) do
+		if not contains(_G.todo_list_ignore_list, file) then
+			todos = vim.fn.extend(todos, find_todos_file(file, false))
+		end
+	end
+	if todos ~= {} then
+		update_cache("folder", path, todos)
+	end
+	return todos
+end
+
+local function find_todos_git(path)
+	-- Desc: Shows the toods for a git repository based on the path of provided
+	-- Args: path (string): Path to a file inside a git repository
+	-- Output: todos (table): List of todos
+	-- TODO: Input verification
+	local todos = {}
+	local cmd = "git -C '" .. path .. "' rev-parse --show-toplevel 2>/dev/null"
+	local in_repo = vim.fn.system(cmd)
+
+	if in_repo == "" then
+		-- print(in_repo)
+		print("File is not in a git repository")
+		return
+	end
+
+	local git_root = vim.fn.trim(in_repo)
+	-- print("git_root:", git_root)
+
+	cmd = "git -C " .. git_root .. " ls-files"
+	local files = vim.fn.system(cmd)
+	files = vim.fn.split(files, "\n")
+
+	for _, file in ipairs(files) do
+		if not contains(_G.todo_list_ignore_list, file) then
+			todos = vim.fn.extend(todos, find_todos_file(git_root .. "/" .. file, false))
+		end
+	end
+	update_cache("git", git_root, todos)
+	return todos
+end
+
+-- Displaying
+local function display_todos(todos)
+	-- TODO: Input validation
+	vim.print("fn display_todos")
+	-- vim.print(todos)
+	vim.print(type(todos))
+	vim.print(#todos)
+	vim.ui.select(todos, {
+		prompt = "Select a TODO to open:",
+		format_item = function(todo)
+			local display_string = string.format("%s:%s", todo.name, todo.text)
+			return display_string
+		end,
+	}, function(selected)
+		if selected then
+			vim.cmd("e " .. selected.file)
+			vim.api.nvim_win_set_cursor(0, { selected.lnum, selected.col - 1 })
+		end
+	end)
+end
+
+function display_todos_buffer()
+	local file_path = vim.api.nvim_buf_get_name(0)
+	local todos, outdated = read_caches_todos("files", file_path)
+	if not outdated then
+		display_todos(todos)
+	else
+		print("This type of todo list not in cache, running search")
+		todos = find_todos_buffers(vim.api.nvim_get_current_buf(), true)
+		display_todos(todos)
+	end
+end
+
+function display_todos_buffers()
+	-- print("fn display_todos_buffers")
+	local buffers = vim.api.nvim_list_bufs()
+	local file_path, bufstodos, outdated
+	local todos = {}
+	local buffers_to_update = {}
+
+	for _, buf in ipairs(buffers) do
+		if not vim.api.nvim_buf_is_loaded(buf) then
+			goto ignorebuffer
+		end
+
+		local buffer_name = vim.api.nvim_buf_get_name(buf)
+		if buffer_name == "" then
+			goto ignorebuffer
+		end
+
+		file_path = vim.api.nvim_buf_get_name(buf)
+		-- print("file_path", file_path)
+		-- print("___")
+		bufstodos, outdated = read_caches_todos("files", file_path)
+		if outdated then
+			table.insert(buffers_to_update, buf)
+		else
+			bufstodos = bufstodos[1]
+			table.insert(todos, bufstodos)
+		end
+		::ignorebuffer::
+	end
+	bufstodos = find_todos_buffers(buffers_to_update, false)
+	if not bufstodos == {} then
+		table.insert(todos, bufstodos)
+	end
+	-- vim.print(todos)
+	display_todos(todos)
+end
+
+local function display_todos_git() end
+function display_todos_cwd()
+	local folder_path = vim.fn.getcwd()
+	print("folder_path", folder_path)
+	local todos, outdated = read_caches_todos("folder", folder_path)
+	-- vim.print(todos)
+	vim.print(outdated)
+	if not outdated then
+		display_todos(todos)
+	else
+		print("This type of todo list not in cache, running search")
+		todos = find_todos_folder(folder_path)
+		display_todos(todos)
+	end
+end
+
+function display_todos_home()
+	local folder_path = os.getenv("HOME")
+	print("folder_path", folder_path)
+	local todos, outdated = read_caches_todos("folder", folder_path)
+	if not outdated then
+		display_todos(todos)
+	else
+		print("This type of todo list not in cache, running search")
+		-- TODO: check which files are outdated and only serach those
+		todos = find_todos_folder(folder_path)
+		display_todos(todos)
+	end
+end
+
+-- Ignore list
+local function ignore_list_update()
+	local f = io.open(ignore_list_file_path, "w")
+	if f then
+		-- Write the table so that it can be loaded as a Lua module if needed
+		f:write("return " .. vim.inspect(_G.todo_list_ignore_list))
+		f:close()
+	else
+		print("Error opening file: " .. ignore_list_file_path)
+	end
+end
+
+local function ignore_list_add()
+	local current_buffer_path = vim.fn.expand("%:p")
+	if not contains(_G.todo_list_ignore_list, current_buffer_path) then
+		table.insert(_G.todo_list_ignore_list, current_buffer_path)
+		print("Added: " .. current_buffer_path)
+		ignore_list_update()
+	end
+end
+
+local function ignore_list_remove()
+	local current_buffer_path = vim.fn.expand("%:p")
+	local found = false
+	for i, ignore_file_path in ipairs(_G.todo_list_ignore_list) do
+		if ignore_file_path == current_buffer_path then
+			table.remove(_G.todo_list_ignore_list, i)
+			found = true
+			break
+		end
+	end
+	if found then
+		print("Removed repository from ignore list: " .. current_buffer_path)
+		ignore_list_update()
+	else
+		print("Repository not found in ignore list: " .. current_buffer_path)
+	end
+end
+
+local function ignore_list_view()
+	local f = io.open(ignore_list_file_path, "r")
+	if not f then
+		print("Error opening file: " .. ignore_list_file_path)
+		return
+	end
+
+	local content = f:read("*all")
+	f:close()
+	local lines = vim.split(content, "\n")
+
+	-- Create a new normal buffer and assign the file path
+	local buf = vim.api.nvim_create_buf(true, false)
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+	vim.api.nvim_buf_set_name(buf, ignore_list_file_path)
+
+	-- Set key mapping to close the window on pressing q
+	vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>bd!<CR>", { noremap = true, silent = true })
+
+	-- Calculate floating window size and position
+	local width = math.floor(vim.o.columns * 0.8)
+	local height = math.floor(vim.o.lines * 0.8)
+	local row = math.floor((vim.o.lines - height) / 2)
+	local col = math.floor((vim.o.columns - width) / 2)
+
+	-- Open the floating window
+	vim.api.nvim_open_win(buf, true, {
+		relative = "editor",
+		width = width,
+		height = height,
+		row = row,
+		col = col,
+		style = "minimal",
+		border = "rounded",
+	})
+end
+
+vim.api.nvim_create_user_command("TodoList", function()
+	find_todos_buffers(vim.api.nvim_get_current_buf(), { ignore_list = false })
+end, {})
+vim.api.nvim_create_user_command("TodoListBuffers", function()
+	find_todos_buffers(vim.api.nvim_list_bufs(), { ignore_list = true })
+end, {})
+vim.api.nvim_create_user_command("TodoListGit", function()
+	find_todos_git(vim.fn.expand("%:p:h"))
+end, {})
+vim.api.nvim_create_user_command("TodoListCWD", function()
+	find_todos_folder(vim.fn.getcwd())
+end, {})
+vim.api.nvim_create_user_command("TodoListHome", function()
+	find_todos_folder(vim.fn.getenv("HOME"))
+end, {})
+
+vim.api.nvim_create_user_command("TodoListAddToIgnoreList", ignore_list_add, {})
+vim.api.nvim_create_user_command("TodoListRemoveFromIgnoreList", ignore_list_remove, {})
+vim.api.nvim_create_user_command("TodoListViewIgnoreList", ignore_list_remove, {})
+
+local keymap = vim.keymap.set
+local opts = { noremap = true, silent = true }
+keymap("n", "<Leader>tt", function()
+	find_todos_buffers(vim.api.nvim_get_current_buf(), { use_ignore_list = false })
+end, opts)
+keymap("n", "<Leader>tb", function()
+	find_todos_buffers(vim.api.nvim_list_bufs(), { use_ignore_list = true })
+end, opts)
+keymap("n", "<Leader>tg", function()
+	find_todos_git(vim.fn.expand("%:p:h"))
+end, opts)
+keymap("n", "<Leader>tc", function()
+	find_todos_folder(vim.fn.getcwd())
+end, opts)
+keymap("n", "<Leader>th", function()
+	find_todos_folder(vim.fn.getenv("HOME"))
+end, opts)
+
+keymap("n", "<Leader>ti", ignore_list_add, opts)
+keymap("n", "<Leader>tr", ignore_list_remove, opts)
+keymap("n", "<Leader>tv", ignore_list_view, opts)

@@ -9,6 +9,7 @@ require("config.neovide")
 require("config.other")
 require("config.terminal")
 require("config.theme")
+require("config.python")
 
 -- My "plugins"
 require("myPlugins.diaryMode")
@@ -16,6 +17,7 @@ require("myPlugins.focusMode")
 require("myPlugins.reopenBuffer")
 require("myPlugins.projectManager")
 require("myPlugins.todoList")
+require("myPlugins.debug")
 SessionManager = require("myPlugins.sessionManager")
 
 if vim.g.neovide then

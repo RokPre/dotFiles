@@ -1,45 +1,22 @@
--- SessionManager .config/nvim/lua/myPlugins/projectManager.lua
+-- projectManager .config/nvim/lua/myPlugins/projectManager.lua
+-- TODO: Write the update cache to file.
 local home_dir = os.getenv("HOME")
 local ignore_list_file = vim.fn.stdpath("config") .. "/.project_manager_ignore_list.lua"
 local ignore_pattern_file = vim.fn.stdpath("config") .. "/.project_manager_ignore_pattern.lua"
 local cache = vim.fn.stdpath("data") .. "/.project_manager_cache.lua"
 local sessionManager = require("myPlugins.sessionManager")
+_G.project_manager_ignore_list = {}
+_G.project_manager_ignore_pattern = {}
 
---------------------------
--- Load data from files --
---------------------------
-
-local function load_cache()
-	-- Load cache from file if it exists
-	local ok_cache, cache_from_file = pcall(dofile, cache)
-	if ok_cache and type(cache_from_file) == "table" then
-		_G.project_manager_cache = cache_from_file
+local function load_file(file_path, Variable_name)
+	local ok, from_file = pcall(dofile, file_path)
+	if ok and type(from_file) == "table" then
+		Variable_name = from_file
 	else
-		_G.project_manager_cache = {}
+		Variable_name = {}
 	end
 end
 
-local function load_ignore_pattern()
-	-- Load ignore pattern from file if it exists
-	local ok_pattern, ignore_pattern_from_file = pcall(dofile, ignore_pattern_file)
-	if ok_pattern and type(ignore_pattern_from_file) == "table" then
-		_G.project_manager_ignore_pattern = ignore_pattern_from_file
-	else
-		_G.project_manager_ignore_pattern = {}
-	end
-end
-
-local function load_ignore_list()
-	-- Load ignore list from file if it exists
-	local ok, ignore_list_from_file = pcall(dofile, ignore_list_file)
-	if ok and type(ignore_list_from_file) == "table" then
-		_G.project_manager_ignore_list = ignore_list_from_file
-	else
-		_G.project_manager_ignore_list = {}
-	end
-end
-
--- Helper function to check if a value is in a table
 local function contains(tbl, val)
 	for _, v in ipairs(tbl) do
 		if v == val then
@@ -57,6 +34,41 @@ local function contains_ignore_pattern(val, ignore_patterns)
 	end
 	return false
 end
+
+local function update_cache()
+	local repo_dirs = {}
+	local cmd = "find " .. home_dir .. "/sync -type d -name .git -exec dirname {} \\; 2>/dev/null"
+	local git_repos = vim.fn.systemlist(cmd)
+
+	for _, git_dir in ipairs(git_repos) do
+		if
+			not contains(_G.project_manager_ignore_list, git_dir)
+			and not contains_ignore_pattern(git_dir, _G.project_manager_ignore_pattern)
+		then
+			table.insert(repo_dirs, git_dir)
+		end
+	end
+
+	_G.project_manager_cache = repo_dirs
+end
+
+local function init()
+	load_file(cache, _G.project_manager_cache)
+	load_file(ignore_pattern_file, _G.project_manager_ignore_pattern)
+	load_file(ignore_list_file, _G.project_manager_ignore_list)
+	-- load_cache()
+	-- load_ignore_pattern()
+	-- load_ignore_list()
+	update_cache()
+end
+
+init()
+
+--------------------------
+-- Load data from files --
+--------------------------
+
+-- Helper function to check if a value is in a table
 
 local function get_project_name(path)
 	-- Modify the the options that the ui shows.
@@ -87,24 +99,6 @@ local function show_projects()
 			vim.cmd("e " .. selected)
 		end
 	end)
-end
-
--- Function to find all Git repositories in home directory
-local function update_cache()
-	local repo_dirs = {}
-	local cmd = "find " .. home_dir .. "/sync -type d -name .git -exec dirname {} \\; 2>/dev/null"
-	local git_repos = vim.fn.systemlist(cmd)
-
-	for _, git_dir in ipairs(git_repos) do
-		if
-			not contains(_G.project_manager_ignore_list, git_dir)
-			and not contains_ignore_pattern(git_dir, _G.project_manager_ignore_pattern)
-		then
-			table.insert(repo_dirs, git_dir)
-		end
-	end
-
-	_G.project_manager_cache = repo_dirs
 end
 
 local function get_git_root()
@@ -229,7 +223,7 @@ local function update_ignore_pattern()
 	-- Works more like format, not update. When you write to the file `.project_manager_ignore_pattern.lua`, is when you update it.
 	-- I could make it so that when you write to the file, it load the table form the file back into the
 	-- _G.project_manager_ignore_pattern variable.
-	load_ignore_pattern()
+	load_file(ignore_pattern_file, _G.project_manager_ignore_pattern)
 	local f = io.open(ignore_pattern_file, "w")
 	if f then
 		f:write("return {\n")
@@ -339,15 +333,6 @@ local function open_readme()
 		end
 	end
 end
-
-local function init()
-	load_cache()
-	load_ignore_pattern()
-	load_ignore_list()
-	update_cache()
-end
-
-init()
 
 vim.api.nvim_create_user_command("ProjectManagerShowProjects", show_projects, {})
 vim.api.nvim_create_user_command("ProjectManagerUpdateList", update_cache, {})
