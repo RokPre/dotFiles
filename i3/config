@@ -162,6 +162,10 @@ bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%-
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+
 
+# Brightness control
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness.sh up
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness.sh down
+
 # Second display
 exec --no-startup-id /usr/bin/xrandr --auto
 exec --no-startup-id /usr/bin/xrandr --output HDMI-1 --right-of DP-1 --rotate right"
@@ -169,3 +173,6 @@ exec --no-startup-id /usr/bin/xrandr --output HDMI-1 --right-of DP-1 --rotate ri
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
 exec --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1
+
+# Automatically connect to bluetooth headphones
+exec --no-startup-id bluetoothcli connect 50:5E:5C:03:EC:63

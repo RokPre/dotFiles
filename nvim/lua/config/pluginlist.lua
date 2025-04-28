@@ -1,6 +1,7 @@
 return {
+	-- { import = "plugins.avante" }, -- Browser like buffers
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
-	{ import = "plugins.ccc" }, -- color picker
+	-- { import = "plugins.ccc" }, -- color picker
 	{ import = "plugins.cmp" }, -- Text completion
 	{ import = "plugins.colorizer" },
 	{ import = "plugins.conform" }, -- Code formater

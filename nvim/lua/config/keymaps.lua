@@ -1,44 +1,13 @@
---TODO: Check if which-key is available.
+-- TODO: When searching for files use the <Leader>f_ keymap. <L>fb will oepn buffers. <L>ff will open files search, <L>fg will open git files search.
+-- TODO: Add a grep keymap. <L>gb will grep buffers, <L>gc will grep cwd, <L>gg will grep git files.
 local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
 local modes = { "n", "i", "v", "t", "o" }
 local noimodes = { "n", "v", "o" }
 
-local wk = require("which-key")
-
-wk.add({
-	{ "gh", desc = "Beginning of line", mode = noimodes },
-	{ "gl", desc = "End of line", mode = noimodes },
-	{ "<Leader><Leader>", desc = "Find files", mode = noimodes },
-	{ "<Leader>u", desc = "Undo tree", mode = noimodes },
-	{ "<Leader>g", desc = "Git files", mode = noimodes },
-	{ "<Leader>b", desc = "List buffers", mode = noimodes },
-	-- { "<Leader>p", desc = "Project manager", mode = noimodes },
-	-- { "<Leader>pp", desc = "View projects", mode = noimodes },
-	-- { "<Leader>pi", desc = "Add to ignore", mode = noimodes },
-	-- { "<Leader>pr", desc = "Remove from ignore", mode = noimodes },
-	-- { "<Leader>pv", desc = "View ignore list", mode = noimodes },
-	{ "<Leader>cwd", desc = "Set cwd", mode = noimodes },
-	{ "<Leader>t", desc = "Todo list", mode = noimodes },
-	{ "<Leader>tt", desc = "Current buffer", mode = noimodes },
-	{ "<Leader>tb", desc = "Open buffers", mode = noimodes },
-	{ "<Leader>tc", desc = "Cwd", mode = noimodes },
-	{ "<Leader>tg", desc = "Current git repositorie", mode = noimodes },
-	{ "<Leader>th", desc = "Home directory", mode = noimodes },
-	{ "<Leader>ts", desc = "System files", mode = noimodes },
-	{ "<Leader>ti", desc = "Add to ignore list", mode = noimodes },
-	{ "<Leader>tr", desc = "Remove from ignore list", mode = noimodes },
-	{ "<Leader>tv", desc = "View ignore list", mode = noimodes },
-	{ "<Leader>s", desc = "Session manager", mode = noimodes },
-	{ "<Leader>ss", desc = "Save session", mode = noimodes },
-	{ "<Leader>sl", desc = "Load session", mode = noimodes },
-	{ "<Leader>sa", desc = "All sessions", mode = noimodes },
-	{ "<Leader>sc", desc = "Clear sessions", mode = noimodes },
-})
-
 -- Navigation
-keymap(noimodes, "gh", "^", opts)
-keymap(noimodes, "gl", "$", opts)
+keymap(noimodes, "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
+keymap(noimodes, "gl", "$", { silent = true, noremap = true, desc = "End of line" })
 
 -- Folder and file navigation
 local builtin = require("telescope.builtin")
@@ -60,10 +29,10 @@ local function safe_git_files()
 		vim.cmd("cd " .. current_dir)
 	end
 end
-keymap(noimodes, "<Leader><Leader>", ":Telescope find_files<CR>", opts)
-keymap(noimodes, "<Leader>g", safe_git_files, opts)
-keymap(noimodes, "<Leader>b", builtin.buffers, opts)
-keymap(noimodes, "<Leader>cwd", function()
+keymap("n", "<Leader><Leader>", ":Telescope find_files<CR>", opts)
+keymap("n", "<Leader>g", safe_git_files, opts)
+keymap("n", "<Leader>b", builtin.buffers, opts)
+keymap("n", "<Leader>cwd", function()
 	vim.cmd("cd " .. vim.fn.expand("%:p:h"))
 	print("CWD: " .. vim.fn.expand("%:p:h"))
 end, { silent = false })
@@ -80,12 +49,16 @@ keymap(modes, "<A-s>", "5z<Left>", opts)
 keymap(modes, "<A-g>", "5z<Right>", opts)
 
 -- Move highlighted text between lines
-keymap("n", "<C-j>", ":m .+1<CR>==", opts) -- move line up(n)
-keymap("n", "<C-k>", ":m .-2<CR>==", opts) -- move line down(n)
-keymap("v", "<C-j>", ":m '>+1<CR>gv=gv", opts) -- move line up(v)
-keymap("v", "<C-k>", ":m '<-2<CR>gv=gv", opts) -- move line down(v)
+keymap("n", "<C-j>", ":m .+1<CR>==", opts) -- move line up
+keymap("n", "<C-k>", ":m .-2<CR>==", opts) -- move line down
+keymap("v", "<C-j>", ":m '>+1<CR>gv=gv", opts) -- move line up
+keymap("v", "<C-k>", ":m '<-2<CR>gv=gv", opts) -- move line down
 keymap("v", ">", ">gv", opts) -- indent right
 keymap("v", "<", "<gv", opts) -- indent left
+
+-- Comment comment and paste bellow
+keymap("n", "gyc", "yygccp", { silent = true, remap = true, desc = "Copy and comment current line" })
+keymap("v", "gyc", "ygvgcgv`><Esc>p", { remap = true, desc = "Copy and comment selection" })
 
 -- Undo/redo
 keymap(noimodes, "<S-u>", "<C-r>", opts)
@@ -94,16 +67,17 @@ keymap(noimodes, "<S-u>", "<C-r>", opts)
 keymap("i", "<C-s>", "<Esc><Cmd>w<CR>", opts)
 keymap("n", "<C-s>", "<Cmd>w<CR>", opts)
 
--- Search
+-- search
 keymap("n", "<C-f>", "*", opts)
 keymap("v", "<C-f>", '"zy/<C-R>z<CR>', opts)
+keymap("x", "/", "<Esc>/\\%V") -- Search visual selection
+keymap("n", "<Esc>", ":noh<CR>", { noremap = false, silent = true }) -- Search highlight hide
+keymap("n", ",", "n", { remap = false, desc = "Next search match" })
+keymap("n", ";", "N", { remap = false, desc = "Previous search match" })
 
--- Uppercase/downcase
+-- uppercase/lowercase
 keymap("n", "<C-u>", "~", opts)
 keymap("v", "<C-u>", "~", opts)
-
--- Search highlight hide
-keymap("n", "<Esc>", ":noh<CR>", { noremap = false, silent = true })
 
 -- Disable default behavior of 'd' to not copy to system clipboard
 -- Yank to system clipboard and "0.
@@ -128,8 +102,11 @@ keymap("t", "<C-S-v>", '<C-\\><C-N>"+pa', opts)
 
 -- Close buffer
 keymap("n", "<C-w>", "<Cmd>bd!<Cr>", opts)
-vim.api.nvim_del_keymap("n", "<C-W><C-d>")
-vim.api.nvim_del_keymap("n", "<C-W>d")
+pcall(vim.api.nvim_del_keymap, "n", "<C-W><C-d>")
+pcall(vim.api.nvim_del_keymap, "n", "<C-W>d")
+
+-- Open buffer
+keymap("n", "<C-t>", "<Cmd>enew<Cr>", opts)
 
 -- Windows
 -- Navigate between windows
@@ -176,17 +153,17 @@ keymap("n", "<A-n>", "(", opts)
 keymap("n", "<A-m>", ")", opts)
 
 -- Parentheses
-keymap("v", "<leader>(", "<Esc>`<i(<Esc>`>la)<Esc>", opts)
-keymap("v", "<leader>)", "<Esc>`<i(<Esc>`>la)<Esc>", opts)
-keymap("v", "<leader>[", "<Esc>`<i[<Esc>`>la]<Esc>", opts)
-keymap("v", "<leader>]", "<Esc>`<i[<Esc>`>la]<Esc>", opts)
-keymap("v", "<leader>{", "<Esc>`<i{<Esc>`>la}<Esc>", opts)
-keymap("v", "<leader>}", "<Esc>`<i{<Esc>`>la}<Esc>", opts)
-keymap("v", "<leader><", "<Esc>`<i<<Esc>`>la><Esc>", opts)
-keymap("v", "<leader>>", "<Esc>`<i<<Esc>`>la><Esc>", opts)
-keymap("v", '<leader>"', '<Esc>`<i"<Esc>`>la"<Esc>', opts)
-keymap("v", "<leader>'", "<Esc>`<i'<Esc>`>la'<Esc>", opts)
-keymap("v", "<leader>`", "<Esc>`<i`<Esc>`>la`<Esc>", opts)
+keymap("v", "<leader>(", "<Esc>`<i(<Esc>`>la)<Esc>", { silent = true, noremap = true, desc = "()" })
+keymap("v", "<leader>)", "<Esc>`<i(<Esc>`>la)<Esc>", { silent = true, noremap = true, desc = "()" })
+keymap("v", "<leader>[", "<Esc>`<i[<Esc>`>la]<Esc>", { silent = true, noremap = true, desc = "[]" })
+keymap("v", "<leader>]", "<Esc>`<i[<Esc>`>la]<Esc>", { silent = true, noremap = true, desc = "[]" })
+keymap("v", "<leader>{", "<Esc>`<i{<Esc>`>la}<Esc>", { silent = true, noremap = true, desc = "{}" })
+keymap("v", "<leader>}", "<Esc>`<i{<Esc>`>la}<Esc>", { silent = true, noremap = true, desc = "{}" })
+keymap("v", "<leader><", "<Esc>`<i<<Esc>`>la><Esc>", { silent = true, noremap = true, desc = "<>" })
+keymap("v", "<leader>>", "<Esc>`<i<<Esc>`>la><Esc>", { silent = true, noremap = true, desc = "<>" })
+keymap("v", '<leader>"', '<Esc>`<i"<Esc>`>la"<Esc>', { silent = true, noremap = true, desc = '""' })
+keymap("v", "<leader>'", "<Esc>`<i'<Esc>`>la'<Esc>", { silent = true, noremap = true, desc = "''" })
+keymap("v", "<leader>`", "<Esc>`<i`<Esc>`>la`<Esc>", { silent = true, noremap = true, desc = "``" })
 
 keymap("i", "<A-BS>", "<C-W>", opts)
 keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it up.
@@ -209,7 +186,7 @@ vim.api.nvim_set_keymap("n", "h", "", {
 })
 
 -- dashboard
-keymap("n", "<leader>d", function()
+keymap("n", "<leader>dd", function()
 	require("snacks.dashboard").open()
 end, { desc = "Open Snacks Dashboard" })
 

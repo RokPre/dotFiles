@@ -1,3 +1,4 @@
+-- TODO: When i close the tab with ctrl+w, the tab closes, but then i am uable to use bufferline to navigate between buffers.
 local vim = vim
 vim.g.focusMode = false
 local Windows = {}

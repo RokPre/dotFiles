@@ -1,3 +1,13 @@
 vim.o.guifont = "Cousine Nerd Font Mono:h10" -- text below applies for VimScript
 -- vim.o.guifont = "Agave Nerd Font Mono:h11" -- text below applies for VimScript
 -- vim.o.guifont = "JetBrainsMono Nerd Font Mono:h14" -- text below applies for VimScript
+
+vim.api.nvim_create_autocmd("VimEnter", {
+	once = true,
+	callback = function()
+		vim.defer_fn(function()
+			-- Your code here, e.g., setting Neovide scale factor
+			vim.g.neovide_scale_factor = 1.1
+		end, 120) -- Delay in milliseconds
+	end,
+})

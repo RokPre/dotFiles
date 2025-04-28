@@ -12,12 +12,14 @@ require("config.theme")
 require("config.python")
 
 -- My "plugins"
-require("myPlugins.diaryMode")
-require("myPlugins.focusMode")
-require("myPlugins.reopenBuffer")
-require("myPlugins.projectManager")
-require("myPlugins.todoList")
-require("myPlugins.debug")
+require("debug.lua")
+require("diaryMode.lua")
+require("fileFinder.lua")
+require("focusMode.lua")
+require("liveGrep.lua")
+require("projectManager.lua")
+require("reopenBuffer.lua")
+require("todoList.lua")
 SessionManager = require("myPlugins.sessionManager")
 
 if vim.g.neovide then
