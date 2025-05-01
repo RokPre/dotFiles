@@ -38,7 +38,7 @@ return {
 			},
 		},
 		image = {
-			enabled = true,
+			enabled = false,
 			doc = {
 				enabled = true,
 				inline = true,

@@ -34,21 +34,33 @@ local function contains_ignore_pattern(val, ignore_patterns)
 	return false
 end
 
-----------
--- core --
-----------
+local function update_cache()
+	local repo_dirs = {}
+	local cmd = "find " .. home_dir .. " -type d -name .git -exec dirname {} \\; 2>/dev/null"
+	local git_repos = vim.fn.systemlist(cmd)
+
+	for _, git_dir in ipairs(git_repos) do
+		if
+			not contains(_G.project_manager_ignore_list, git_dir)
+			and not contains_ignore_pattern(git_dir, _G.project_manager_ignore_pattern)
+		then
+			table.insert(repo_dirs, git_dir)
+		end
+	end
+	_G.project_manager_cache = repo_dirs
+end
+
 local function update_cache_async()
 	local uv = vim.uv
 	local stdin = uv.new_pipe()
 	local stdout = uv.new_pipe()
-	-- local stderr = uv.new_pipe()
+	local stderr = uv.new_pipe()
 
 	home_dir = os.getenv("HOME")
 	local handle, pid = uv.spawn("find", {
 		stdio = { stdin, stdout, stderr },
 		args = { home_dir, "-type", "d", "-name", ".git" },
-	}, function(code, signal)
-		-- TODO: Maybe the code from the vim.schedule bellow should be moved to the callback function
+	}, function(code, signal) -- on exit
 	end)
 
 	uv.read_start(stdout, function(err, data)
@@ -125,6 +137,7 @@ end
 ---------------------------
 -- Ignore list functions --
 ---------------------------
+
 -- Helper function to update the ignore list file with the current table
 local function update_ignore_list()
 	local f = io.open(ignore_list_file, "w")
@@ -138,7 +151,7 @@ local function update_ignore_list()
 	else
 		print("Error opening file: " .. ignore_list_file)
 	end
-	update_cache_async()
+	update_cache()
 end
 
 local function add_to_ignore_list()
@@ -220,9 +233,6 @@ local function view_ignores(file_path)
 	})
 end
 
-------------
--- others --
-------------
 local function open_readme()
 	local current_file = vim.fn.expand("%:p")
 	local current_dir = vim.fn.fnamemodify(current_file, ":h")
@@ -283,6 +293,7 @@ end
 init()
 
 vim.api.nvim_create_user_command("ProjectManagerShowProjects", show_projects, {})
+vim.api.nvim_create_user_command("ProjectManagerUpdateList", update_cache, {})
 vim.api.nvim_create_user_command("ProjectManagerAddToIgnoreList", add_to_ignore_list, {})
 vim.api.nvim_create_user_command("ProjectManagerRemoveFromIgnoreList", remove_from_ignore_list, {})
 vim.api.nvim_create_user_command("ProjectManagerViewIgnoreList", function()
@@ -296,7 +307,8 @@ vim.api.nvim_create_user_command("ProjectManagerOpenReadme", open_readme, {})
 local keymap = vim.keymap.set
 keymap("n", "<Leader>p", "<Nop>", { noremap = true, silent = true, desc = "Project manager" })
 keymap("n", "<Leader>pp", show_projects, { noremap = true, silent = true, desc = "Show projects" })
-keymap("n", "<Leader>pu", update_cache_async, { noremap = true, silent = true, desc = "Update cache async" })
+keymap("n", "<Leader>pu", update_cache, { noremap = true, silent = true, desc = "Update project list cache" })
+keymap("n", "<Leader>pa", update_cache_async, { noremap = true, silent = true, desc = "Update cache async" })
 keymap("n", "<Leader>pi", add_to_ignore_list, { noremap = true, silent = true, desc = "Add to ignore list" })
 keymap("n", "<Leader>pr", remove_from_ignore_list, { noremap = true, silent = true, desc = "Remove from ignore list" })
 keymap("n", "<Leader>pv", function()

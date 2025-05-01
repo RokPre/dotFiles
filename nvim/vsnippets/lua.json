@@ -1,0 +1,7 @@
+{
+  "mk": {
+    "prefix": "mk",
+    "body": ["$$${1:cursor}$0$$"],
+    "description": "Insert $$ with cursor between"
+  }
+}

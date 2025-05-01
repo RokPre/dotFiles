@@ -85,11 +85,11 @@ user_cmd("ListSessions", listSessions, {})
 user_cmd("ClearSessions", clearSessions, {})
 
 local keymap = vim.keymap.set
-local opts = { noremap = true, silent = true }
-keymap("n", "<Leader>ss", M.SaveSession, opts)
-keymap("n", "<Leader>sl", M.LoadSession, opts)
-keymap("n", "<Leader>sa", listSessions, opts)
-keymap("n", "<Leader>sc", clearSessions, opts)
+keymap("n", "<Leader>s", "<Nop>", { desc = "Sessions manager" })
+keymap("n", "<Leader>ss", M.SaveSession, { desc = "Save session" })
+keymap("n", "<Leader>sl", M.LoadSession, { desc = "Load session" })
+keymap("n", "<Leader>sa", listSessions, { desc = "List sessions" })
+keymap("n", "<Leader>sc", clearSessions, { desc = "Clear sessions" })
 
 vim.api.nvim_create_autocmd("VimLeavePre", {
 	callback = function()

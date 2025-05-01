@@ -1,5 +1,5 @@
 -- Colors
-vim.cmd([[colorscheme everforest]])
+vim.cmd([[colorscheme onedark]])
 -- vim.cmd([[colorscheme tokyonight]])
 vim.cmd("hi CursorLineNr guifg=#ff966c")
 vim.cmd("hi LineNr guifg=#ff966c")

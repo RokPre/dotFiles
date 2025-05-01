@@ -1,7 +1,29 @@
-vim.keymap.set("n", "n", "<Nop>")
-vim.keymap.set("n", "N", "<Nop>")
+vim.keymap.set("n", "n", "<Nop>", {desc = "Next"})
+vim.keymap.set("n", "N", "<Nop>", {desc = "Prev"})
+vim.keymap.set("n", "e", "<Nop>", {desc = "End of"})
+vim.keymap.set("n", "b", "<Nop>", {desc = "Begging of prev"})
+vim.keymap.set("n", "w", "<Nop>")
+vim.keymap.set("n", "W", "<Nop>")
 vim.keymap.set("n", "e", "<Nop>")
 vim.keymap.set("n", "E", "<Nop>")
+vim.keymap.set("n", "b", "<Nop>")
+vim.keymap.set("n", "B", "<Nop>")
+
+-- Sentence navigation
+vim.keymap.set("n", "ns", ")")
+vim.keymap.set("n", "Ns", "(")
+vim.keymap.set("n", "es", ")")
+vim.keymap.set("n", "bs", "(")
+
+vim.keymap.set("n", "nw", "w")
+vim.keymap.set("n", "Nw", "b")
+vim.keymap.set("n", "ew", "e")
+vim.keymap.set("n", "bw", "bbe")
+
+vim.keymap.set("n", "nW", "W")
+vim.keymap.set("n", "NW", "B")
+vim.keymap.set("n", "eW", "E")
+vim.keymap.set("n", "bW", "BBE")
 
 return {
 	{
@@ -41,7 +63,6 @@ return {
 							["ai"] = "@conditional.outer",
 							["ar"] = "@return.outer",
 							["aa"] = "@assignment.outer",
-							["as"] = "@statement.outer",
 							["am"] = "@comment.outer",
 							["ab"] = "@block.outer",
 							["if"] = "@function.inner",
@@ -51,7 +72,6 @@ return {
 							["ii"] = "@conditional.inner",
 							["ir"] = "@return.inner",
 							["ia"] = "@assignment.inner",
-							["is"] = "@statement.inner",
 							["im"] = "@comment.inner",
 							["ib"] = "@block.inner",
 						},
@@ -67,7 +87,6 @@ return {
 							["ni"] = "@conditional.outer",
 							["nr"] = "@return.outer",
 							["na"] = "@assignment.outer",
-							["ns"] = "@statement.outer",
 							["nm"] = "@comment.outer",
 							["nb"] = "@block.outer",
 						},
@@ -79,7 +98,6 @@ return {
 							["Ni"] = "@conditional.outer",
 							["Nr"] = "@return.outer",
 							["Na"] = "@assignment.outer",
-							["Ns"] = "@statement.outer",
 							["Nm"] = "@comment.outer",
 							["Nb"] = "@block.outer",
 						},
@@ -91,7 +109,6 @@ return {
 							["ei"] = "@conditional.outer",
 							["er"] = "@return.outer",
 							["ea"] = "@assignment.outer",
-							["es"] = "@statement.outer",
 							["em"] = "@comment.outer",
 							["eb"] = "@block.outer",
 						},
@@ -103,7 +120,6 @@ return {
 							["bi"] = "@conditional.outer",
 							["br"] = "@return.outer",
 							["ba"] = "@assignment.outer",
-							["bs"] = "@statement.outer",
 							["bm"] = "@comment.outer",
 							["bb"] = "@block.outer",
 						},

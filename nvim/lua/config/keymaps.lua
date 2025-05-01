@@ -1,5 +1,6 @@
 -- TODO: When searching for files use the <Leader>f_ keymap. <L>fb will oepn buffers. <L>ff will open files search, <L>fg will open git files search.
 -- TODO: Add a grep keymap. <L>gb will grep buffers, <L>gc will grep cwd, <L>gg will grep git files.
+-- TODO: Achieve this with telescope. Don'r reenvent the wheel.
 local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
 local modes = { "n", "i", "v", "t", "o" }
@@ -8,34 +9,6 @@ local noimodes = { "n", "v", "o" }
 -- Navigation
 keymap(noimodes, "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
 keymap(noimodes, "gl", "$", { silent = true, noremap = true, desc = "End of line" })
-
--- Folder and file navigation
-local builtin = require("telescope.builtin")
-local function safe_git_files()
-	local current_dir = vim.fn.getcwd()
-	local buffer_dir = vim.fn.expand("%:p:h")
-	local git_dir = vim.fn.finddir(".git", buffer_dir .. ";")
-	git_dir = git_dir:sub(0, -5)
-
-	if git_dir == "" then -- Empty string means no .git directory found
-		print("Showing dir files for: " .. buffer_dir)
-		vim.cmd("cd " .. buffer_dir)
-		builtin.find_files()
-		vim.cmd("cd " .. current_dir)
-	else
-		print("Showing git files for: " .. git_dir)
-		vim.cmd("cd " .. git_dir)
-		builtin.git_files()
-		vim.cmd("cd " .. current_dir)
-	end
-end
-keymap("n", "<Leader><Leader>", ":Telescope find_files<CR>", opts)
-keymap("n", "<Leader>g", safe_git_files, opts)
-keymap("n", "<Leader>b", builtin.buffers, opts)
-keymap("n", "<Leader>cwd", function()
-	vim.cmd("cd " .. vim.fn.expand("%:p:h"))
-	print("CWD: " .. vim.fn.expand("%:p:h"))
-end, { silent = false })
 
 if pcall(require, "oil") then
 	keymap("n", "<Leader>e", "<Cmd>Oil<CR>", opts)
@@ -70,6 +43,8 @@ keymap("n", "<C-s>", "<Cmd>w<CR>", opts)
 -- search
 keymap("n", "<C-f>", "*", opts)
 keymap("v", "<C-f>", '"zy/<C-R>z<CR>', opts)
+keymap("n", "f", "/", opts)
+keymap("v", "f", "/", opts)
 keymap("x", "/", "<Esc>/\\%V") -- Search visual selection
 keymap("n", "<Esc>", ":noh<CR>", { noremap = false, silent = true }) -- Search highlight hide
 keymap("n", ",", "n", { remap = false, desc = "Next search match" })
@@ -148,10 +123,6 @@ keymap("n", "<A-C-h>", ":wincmd <<CR>", opts)
 keymap("n", "<A-C-m>", ":wincmd o<CR>", opts)
 keymap("n", "<A-=>", ":wincmd =<CR>", opts)
 
--- Sentence navigation
-keymap("n", "<A-n>", "(", opts)
-keymap("n", "<A-m>", ")", opts)
-
 -- Parentheses
 keymap("v", "<leader>(", "<Esc>`<i(<Esc>`>la)<Esc>", { silent = true, noremap = true, desc = "()" })
 keymap("v", "<leader>)", "<Esc>`<i(<Esc>`>la)<Esc>", { silent = true, noremap = true, desc = "()" })
@@ -189,12 +160,3 @@ vim.api.nvim_set_keymap("n", "h", "", {
 keymap("n", "<leader>dd", function()
 	require("snacks.dashboard").open()
 end, { desc = "Open Snacks Dashboard" })
-
--- Codeblocks
-keymap("n", "<A-C-c>", "<Cmd>insert``<Cr>", { remap = true })
-keymap("i", "<A-C-c>", "``", { remap = true })
-keymap("v", "<A-C-c>", "``", { remap = true })
-
-keymap("n", "<A-S-c>", "<Cmd>insert```\n```<Cr>", { remap = true })
-keymap("i", "<A-S-c>", "```\n```", { remap = true })
-keymap("v", "<A-S-c>", "```\n```", { remap = true })

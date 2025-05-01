@@ -77,7 +77,9 @@ local function get_activity()
 
 	-- Loop through activities and check if they are active
 	for i = start_index + 1, end_index - 1 do
-		local activity, start_time, end_time = contents[i]:match("%- %[ %] (.-)%s+(%d%d:%d%d)%s*%-%s*(%d%d:%d%d)")
+    local activity, start_time, end_time = contents[i]:match("%- %[ %] (.-)%s+(%d?%d:%d%d)%s*%-%s*(%d?%d:%d%d)")
+    -- vim.print("contents" .. contents[i])
+    -- vim.print(activity, start_time, end_time)
 		if activity and start_time and end_time and is_active(start_time, end_time) then
 			_G.last_activity = activity
 			_G.last_activity_end_time = convert_to_timestamp(end_time)

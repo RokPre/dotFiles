@@ -1,4 +1,6 @@
 return {
-  ".bak",
-  "keyboardsNotMine",
+	".bak",
+	".local",
+	"keyboardsNotMine",
+	"offline",
 }
