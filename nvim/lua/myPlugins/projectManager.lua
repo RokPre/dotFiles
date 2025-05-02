@@ -57,12 +57,11 @@ local function update_cache_async()
 			vim.schedule(function()
 				local projects = {}
 				for git_dir in data:gmatch("([^\n]+)") do
+					git_dir = git_dir:gsub("/.git", "")
 					if
 						not contains(_G.project_manager_ignore_list, git_dir)
 						and not contains_ignore_pattern(git_dir, _G.project_manager_ignore_pattern)
 					then
-						git_dir = git_dir:gsub("/.git", "")
-						-- vim.print("Git dir: " .. git_dir)
 						table.insert(projects, git_dir)
 					end
 				end
