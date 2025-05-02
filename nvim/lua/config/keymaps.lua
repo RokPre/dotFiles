@@ -30,8 +30,8 @@ keymap("v", ">", ">gv", opts) -- indent right
 keymap("v", "<", "<gv", opts) -- indent left
 
 -- Comment comment and paste bellow
-keymap("n", "gyc", "yygccp", { silent = true, remap = true, desc = "Copy and comment current line" })
-keymap("v", "gyc", "ygvgcgv`><Esc>p", { remap = true, desc = "Copy and comment selection" })
+keymap("n", "gy", "yygccp", { silent = true, remap = true, desc = "Copy and comment current line" })
+keymap("v", "gy", "ygvgcgv`><Esc>p", { remap = true, desc = "Copy and comment selection" })
 
 -- Undo/redo
 keymap(noimodes, "<S-u>", "<C-r>", opts)
@@ -140,21 +140,6 @@ keymap("i", "<A-BS>", "<C-W>", opts)
 keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it up.
 
 keymap("n", "<C-p>", ":CccPick<CR>", opts)
-
--- Folding folding folds
-vim.api.nvim_set_keymap("n", "h", "", {
-	noremap = true,
-	callback = function()
-		local col = vim.api.nvim_win_get_cursor(0)[2]
-		local line = vim.fn.getline(".")
-		local first_non_blank = #vim.fn.matchstr(line, "^\\s*")
-		if col <= first_non_blank then
-			vim.cmd("normal! zc ")
-		else
-			vim.api.nvim_feedkeys("h", "n", false)
-		end
-	end,
-})
 
 -- dashboard
 keymap("n", "<leader>dd", function()
