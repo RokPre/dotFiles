@@ -116,7 +116,8 @@ end
 local function runBuffer()
 	print("Running buffer")
 	local file = vim.api.nvim_buf_get_name(0)
-	runFile(file)
+  vim.print(file)
+	runFile("'" .. file .. "'")
 end
 
 -- Finds the file to source the environment in the current directory.

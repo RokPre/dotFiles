@@ -338,6 +338,122 @@ local function get_todos_ripgrep(files)
 	return todos, write_cache
 end
 
+local function get_todos_ripgrep_async(files)
+	-- TODO: Fix for when there are many files, maybe chunk up the files.
+	-- TODO: Make the chunks run in parallel.
+	local file_todos, file_cache
+	local todos, files_left = {}, {}
+	local write_cache = false
+	local uv = vim.uv
+	local stdin_1 = uv.new_pipe()
+	local stdout = uv.new_pipe()
+
+	-- Load from cache
+	for _, file in ipairs(files) do
+		file_todos = {}
+
+		-- Load cache for file
+		file_cache = _G.todo_list_cache[file]
+		if file_cache and file_cache.mtime > vim.loop.fs_stat(file).mtime.sec then
+			file_todos = file_cache.todos
+		else
+			table.insert(files_left, file)
+		end
+
+		for _, todo in ipairs(file_todos) do
+			table.insert(todos, todo)
+		end
+	end
+
+	if #files_left == 0 then
+		return todos, false
+	end
+
+	local args = { "--vimgrep", "TODO:" }
+	for _, file in ipairs(files_left) do
+		table.insert(args, file)
+	end
+
+	local handle_1, pid = uv.spawn("rg", {
+		stdio = { stdin_1, stdout, stderr },
+		args = args,
+	}, function(code, signal)
+		-- TODO: Maybe the code from the vim.schedule bellow should be moved to the callback function
+	end)
+
+	local result = ""
+
+	uv.read_start(stdout, function(err, data)
+		assert(not err, err)
+		if data then
+			result = result .. data
+		else
+			-- EOF
+			vim.schedule(function()
+				-- vim.print("result", result)
+				local lines = {}
+				for line in string.gmatch(result, "([^\n]+)") do
+					if line:find("TODO:") then
+						table.insert(lines, line)
+					end
+				end
+				vim.print("Lines:", lines)
+				vim.print("Lines:", #lines)
+				local file_name = nil
+				file_todos = {}
+
+				-- helper to flush current file todos
+				local function flush()
+					if file_name and #file_todos > 0 then
+						_G.todo_list_cache[file_name] = {
+							mtime = os.time(),
+							todos = file_todos,
+						}
+						for _, todo in ipairs(file_todos) do
+							table.insert(todos, todo)
+						end
+						write_cache = true
+					end
+				end
+
+				for _, entry in ipairs(lines) do
+					-- parse each line
+					local path, lnum, col, text = entry:match("^(.-):(%d+):(%d+):(.*)$")
+					if path then
+						if path ~= file_name then
+							flush() -- flush previous file
+							file_name = path
+							file_todos = {}
+						end
+
+						local _, todo_end = text:find("TODO:")
+						local snippet = text:sub((todo_end or 4) + 1, (todo_end or 4) + 128)
+
+						table.insert(file_todos, {
+							file = path,
+							name = vim.fn.fnamemodify(path, ":t"),
+							text = snippet,
+							lnum = tonumber(lnum),
+							col = tonumber(col),
+						})
+					end
+				end
+
+				flush() -- final flush after loop
+				display_todos(todos)
+			end)
+		end
+	end)
+
+	uv.shutdown(stdin_1, function()
+		-- vim.print("stdin shutdown", stdin)
+		uv.close(handle_1, function()
+			-- vim.print("process closed", handle, pid)
+		end)
+	end)
+	return todos, write_cache
+end
+
 local function f_toggle_ripgrep()
 	_G.todo_list_use_ripgrep = not _G.todo_list_use_ripgrep
 	print("Use ripgrep is now", _G.todo_list_use_ripgrep)
@@ -349,6 +465,19 @@ local function get_todos(files)
 		todos, write_cache = get_todos_ripgrep(files)
 	else
 		todos, write_cache = get_todos_no_ripgrep(files)
+	end
+	if write_cache then
+		write_file(todo_list_cache, _G.todo_list_cache)
+	end
+	return todos
+end
+
+local function get_todos_async(files)
+	local todos, write_cache
+	if _G.todo_list_use_ripgrep then
+		todos, write_cache = get_todos_ripgrep_async(files)
+	else
+		todos, write_cache = get_todos_no_ripgrep_async(files)
 	end
 	if write_cache then
 		write_file(todo_list_cache, _G.todo_list_cache)
@@ -383,6 +512,49 @@ local function f_folder(path)
 	local todos = get_todos(files)
 	display_todos(todos)
 end
+
+local function f_folder_async(path)
+	local uv = vim.uv
+	local stdin = uv.new_pipe()
+	local stdout = uv.new_pipe()
+
+	local output = ""
+
+	local handle, pid = uv.spawn("find", {
+		stdio = { stdin, stdout, stderr },
+		args = { path, "-type", "f" },
+	}, function(code, signal) end)
+
+	uv.read_start(stdout, function(err, data)
+		assert(not err, err)
+		if data then
+			output = output .. data
+		else
+			vim.schedule(function()
+				local files = {}
+				for file in output:gmatch("([^\n]+)") do
+					table.insert(files, file)
+				end
+				vim.print("Before filter:", #files)
+				files = filter_ignore_pattern(files)
+				files = filter_ignore_list(files)
+				vim.print("After filter:", #files)
+				local todos = get_todos_async(files)
+			end)
+		end
+	end)
+
+	uv.shutdown(stdin, function()
+		-- vim.print("stdin shutdown", stdin)
+		uv.close(handle, function()
+			-- vim.print("process closed", handle, pid)
+		end)
+	end)
+end
+
+vim.keymap.set("n", "<Leader>tf", function()
+	f_folder_async(vim.fn.getcwd())
+end, { desc = "Find files in folder asynchronously" })
 
 local function f_git()
 	local current_file = vim.fn.expand("%:p:h")

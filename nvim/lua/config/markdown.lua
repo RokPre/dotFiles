@@ -33,10 +33,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = false
 
     -- Codeblocks
-    vim.keymap.set("n", "<A-C-c>", "<Cmd>insert``<Cr>", { remap = true })
     vim.keymap.set("i", "<A-C-c>", "``", { remap = true })
     vim.keymap.set("v", "<A-C-c>", "``", { remap = true })
-    vim.keymap.set("n", "<A-S-c>", "<Cmd>insert```\n```<Cr>", { remap = true })
     vim.keymap.set("i", "<A-S-c>", "```\n```", { remap = true })
     vim.keymap.set("v", "<A-S-c>", "```\n```", { remap = true })
   end,

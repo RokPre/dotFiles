@@ -64,6 +64,10 @@ keymap("n", "D", '"0D', opts) -- Normal mode
 keymap("v", "D", '"0D', opts) -- Visual mode
 keymap("n", "x", '"0x', opts) -- Normal mode
 keymap("v", "x", '"0x', opts) -- Visual mode
+keymap("n", "c", '"0c', opts) -- Normal mode
+keymap("v", "c", '"0c', opts) -- Visual mode
+keymap("n", "C", '"0C', opts) -- Normal mode
+keymap("v", "C", '"0C', opts) -- Visual mode
 
 keymap("n", "p", '"0p', opts) -- Normal mode
 keymap("v", "p", '"0p', opts) -- Visual mode

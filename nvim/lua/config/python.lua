@@ -2,6 +2,7 @@
 local lines = {
   "#! /usr/bin/python3",
   "",
+  "",
   "def init():",
   "    pass",
   "",

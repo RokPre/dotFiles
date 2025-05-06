@@ -5,6 +5,7 @@ local ignore_pattern_file = vim.fn.stdpath("config") .. "/.project_manager_ignor
 local sessionManager = require("myPlugins.sessionManager")
 _G.project_manager_ignore_list = {}
 _G.project_manager_ignore_pattern = {}
+_G.project_manager_cache = {}
 
 local function load_file(file_path)
 	local ok, from_file = pcall(dofile, file_path)
@@ -55,18 +56,18 @@ local function update_cache_async()
 		assert(not err, err)
 		if data then
 			vim.schedule(function()
-				local projects = {}
 				for git_dir in data:gmatch("([^\n]+)") do
 					git_dir = git_dir:gsub("/.git", "")
 					if
 						not contains(_G.project_manager_ignore_list, git_dir)
+            and not contains(_G.project_manager_cache, git_dir)
 						and not contains_ignore_pattern(git_dir, _G.project_manager_ignore_pattern)
 					then
-						table.insert(projects, git_dir)
+						table.insert(_G.project_manager_cache , git_dir)
 					end
 				end
-				_G.project_manager_cache = projects
-				-- vim.print(_G.project_manager_cache)
+        -- vim.print(_G.project_manager_cache)
+        vim.print("Project cache updated")
 			end)
 		end
 	end)
@@ -79,10 +80,14 @@ local function update_cache_async()
 	end)
 end
 
+local function view_cache()
+  vim.print(_G.project_manager_cache)
+end
+
 local function show_projects()
 	-- Shows the projects that are stored in the cache
 	local repo_dirs = _G.project_manager_cache
-	if not repo_dirs then
+	if not repo_dirs or #repo_dirs == 0 then
 		vim.notify("No projects found. Please wait or use <Leader>pu to update the cache")
 		return
 	end
@@ -296,6 +301,7 @@ local keymap = vim.keymap.set
 keymap("n", "<Leader>p", "<Nop>", { noremap = true, silent = true, desc = "Project manager" })
 keymap("n", "<Leader>pp", show_projects, { noremap = true, silent = true, desc = "Show projects" })
 keymap("n", "<Leader>pu", update_cache_async, { noremap = true, silent = true, desc = "Update cache async" })
+keymap("n", "<Leader>pc", view_cache, { noremap = true, silent = true, desc = "View projects README" })
 keymap("n", "<Leader>pi", add_to_ignore_list, { noremap = true, silent = true, desc = "Add to ignore list" })
 keymap("n", "<Leader>pr", remove_from_ignore_list, { noremap = true, silent = true, desc = "Remove from ignore list" })
 keymap("n", "<Leader>pv", function()

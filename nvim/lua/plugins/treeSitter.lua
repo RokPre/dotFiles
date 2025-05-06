@@ -44,6 +44,7 @@ return {
 					"tsx",
 					"markdown",
 				},
+        fold = {enable = true},
 				sync_install = true,
 				auto_install = true,
 				ignore_install = { "" },
