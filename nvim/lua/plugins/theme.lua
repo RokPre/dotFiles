@@ -1,20 +1,22 @@
 return {
-	{
-		"folke/tokyonight.nvim",
-		lazy = false,
-		priority = 1000,
-		opts = {},
-	},
-	{
-		"neanias/everforest-nvim",
-		lazy = false,
-		priority = 1000,
-		opts = {},
-		config = function()
-			require("everforest").setup({
-				-- Your config here
-			})
-		end,
-	},
-  {"navarasu/onedark.nvim"}
+  { "folke/tokyonight.nvim" },
+  { "neanias/everforest-nvim" },
+  {"AlexvZyl/nordic.nvim"},
+  {"bluz71/vim-moonfly-colors"},
+  {"bluz71/vim-nightfly-colors"},
+  {"catppuccin/nvim"},
+  {"jacoborus/tender.vim"},
+  {"kepano/flexoki"},
+  {"LunarVim/synthwave84.nvim"},
+  {"mcchrish/vim-no-color-collections"},
+  {"myxik/lovelace.nvim"},
+  {"navarasu/onedark.nvim"},
+  {"nyoom-engineering/nyoom.nvim"},
+  {"nyoom-engineering/oxocarbon.nvim"},
+  {"olimorris/onedarkpro.nvim"},
+  {"olivercederborg/poimandres.nvim"},
+  {"rebelot/kanagawa.nvim"},
+  {"rmehri01/onenord.nvim"},
+  {"sainnhe/edge"},
+  {"savq/melange-nvim"},
 }

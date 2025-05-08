@@ -167,9 +167,7 @@ bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness.sh down
 
 # Second display
-exec --no-startup-id /usr/bin/xrandr --auto
-exec --no-startup-id /usr/bin/xrandr --output HDMI-1 --right-of DP-1 --rotate right"
-# exec --no-startup-id sh -c "xrandr --output HDMI-1 --above eDP-1"
+exec --no-startup-id --no-startup-id ~/.config/i3/scripts/displays.sh
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
 exec --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1

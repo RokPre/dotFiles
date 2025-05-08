@@ -33,6 +33,11 @@ return {
 			"nvim-treesitter/playground",
 		},
 		config = function()
+      vim.filetype.add({
+        extension = {
+          launch = "xml"
+        }
+      })
 			require("nvim-treesitter.configs").setup({
 				ensure_installed = {
 					"css",
@@ -43,6 +48,7 @@ return {
 					"scss",
 					"tsx",
 					"markdown",
+          "xml"
 				},
         fold = {enable = true},
 				sync_install = true,

@@ -20,7 +20,6 @@ require("myPlugins.projectManager")
 require("myPlugins.reopenBuffer")
 require("myPlugins.todoList")
 require("myPlugins.ui")
-require("myPlugins.test")
 SessionManager = require("myPlugins.sessionManager")
 
 if vim.g.neovide then
