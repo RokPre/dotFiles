@@ -3,25 +3,28 @@ return {
 	opts = {},
 	dependencies = { { "echasnovski/mini.icons", opts = {} } },
 	config = function()
+    vim.keymap.set("n", "<Leader>o", "<Nop>", { noremap = true, silent = true, desc = "Oil" })
+    vim.keymap.set("n", "<Leader>oo", ":Oil<CR>", { noremap = true, silent = true , desc = "File picker"})
+    vim.keymap.set("n", "<Leader>oy", "")
 		require("oil").setup({
 			default_file_explorer = true,
 			view_options = {
 				show_hidden = true,
 			},
 			keymaps = {
-				["g?"] = "actions.show_help",
+				["<Leader>oh"] = "actions.show_help",
 				["l"] = "actions.select",
-				["<C-s>"] = {
+				["<Leader>ov"] = {
 					"actions.select",
 					opts = { vertical = true },
 					desc = "Open the entry in a vertical split",
 				},
-				["<C-h>"] = {
+				["<Leader>ob"] = {
 					"actions.select",
 					opts = { horizontal = true },
 					desc = "Open the entry in a horizontal split",
 				},
-				["<C-t>"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
+				["<Leader>ot"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
 				["<C-p>"] = {
 					callback = function()
 						local oil = require("oil")
@@ -29,15 +32,15 @@ return {
 					end,
 				},
 				["q"] = "actions.close",
-				["<C-l>"] = "actions.refresh",
+				["<Leader>or"] = "actions.refresh",
 				["h"] = "actions.parent",
-				["_"] = "actions.open_cwd",
-				["`"] = "actions.cd",
+				["<Leader>oc"] = "actions.open_cwd",
+				["<Leader>od"] = "actions.cd",
 				["<Leader>cwd"] = { "actions.cd", opts = { scope = "tab" }, desc = ":tcd to the current oil directory" },
-				["gs"] = "actions.change_sort",
-				["gx"] = "actions.open_external",
-				["g."] = "actions.toggle_hidden",
-				["g\\"] = "actions.toggle_trash",
+				["<Leader>os"] = "actions.change_sort",
+				["<Leader>ox"] = "actions.open_external",
+				["<Leader>o."] = "actions.toggle_hidden",
+				["<Leader>o/"] = "actions.toggle_trash",
 			},
 			preview_win = {
 				update_on_cursor_moved = true, -- Automatically update the preview
