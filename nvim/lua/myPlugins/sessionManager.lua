@@ -9,7 +9,6 @@ function M.SaveSession()
 	local session_name = cwd:gsub("[/\\]", "%%") -- sanitize path
 	local session_path = vim.fn.stdpath("data") .. "/session/" .. session_name .. ".vim"
 
-	-- TODO: Check if folder exists, and make if not
 	if vim.fn.isdirectory(vim.fn.stdpath("data") .. "/session/") == 0 then
 		vim.fn.mkdir(vim.fn.stdpath("data") .. "/session/", "p")
 	end

@@ -124,6 +124,7 @@ function FocusModeUpdate()
 	end
 
 	if need_open then
+    vim.print("Need open")
 		Flags.scheduledRunning = true
 		vim.schedule(function()
 			if #win_list > 1 then
@@ -139,6 +140,7 @@ function FocusModeUpdate()
 
 			if not vim.api.nvim_win_is_valid(win_list[1]) then
 				vim.api.nvim_set_current_win(Windows.marginLeft)
+        print(Buffers.current_buf)
 				Windows.current_win = vim.api.nvim_open_win(Buffers.current_buf, false, { split = "right" })
 			end
 
