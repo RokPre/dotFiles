@@ -146,6 +146,6 @@ keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it 
 keymap("n", "<C-p>", ":CccPick<CR>", opts)
 
 -- dashboard
-keymap("n", "<leader>dd", function()
+keymap("n", "<leader>h", function()
 	require("snacks.dashboard").open()
 end, { desc = "Open Snacks Dashboard" })

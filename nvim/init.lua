@@ -19,6 +19,7 @@ require("myPlugins.focusMode")
 require("myPlugins.projectManager")
 require("myPlugins.reopenBuffer")
 require("myPlugins.todoList")
+require("myPlugins.community")
 SessionManager = require("myPlugins.sessionManager")
 
 if vim.g.neovide then

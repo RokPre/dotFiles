@@ -2,7 +2,6 @@ return {
 	"williamboman/mason.nvim",
 	opts = {
 		ensure_installed = {
-			"stylua",
 			"shfmt",
 			"pyright",
 			"lua-language-server", -- Note the hyphen instead of underscore

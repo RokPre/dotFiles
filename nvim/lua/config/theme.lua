@@ -63,7 +63,7 @@ get_all_color_themes()
 -- vim.print(_G.colorschemes)
 
 -- Keymaps
-vim.keymap.set("n", "<leader>cn", next_color_theme, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>cp", previous_color_theme, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>cd", delete_color_theme, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>cg", get_all_color_themes, { noremap = true, silent = true })
+-- vim.keymap.set("n", "<leader>cn", next_color_theme, { noremap = true, silent = true })
+-- vim.keymap.set("n", "<leader>cp", previous_color_theme, { noremap = true, silent = true })
+-- vim.keymap.set("n", "<leader>cd", delete_color_theme, { noremap = true, silent = true })
+-- vim.keymap.set("n", "<leader>cg", get_all_color_themes, { noremap = true, silent = true })

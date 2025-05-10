@@ -61,7 +61,6 @@
   "telescope.nvim": { "branch": "master", "commit": "a0bbec21143c7bc5f8bb02e0005fa0b982edc026" },
   "tender.vim": { "branch": "master", "commit": "01c9bd723f2631971b2c8cda8f8ea037221d5149" },
   "tokyonight.nvim": { "branch": "main", "commit": "057ef5d260c1931f1dffd0f052c685dcd14100a3" },
-  "vim-markdown-toc": { "branch": "master", "commit": "aa9cc3b07791db5cbe5f29d661763bc0eb4fb7c1" },
   "vim-moonfly-colors": { "branch": "master", "commit": "164888b0140d6a4ba3f5ec5d760d46fb6a417d7a" },
   "vim-nightfly-colors": { "branch": "master", "commit": "3fee8c331b790e349fc4cac9705d484d68e20f73" },
   "vim-no-color-collections": { "branch": "master", "commit": "0c235f5e025732c28ab93c3fa2bdebd62e6d6acf" },

@@ -188,5 +188,5 @@ exec --no-startup-id bluetoothcli connect 50:5E:5C:03:EC:63
 
 exec --no-startup-id sh -c 'sleep 1; i3-msg "workspace 1; exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim"'
 exec --no-startup-id sh -c 'sleep 2; i3-msg "workspace 2; exec vivaldi"'
-exec --no-startup-id sh -c 'sleep 3; i3-msg "workspace 3; exec /home/lasim/.local/kitty.app/bin/kitty"'
-exec --no-startup-id sh -c 'sleep 4; i3-msg "workspace 4; exec obsidian obsidian://open?vault=vault"'
+exec --no-startup-id sh -c 'sleep 3; i3-msg "workspace 2; exec /home/lasim/.local/kitty.app/bin/kitty"'
+exec --no-startup-id sh -c 'sleep 4; i3-msg "workspace 3; exec obsidian obsidian://open?vault=vault"'
