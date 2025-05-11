@@ -22,6 +22,8 @@
 -- You could optionally use telescope.nvim for selecting todos with fuzzy search.
 
 -- TODO: Make ripgrep async (look at projectManager.lua debug.lua)
+-- TODO: Add highlighting to todoos
+-- TODO: Show todos in daily note <L>td and notes <L>tD
 
 local ignore_list_file_path = vim.fn.stdpath("config") .. "/.todoList.lua"
 local ignore_pattern_file_path = vim.fn.stdpath("config") .. "/.todoListPattern.lua"
@@ -378,7 +380,7 @@ local function get_todos_ripgrep_async(files)
 		stdio = { stdin_1, stdout, stderr },
 		args = args,
 	}, function(code, signal)
-		-- TODO: Maybe the code from the vim.schedule bellow should be moved to the callback function
+		-- TODO: Maybe the code from the vim.schedule below should be moved to the callback function
 	end)
 
 	local result = ""
@@ -584,7 +586,7 @@ end
 local function ignore_list_update()
 	local f = io.open(ignore_list_file_path, "w")
 	if f then
-		-- This is just so that the file is formated nicely with proper indentation.
+		-- This is just so that the file is formatted nicely with proper indentation.
 		f:write(
 			"return{\n\t" .. vim.inspect(_G.todo_list_ignore_list):gsub("{ ", ""):gsub(", ", ",\n\t"):gsub(" }", "\n}")
 		)

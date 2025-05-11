@@ -1,5 +1,6 @@
 -- TODO: Add a list of people that you haven't interacted with in a long time
 -- TODO: Sort by birthdays
+-- TODO: Add caching,
 
 -- Constants
 M = {}
@@ -7,12 +8,12 @@ M = {}
 M.path = "~/sync/vault/Ljudje/"
 M.template = "~/sync/vault/template/Neovim-ljudlje-template.md"
 M.sort = "score" -- score, name, most interacted (score changes, daily note)
+M.sortOrder = true -- true = asc, false = desc
 M.scorePattern = "tocke"
 M.blockPattern = "blokiran"
 M.socialPattern = "druženje:"
 
--- utils
-local function getScore(person)
+local function getLines(person)
   local home = os.getenv("HOME")
   local path = M.path .. person  -- Avoid fnameescape for file IO
   -- path = vim.fn.fnameescape(path)
@@ -22,8 +23,14 @@ local function getScore(person)
   local ok, lines = pcall(vim.fn.readfile, path)
   if not ok then
     vim.print("Failed to read file: " .. path)
-    return nil
+    return {}
   end
+  return lines
+end
+
+-- utils
+local function getScore(person)
+  local lines = getLines(person)
 
   for _, line in ipairs(lines) do
     local score = line:match("^" .. M.scorePattern .. ":%s*(.+)")
@@ -34,14 +41,43 @@ local function getScore(person)
 end
 
 local function getInteractionCount(person)
-  -- TODO: Fix this to count the number of iterections
-  return os.time(os.date("!*t"))
+  -- TODO: Use treesiter to count the number of headings that also contain a date.
+  local lines = getLines(person)
+  local count = 0
+  for _, line in ipairs(lines) do
+    if line:find("^#") then
+      count = count + 1
+    end
+  end
+  return count
 end
 
 local function lastInteractionTime(person)
-  -- TODO: Get the date of the last interaction
-  -- return in unix ms
-  return nil
+  local lines = getLines(person)
+  for _, line in ipairs(lines) do
+    if line:find("^#") then
+      -- vim.print("line: " .. line)
+      local ok, datetime = pcall(function() return line:match("#%s*(%d%d%d%d%-%d%d%-%d%d %d%d:%d%d)") end)
+      -- vim.print("Datetime: ",datetime)
+      if datetime and ok then
+        local year, month, day, hour, min = datetime:match("(%d+)%-(%d+)%-(%d+) (%d+):(%d+)")
+        local timestamp = os.time({
+          year = tonumber(year),
+          month = tonumber(month),
+          day = tonumber(day),
+          hour = tonumber(hour),
+          min = tonumber(min),
+          sec = 0,
+        })
+        -- vim.print("Timestamp: ", timestamp)
+        if year == nil then year = "" end
+        if month == nil then month = "" end
+        if day == nil then day = "" end
+        return timestamp * 1000, year, month, day  -- Convert to milliseconds
+      end
+    end
+  end
+  return 0
 end
 
 
@@ -52,6 +88,18 @@ local function getPeople()
   -- vim.print(vim.split(people, "\n"))
   local people_list = vim.split(people, "\n")
   return people_list
+end
+
+local function getRelevantInfo(person, sortType)
+  if sortType == "name" then
+    return ""
+  elseif sortType == "score" then
+    return ""
+  elseif sortType == "most interacted" then
+    return getInteractionCount(person)
+  elseif sortType == "most recent" then
+    return lastInteractionTime(person)
+  end
 end
 
 local function sortPeople(people, sortType, sortDir)
@@ -83,8 +131,10 @@ local function sortPeople(people, sortType, sortDir)
     end)
   elseif sortType == "most recent" then
     table.sort(people, function(a, b)
-      local sa = tonumber(lastInteractionTime(a)) or -math.huge
-      local sb = tonumber(lastInteractionTime(b)) or -math.huge
+      local timestamp_a, _, _, _ = lastInteractionTime(a)
+      local timestamp_b, _, _, _ = lastInteractionTime(b)
+      local sa = tonumber(timestamp_a) or -math.huge
+      local sb = tonumber(timestamp_b) or -math.huge
       if sortDir then
         return sa < sb
       end
@@ -140,9 +190,17 @@ local function showPeople(people)
       if item == newPersonString then
         return item
       end
+      -- TODO: If sort type is score, then this is redundant, otherwise it is not.
       local score = getScore(item)
       score = tostring(score)
-      return score .. " " .. item:gsub(".md", "")
+      -- TODO: I am getting relevant_info twice, as i am already checking it in the sort function.
+      local relevant_info, year, month, day = getRelevantInfo(item, M.sort)
+      if year ~= nil and month ~= nil and day ~= nil then
+        if year ~= "" and month ~= "" and day ~= "" then
+          relevant_info =  year .. "-" .. month .. "-" .. day
+        end
+      end
+      return relevant_info .. " " .. score .. " " .. item:gsub(".md", "")
     end,
   }, function(selected)
     if not selected then
@@ -308,14 +366,8 @@ local function social()
 
     started = false
     ended = false
-    path = M.path .. person  -- Avoid fnameescape for file IO
-    path = path:gsub("~", home)
-    -- vim.print(path)
-    local ok, lines = pcall(vim.fn.readfile, path)
-    if not ok then
-      vim.print("Failed to read file: " .. path)
-      return nil
-    end
+
+    local lines = getLines(person)
 
     for _, line in ipairs(lines) do
       if line:find(M.socialPattern) then
@@ -409,6 +461,6 @@ vim.keymap.set("n", "<Leader>cd", function() changeScore(-1) end, { silent = tru
 vim.keymap.set("n", "<Leader>cl", log, { silent = true, desc = "Add log" })
 vim.keymap.set("n", "<Leader>cb", blockPerson, { silent = true, desc = "Block person" })
 vim.keymap.set("n", "<Leader>cs", sortSwitch, { silent = true, desc = "Switch sorting" })
-vim.keymap.set("n", "<Leader>co", sortOrder, { silent = true, desc = "Change sort direction" })
+vim.keymap.set("n", "<Leader>co", sortOrder, { silent = true, desc = "Sort order" })
 vim.keymap.set("n", "<Leader>ca", social, { silent = true, desc = "Activities" })
 vim.keymap.set("n", "<Leader>ct", insertTamplate, { silent = true, desc = "Insert template" })

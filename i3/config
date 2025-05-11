@@ -170,7 +170,14 @@ bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightne
 exec --no-startup-id --no-startup-id ~/.config/i3/scripts/displays.sh
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
-exec --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" Button 2 "key Ctrl z"
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" Button 3 "key Ctrl Shift z"
+
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 1 "1"
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 2 "6"
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 3 "7"
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 4 "0"
 
 # Automatically connect to bluetooth headphones
 exec --no-startup-id bluetoothcli connect 50:5E:5C:03:EC:63
