@@ -1,4 +1,4 @@
--- TODO: When searching for files use the <Leader>f_ keymap. <L>fb will oepn buffers. <L>ff will open files search, <L>fg will open git files search.
+-- TODO: When searching for files use the <Leader>f_ keymap. <L>fb will open buffers. <L>ff will open files search, <L>fg will open git files search.
 -- TODO: Add a grep keymap. <L>gb will grep buffers, <L>gc will grep cwd, <L>gg will grep git files.
 -- TODO: Achieve this with telescope. Don'r reenvent the wheel.
 local keymap = vim.keymap.set
@@ -11,9 +11,9 @@ keymap(noimodes, "gh", "^", { silent = true, noremap = true, desc = "Beginning o
 keymap(noimodes, "gl", "$", { silent = true, noremap = true, desc = "End of line" })
 
 if pcall(require, "oil") then
-	keymap("n", "<Leader>e", "<Cmd>Oil<CR>", opts)
+  keymap("n", "<Leader>e", "<Cmd>Oil<CR>", opts)
 else
-	keymap("n", "<Leader>e", "<Cmd>e .<CR>", opts)
+  keymap("n", "<Leader>e", "<Cmd>e .<CR>", opts)
 end
 
 -- Scroll
@@ -22,14 +22,14 @@ keymap(modes, "<A-s>", "5z<Left>", opts)
 keymap(modes, "<A-g>", "5z<Right>", opts)
 
 -- Move highlighted text between lines
-keymap("n", "<C-j>", ":m .+1<CR>==", opts) -- move line up
-keymap("n", "<C-k>", ":m .-2<CR>==", opts) -- move line down
+keymap("n", "<C-j>", ":m .+1<CR>==", opts)     -- move line up
+keymap("n", "<C-k>", ":m .-2<CR>==", opts)     -- move line down
 keymap("v", "<C-j>", ":m '>+1<CR>gv=gv", opts) -- move line up
 keymap("v", "<C-k>", ":m '<-2<CR>gv=gv", opts) -- move line down
-keymap("v", ">", ">gv", opts) -- indent right
-keymap("v", "<", "<gv", opts) -- indent left
+keymap("v", ">", ">gv", opts)                  -- indent right
+keymap("v", "<", "<gv", opts)                  -- indent left
 
--- Comment comment and paste bellow
+-- Comment comment and paste below
 keymap("n", "gy", "yygccp", { silent = true, remap = true, desc = "Copy and comment current line" })
 keymap("v", "gy", "ygvgcgv`><Esc>p", { remap = true, desc = "Copy and comment selection" })
 
@@ -45,7 +45,7 @@ keymap("n", "<C-f>", "*", opts)
 keymap("v", "<C-f>", '"zy/<C-R>z<CR>', opts)
 keymap("n", "f", "/", opts)
 keymap("v", "f", "/", opts)
-keymap("x", "/", "<Esc>/\\%V") -- Search visual selection
+keymap("x", "/", "<Esc>/\\%V")                                       -- Search visual selection
 keymap("n", "<Esc>", ":noh<CR>", { noremap = false, silent = true }) -- Search highlight hide
 keymap("n", ",", "n", { remap = false, desc = "Next search match" })
 keymap("n", ";", "N", { remap = false, desc = "Previous search match" })
@@ -85,7 +85,7 @@ pcall(vim.api.nvim_del_keymap, "n", "<C-W><C-d>")
 pcall(vim.api.nvim_del_keymap, "n", "<C-W>d")
 
 -- Open buffer
-keymap("n", "<C-t>", "<Cmd>enew<Cr>", opts)
+keymap("n", "<C-t>", "<Cmd>new<Cr>", opts)
 
 -- Windows
 -- Navigate between windows
@@ -108,15 +108,15 @@ keymap("n", "<A-w>", "<Cmd>w! | close<CR>", opts)
 
 -- Move windows around
 if pcall(require, "winshift") then
-	keymap("n", "<A-S-h>", "<Cmd>WinShift left<CR>", opts)
-	keymap("n", "<A-S-j>", "<Cmd>WinShift down<CR>", opts)
-	keymap("n", "<A-S-k>", "<Cmd>WinShift up<CR>", opts)
-	keymap("n", "<A-S-l>", "<Cmd>WinShift right<CR>", opts)
+  keymap("n", "<A-S-h>", "<Cmd>WinShift left<CR>", opts)
+  keymap("n", "<A-S-j>", "<Cmd>WinShift down<CR>", opts)
+  keymap("n", "<A-S-k>", "<Cmd>WinShift up<CR>", opts)
+  keymap("n", "<A-S-l>", "<Cmd>WinShift right<CR>", opts)
 else
-	keymap("n", "<A-S-h>", "<Cmd>wincmd H<CR>", opts)
-	keymap("n", "<A-S-j>", "<Cmd>wincmd J<CR>", opts)
-	keymap("n", "<A-S-k>", "<Cmd>wincmd K<CR>", opts)
-	keymap("n", "<A-S-l>", "<Cmd>wincmd L<CR>", opts)
+  keymap("n", "<A-S-h>", "<Cmd>wincmd H<CR>", opts)
+  keymap("n", "<A-S-j>", "<Cmd>wincmd J<CR>", opts)
+  keymap("n", "<A-S-k>", "<Cmd>wincmd K<CR>", opts)
+  keymap("n", "<A-S-l>", "<Cmd>wincmd L<CR>", opts)
 end
 
 -- Resize windows
@@ -147,5 +147,5 @@ keymap("n", "<C-p>", ":CccPick<CR>", opts)
 
 -- dashboard
 keymap("n", "<leader>h", function()
-	require("snacks.dashboard").open()
+  require("snacks.dashboard").open()
 end, { desc = "Open Snacks Dashboard" })

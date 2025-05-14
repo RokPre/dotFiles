@@ -2,7 +2,7 @@ return {
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
 	{ import = "plugins.cmp" }, -- Text completion
 	{ import = "plugins.colorizer" },
-	{ import = "plugins.conform" }, -- Code formater
+	{ import = "plugins.conform" }, -- Code formatter
 	{ import = "plugins.dressing" }, -- Ui enhancements
 	{ import = "plugins.entireFile" }, -- For selecting entire file
 	{ import = "plugins.flash" }, -- Better navigation
@@ -16,6 +16,7 @@ return {
 	-- 	{ import = "plugins.mdmath" }, -- Math rendering
 	{ import = "plugins.mini" }, -- A collection of mini plugins
 	{ import = "plugins.neoScroll" }, -- For scmooth scrolling
+	-- { import = "plugins.netrw" }, -- For scmooth scrolling
 	{ import = "plugins.noice" },
 	-- { import = "plugins.notify" },
 	{ import = "plugins.obsidian" }, -- Obsidian.md support

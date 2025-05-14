@@ -19,6 +19,8 @@ Note taking: [obsidian](https://obsidian.md)
 - [ ] Nvim: Simple snippet for inserting date, time or date and time.
 - [ ] Nvim: Text objects inside function.
 - [ ] https://www.reddit.com/r/neovim/s/DLL5FFQ7hr
+- [ ] Fix obsidian cmp. It prefers id over file name. Look in lua/cmp_obsidian.lua and lua/obsidian/utils.lua->wiki_link_id_prefix()
+- [ ] Fix obsidian checkboxes. Make it so that there are only two options. Checked and unchecked.
 - [x] Nvim: Window movement. Move window by one. Right now its move window all the way to the right, left, up or down. Winshift.nvim
 - [x] Nvim: Toggle checkboxes error not writable buffer
 - [x] Nvim: Implement to no-neck-pain like plugin myself for md files.

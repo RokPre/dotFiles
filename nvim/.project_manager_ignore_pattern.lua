@@ -3,4 +3,5 @@ return {
 	".local",
 	"keyboardsNotMine",
 	"offline",
+  ".gitconfig",
 }

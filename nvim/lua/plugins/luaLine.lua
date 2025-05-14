@@ -36,23 +36,30 @@ local function get_activity()
 	end
 
 	-- Function to check if the current time is within a given activity's time range
-	local function is_active(start_time, end_time)
-		local time = os.date("*t")
-		local hour, minute = time.hour, time.min
-		local start_hour, start_minute = tonumber(start_time:match("(%d%d)")), tonumber(start_time:match(":(%d%d)"))
-		local end_hour, end_minute = tonumber(end_time:match("(%d%d)")), tonumber(end_time:match(":(%d%d)"))
+  local function is_active(start_time, end_time)
+    local time = os.date("*t")
+    local hour, minute = time.hour, time.min
+    -- local start_hour, start_minute = tonumber(start_time:match("(%d%d)")), tonumber(start_time:match(":(%d%d)"))
+    -- local end_hour, end_minute = tonumber(end_time:match("(%d%d)")), tonumber(end_time:match(":(%d%d)"))
+    local start_hour, start_minute = start_time:match("^(%d+):(%d%d)$")
+    local end_hour, end_minute = end_time:match("^(%d+):(%d%d)$")
 
-		local current_minutes = hour * 60 + minute
-		local start_minutes = start_hour * 60 + start_minute
-		local end_minutes = end_hour * 60 + end_minute
+    start_hour = tonumber(start_hour)
+    start_minute = tonumber(start_minute)
+    end_hour = tonumber(end_hour)
+    end_minute = tonumber(end_minute)
 
-		-- Handle case where the time range spans midnight
-		if end_minutes < start_minutes then
-			return current_minutes >= start_minutes or current_minutes <= end_minutes
-		else
-			return current_minutes >= start_minutes and current_minutes <= end_minutes
-		end
-	end
+    local current_minutes = hour * 60 + minute
+    local start_minutes = start_hour * 60 + start_minute
+    local end_minutes = end_hour * 60 + end_minute
+
+    -- Handle case where the time range spans midnight
+    if end_minutes < start_minutes then
+      return current_minutes >= start_minutes or current_minutes <= end_minutes
+    else
+      return current_minutes >= start_minutes and current_minutes <= end_minutes
+    end
+  end
 
 	local function convert_to_timestamp(time_str)
 		-- Assuming time_str is in "HH:MM" format
@@ -90,7 +97,7 @@ local function get_activity()
 
 	-- Default activity if no match found
 	_G.last_activity = "Relax"
-  _G.last_activity_end_time = os.time() + 60 * 5 -- Refresh every 5 minuts
+  _G.last_activity_end_time = os.time() + 60 * 5 -- Refresh every 5 minutes
   _G.mod_time = os.time()
 
   -- Failsafe if nothing else is found
