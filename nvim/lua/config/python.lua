@@ -29,7 +29,7 @@ local lines = {
   "        finalize()",
 }
 
-vim.api.nvim_create_autocmd("BufReadPost", {
+vim.api.nvim_create_autocmd({ "BufWinEnter", "BufReadPost" }, {
   pattern = "main.py",
   nested = true,
   callback = function()
@@ -59,9 +59,9 @@ end
 ls.add_snippets("python", {
   s("print", {
     t('print("'),
-    f(last_yanked, {}),    -- insert those lines here
+    f(last_yanked, {}), -- insert those lines here
     t('", '),
-    f(last_yanked, {}),    -- again for the second argument
+    f(last_yanked, {}), -- again for the second argument
     t(')'),
   }),
 })

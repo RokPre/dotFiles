@@ -23,8 +23,8 @@ font pango:Cousine Nerd Font Mono 16
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
-# Set background
-exec_always --no-startup-id feh --bg-fill /home/lasim/sync/rice/wallpapers/plants.jpg
+# For version 4.22 and above
+# gaps inner 5
 
 bindsym Mod1+space exec --no-startup-id rofi -show run
 
@@ -157,6 +157,9 @@ for_window [class="^.*"] border pixel 0
 exec --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1
 exec --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1
 
+# CapsLock
+exec_always --no-startup-id ~/.config/i3/scripts/capsLock.sh
+
 # Volumen control
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%-
@@ -166,8 +169,14 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%
 bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness.sh up
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness.sh down
 
+bindsym Print exec --no-startup-id flameshot gui
+
 # Second display
 exec --no-startup-id --no-startup-id ~/.config/i3/scripts/displays.sh
+
+# Set background
+# exec_always --no-startup-id feh --bg-fill /home/lasim/sync/rice/wallpapers/house.jpg
+exec_always --no-startup-id wal -i ~/sync/rice/wallpapers/house.jpg
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1

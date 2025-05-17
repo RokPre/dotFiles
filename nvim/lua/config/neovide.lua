@@ -7,7 +7,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
 		vim.defer_fn(function()
 			-- Your code here, e.g., setting Neovide scale factor
-			vim.g.neovide_scale_factor = 1.1
+			vim.g.neovide_scale_factor = 0.9
 		end, 120) -- Delay in milliseconds
 	end,
 })

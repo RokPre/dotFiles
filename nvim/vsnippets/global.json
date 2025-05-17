@@ -1,7 +1,0 @@
-{
-  "mk": {
-    "prefix": "mk",
-    "body": ["$$${1:content}$$"],
-    "description": "Insert TeX inline math"
-  }
-}

@@ -1,14 +1,13 @@
--- TODO: When searching for files use the <Leader>f_ keymap. <L>fb will open buffers. <L>ff will open files search, <L>fg will open git files search.
--- TODO: Add a grep keymap. <L>gb will grep buffers, <L>gc will grep cwd, <L>gg will grep git files.
--- TODO: Achieve this with telescope. Don'r reenvent the wheel.
 local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
-local modes = { "n", "i", "v", "t", "o" }
-local noimodes = { "n", "v", "o" }
 
 -- Navigation
-keymap(noimodes, "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
-keymap(noimodes, "gl", "$", { silent = true, noremap = true, desc = "End of line" })
+keymap("n", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
+keymap("n", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
+keymap("v", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
+keymap("v", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
+keymap("o", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
+keymap("o", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
 
 if pcall(require, "oil") then
   keymap("n", "<Leader>e", "<Cmd>Oil<CR>", opts)
@@ -18,8 +17,14 @@ end
 
 -- Scroll
 -- Vertical scroll is handled by neoscroll plugin
-keymap(modes, "<A-s>", "5z<Left>", opts)
-keymap(modes, "<A-g>", "5z<Right>", opts)
+keymap("n", "<A-s>", "5z<Left>", opts)
+keymap("n", "<A-g>", "5z<Right>", opts)
+keymap("i", "<A-s>", "5z<Left>", opts)
+keymap("i", "<A-s>", "5z<Left>", opts)
+keymap("v", "<A-g>", "5z<Right>", opts)
+keymap("v", "<A-g>", "5z<Right>", opts)
+keymap("t", "<A-g>", "5z<Right>", opts)
+keymap("t", "<A-g>", "5z<Right>", opts)
 
 -- Move highlighted text between lines
 keymap("n", "<C-j>", ":m .+1<CR>==", opts)     -- move line up
@@ -34,7 +39,7 @@ keymap("n", "gy", "yygccp", { silent = true, remap = true, desc = "Copy and comm
 keymap("v", "gy", "ygvgcgv`><Esc>p", { remap = true, desc = "Copy and comment selection" })
 
 -- Undo/redo
-keymap(noimodes, "<S-u>", "<C-r>", opts)
+keymap("n", "<S-u>", "<C-r>", opts)
 
 -- Save C-s
 keymap("i", "<C-s>", "<Esc><Cmd>w<CR>", opts)
@@ -127,25 +132,41 @@ keymap("n", "<A-C-h>", ":wincmd <<CR>", opts)
 keymap("n", "<A-C-m>", ":wincmd o<CR>", opts)
 keymap("n", "<A-=>", ":wincmd =<CR>", opts)
 
--- Parentheses
-keymap("v", "<leader>(", "<Esc>`<i(<Esc>`>la)<Esc>", { silent = true, noremap = true, desc = "()" })
-keymap("v", "<leader>)", "<Esc>`<i(<Esc>`>la)<Esc>", { silent = true, noremap = true, desc = "()" })
-keymap("v", "<leader>[", "<Esc>`<i[<Esc>`>la]<Esc>", { silent = true, noremap = true, desc = "[]" })
-keymap("v", "<leader>]", "<Esc>`<i[<Esc>`>la]<Esc>", { silent = true, noremap = true, desc = "[]" })
-keymap("v", "<leader>{", "<Esc>`<i{<Esc>`>la}<Esc>", { silent = true, noremap = true, desc = "{}" })
-keymap("v", "<leader>}", "<Esc>`<i{<Esc>`>la}<Esc>", { silent = true, noremap = true, desc = "{}" })
-keymap("v", "<leader><", "<Esc>`<i<<Esc>`>la><Esc>", { silent = true, noremap = true, desc = "<>" })
-keymap("v", "<leader>>", "<Esc>`<i<<Esc>`>la><Esc>", { silent = true, noremap = true, desc = "<>" })
-keymap("v", '<leader>"', '<Esc>`<i"<Esc>`>la"<Esc>', { silent = true, noremap = true, desc = '""' })
-keymap("v", "<leader>'", "<Esc>`<i'<Esc>`>la'<Esc>", { silent = true, noremap = true, desc = "''" })
-keymap("v", "<leader>`", "<Esc>`<i`<Esc>`>la`<Esc>", { silent = true, noremap = true, desc = "``" })
+-- Surround
+keymap("v", "<leader>(", "<Esc>`>a)<Esc>`<i(<Esc>", { silent = true, noremap = true, desc = "()" })
+keymap("v", "<leader>)", "<Esc>`>a)<Esc>`<i(<Esc>", { silent = true, noremap = true, desc = "()" })
+keymap("v", "<leader>[", "<Esc>`>a]<Esc>`<i[<Esc>", { silent = true, noremap = true, desc = "[]" })
+keymap("v", "<leader>]", "<Esc>`>a]<Esc>`<i[<Esc>", { silent = true, noremap = true, desc = "[]" })
+keymap("v", "<leader>{", "<Esc>`>a}<Esc>`<i{<Esc>", { silent = true, noremap = true, desc = "{}" })
+keymap("v", "<leader>}", "<Esc>`>a}<Esc>`<i{<Esc>", { silent = true, noremap = true, desc = "{}" })
+keymap("v", "<leader><", "<Esc>`>a><Esc>`<i<<Esc>", { silent = true, noremap = true, desc = "<>" })
+keymap("v", "<leader>>", "<Esc>`>a><Esc>`<i<<Esc>", { silent = true, noremap = true, desc = "<>" })
+keymap("v", '<leader>"', '<Esc>`>a"<Esc>`<i"<Esc>', { silent = true, noremap = true, desc = '""' })
+keymap("v", "<leader>'", "<Esc>`>a'<Esc>`<i'<Esc>", { silent = true, noremap = true, desc = "''" })
+keymap("v", "<leader>`", "<Esc>`>a`<Esc>`<i`<Esc>", { silent = true, noremap = true, desc = "``" })
 
+-- delete work, control backspace ctr + BS
 keymap("i", "<A-BS>", "<C-W>", opts)
 keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it up.
-
-keymap("n", "<C-p>", ":CccPick<CR>", opts)
 
 -- dashboard
 keymap("n", "<leader>h", function()
   require("snacks.dashboard").open()
 end, { desc = "Open Snacks Dashboard" })
+
+-- messages
+local function close_messages()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local name = vim.api.nvim_buf_get_name(buf)
+    if name == "" and vim.api.nvim_buf_get_option(buf, "buftype") == "nofile" then
+      vim.api.nvim_win_close(win, true)
+      return
+    end
+  end
+end
+
+vim.keymap.set("n", "<leader>m", "<Nop>", { desc = "Messages" })
+vim.keymap.set("n", "<leader>mm", "<Cmd>messages<CR>", { desc = "Open messages" })
+vim.keymap.set("n", "<leader>md", "<Cmd>messages clear<CR>", { desc = "Delete messages" })
+vim.keymap.set("n", "<leader>mc", close_messages, { desc = "Close messages" })

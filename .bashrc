@@ -37,7 +37,7 @@ fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-xterm-color | *-256color) color_prompt=yes ;;
+    xterm-color | *-256color | xterm-kitty) color_prompt=yes ;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -56,10 +56,17 @@ if [ -n "$force_color_prompt" ]; then
 	fi
 fi
 
+# if [ "$color_prompt" = yes ]; then
+# 	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+# else
+# 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+# fi
 if [ "$color_prompt" = yes ]; then
-	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+	# PS1='\[\033[01;32m\]\u -> \[\033[01;34m\]\w\[\033[00m\]\ $ '
+  # PS1="\[\033[01;32m\]\u -> \[\033[01;34m\]\w\[\033[00m\] \[$([ $? -eq 0 ] && echo "\033[01;32m" || echo "\033[01;31m")\]\$\[\033[00m\] "
+  PS1="\[\033[01;32m\]\u > \[\033[01;34m\]\w\[\033[00m\] \[$([ $? -eq 0 ] && echo "\[\033[01;32m\]" || echo "\[\033[01;31m\]")\]> \[\033[00m\]"
 else
-	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+  PS1='\u > \w > '
 fi
 unset color_prompt force_color_prompt
 
@@ -100,8 +107,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-	. ~/.bash_aliases
+if [ -f ~/.bash_alias ]; then
+  source ~/.bash_alias
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -121,19 +128,39 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-.export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
-alias eb='nano ~/.bashrc'
+export ROS_MASTER_URI=http://192.168.9.138:11311
+export ROS_HOSTNAME=192.168.9.138
+export TURTLEBOT3_MODEL="waffle_pi"
+
 alias sb='source ~/.bashrc'
-alias gs='git status'
-alias gp='git pull'
-alias cw='cd ~/catkin_ws'
-alias cs='cd ~/catkin_ws/src'
 alias cm='cd ~/catkin_ws && catkin_make'
-source /opt/ros/noetic/setup.bash
-source ~/catkin_ws/devel/setup.bash
-source ~/.bash_alias
-export ROS_MASTER_URI=http://192.168.50.63:11311
-export ROS_HOSTNAME=192.168.50.63
-export TURTLEBOT3_MODEL=waffle_pi
 
+if [ -f /opt/ros/noetic/setup.bash ]; then
+  source /opt/ros/noetic/setup.bash
+fi
+
+if [ -f ~/catkin_ws/devel/setup.bash ]; then
+  source ~/catkin_ws/devel/setup.bash
+fi
+
+if [[ ! "$PATH" == */home/lasim/.fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/lasim/.fzf/bin"
+fi
+
+export NVM_DIR="$HOME/.config/nvm"
+if [ -d $NVM_DIR ]; then
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+fi
+
+
+echo 🕐 "" $(date +"%Y-%m-%d %H:%M")
+
+weather=$(timeout 0.5 curl -s wttr.in?format=1)
+
+if [ -n "$weather" ]; then
+  echo "$weather"
+  echo 📡 "" $(hostname -I)
+fi
