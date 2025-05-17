@@ -1,4 +1,3 @@
--- TODO: Add a list of people that you haven't interacted with in a long time
 -- TODO: Sort by birthdays
 -- TODO: Add caching,
 

@@ -1,5 +1,6 @@
+-- ✅ feature complete
 -- .config/nvim/lua/myPlugins/sessionManager.lua
--- Session name: cwd path replaced with %% eg: %home%lasim%.vim
+-- Session name: cwd path replaced with %%
 -- Sessions saved in vim.fn.stdpath("data"): ~/.local/state/nvim/sessions/
 
 local M = {}
@@ -25,7 +26,7 @@ function M.LoadSession()
 
 	if vim.fn.filereadable(session_path) == 1 then
 		vim.cmd("silent! source " .. vim.fn.fnameescape(session_path))
-		print("Loaded session: " .. session_path)
+		print("Loaded session: " .. session_path:gsub(".vim$", ""):match(".*%%(.*)"))
 		return 0
 	else
 		print("Session file not found: " .. session_path)
@@ -58,6 +59,7 @@ local function listSessions()
 		vim.cmd("%bd!")
 		local cmd = "source " .. sessions_folder .. vim.fn.fnameescape(selected)
 		vim.cmd(cmd)
+    vim.print("selected: ", selected:gsub(".vim$", ""):match(".*%%(.*)"))
 	end)
 end
 

@@ -488,6 +488,7 @@ local function get_todos_async(files)
 end
 
 local function f_current_buffer()
+  -- TODO: Right now it reads the file and not the buffer. This can cause problems if the buffers was changed and not saved.
 	local file_path = vim.api.nvim_buf_get_name(0)
 	local files = { file_path }
 	local todos = get_todos(files)

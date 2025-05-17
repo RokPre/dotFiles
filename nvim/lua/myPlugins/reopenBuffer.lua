@@ -1,3 +1,4 @@
+-- ✅ feature complete
 local keymap = vim.keymap.set
 local closed_buffers = {}
 

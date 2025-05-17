@@ -64,8 +64,28 @@ return {
     lspconfig.matlab_ls.setup({
       capabilities = capabilities,
     })
+
     lspconfig.lua_ls.setup({
       capabilities = capabilities,
+      settings = {
+        Lua = {
+          runtime = {
+            -- tell the server you're using LuaJIT
+            version = 'LuaJIT',
+          },
+          diagnostics = {
+            -- recognize the vim and require globals
+            globals = { 'vim', 'require' },
+          },
+          workspace = {
+            -- make the server aware of Neovim runtime files
+            library = vim.api.nvim_get_runtime_file("", true),
+          },
+          telemetry = {
+            enable = false,
+          },
+        },
+      },
     })
   end,
 }
