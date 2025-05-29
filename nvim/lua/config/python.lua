@@ -1,4 +1,3 @@
--- TODO: Add a print snippet. If a variable/code it highlighted it will put it in a print statement.
 local lines = {
   "#! /usr/bin/python3",
   "",

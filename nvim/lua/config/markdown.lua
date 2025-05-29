@@ -5,6 +5,13 @@ local t  = ls.text_node
 local i  = ls.insert_node
 local f  = ls.function_node
 
+local function today()
+  return "[[" .. os.date("%Y - %j") .. "|today]]"
+end
+
+local function danes()
+  return "[[" .. os.date("%Y - %j") .. "|danes]]"
+end
 
 ls.add_snippets("markdown", {
   s({ trig = "mk", snippetType = "autosnippet", wordTrig = true }, {
@@ -22,11 +29,53 @@ ls.add_snippets("markdown", {
   }),
 })
 
+ls.add_snippets("markdown", {
+  s({ trig = "today", snippetType = "autosnippet", wordTrig = true }, {
+    f(today),
+  }),
+})
+
+ls.add_snippets("markdown", {
+  s({ trig = "danes", snippetType = "autosnippet", wordTrig = true }, {
+    f(danes),
+  }),
+})
+
+local function check_box()
+  -- TODO: Check if this function is safe to use.
+  local line_num = vim.fn.line(".") - 1 -- 0-indexed
+  local line = vim.api.nvim_get_current_line()
+
+  -- Patterns
+  local unchecked_pattern = "^%s*%- %[ %] (.*)$"
+  local checked_pattern = "^%s*%- %[x%] (.*)$"
+
+  local new_line
+
+  if line:match(unchecked_pattern) then
+    local text = line:match(unchecked_pattern)
+    new_line = "- [x] " .. text
+  elseif line:match(checked_pattern) then
+    local text = line:match(checked_pattern)
+    new_line = text
+  else
+    new_line = "- [ ] " .. line
+  end
+
+  vim.api.nvim_buf_set_lines(0, line_num, line_num + 1, false, { new_line })
+end
+
+vim.filetype.add({
+  extension = {
+    md = "markdown",
+  },
+})
+
 local opts = { silent = true, noremap = true, buffer = true }
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "markdown" },
   callback = function()
-    vim.keymap.set("n", "<C-c>", "<Cmd>ObsidianToggleCheckbox<CR>", opts)
+    vim.keymap.set("n", "<C-c>", check_box, opts)
     vim.keymap.set("n", "<C-A-h>", "<Cmd>bprev<Cr>", opts)
     vim.keymap.set("n", "<C-A-l>", "<Cmd>bnext<Cr>", opts)
     vim.opt_local.wrap = true
@@ -43,3 +92,4 @@ vim.api.nvim_create_autocmd("FileType", {
 
 
 local ts_utils = require('nvim-treesitter.ts_utils')
+

@@ -4,4 +4,5 @@ return {
   "keyboardsNotMine",
   "offline",
   "/home/rok/.config/nvm",
+  "/home/rok/.cargo/",
 }

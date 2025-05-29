@@ -16,6 +16,9 @@ return {
   -- { import = "plugins.w3m" }, -- Web browser
   -- { import = "plugins.winShift" }, -- Window management
   -- { import = "plugins.zen" }, -- Zen mode
+  { import = "plugins.dap" }, -- Better debugging
+  { import = "plugins.dapMason" },
+  { import = "plugins.dapui" },
   { import = "plugins.bufferLine" }, -- Browser like buffers
   { import = "plugins.cmp" },        -- Text completion
   { import = "plugins.colorizer" },

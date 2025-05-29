@@ -19,4 +19,8 @@ return {
   {"rmehri01/onenord.nvim"},
   {"sainnhe/edge"},
   {"savq/melange-nvim"},
+  {"TroyFletcher/vim-colors-synthwave"},
+  {"Matsuuu/pinkmare"},
+  {"rose-pine/neovim"},
+
 }

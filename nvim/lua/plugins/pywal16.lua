@@ -15,7 +15,7 @@ return {
       end, 100)
     end)
     if not ok then
-      vim.cmd.colorscheme("tokyonight-storm")
+      vim.cmd.colorscheme("tokyonight-night")
     end
   end,
 }

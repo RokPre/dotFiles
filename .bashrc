@@ -62,9 +62,7 @@ fi
 # 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 # fi
 if [ "$color_prompt" = yes ]; then
-	# PS1='\[\033[01;32m\]\u -> \[\033[01;34m\]\w\[\033[00m\]\ $ '
-  # PS1="\[\033[01;32m\]\u -> \[\033[01;34m\]\w\[\033[00m\] \[$([ $? -eq 0 ] && echo "\033[01;32m" || echo "\033[01;31m")\]\$\[\033[00m\] "
-  PS1="\[\033[01;32m\]\u > \[\033[01;34m\]\w\[\033[00m\] \[$([ $? -eq 0 ] && echo "\[\033[01;32m\]" || echo "\[\033[01;31m\]")\]> \[\033[00m\]"
+  PS1='\[\033[1;34m\]\u > \[\033[1;32m\]\w $([[ $? -eq 0 ]] && echo "\[\033[1;34m\]> " || echo "\[\033[1;31m\]> ")\[\033[0m\]'
 else
   PS1='\u > \w > '
 fi
@@ -150,6 +148,10 @@ if [[ ! "$PATH" == */home/lasim/.fzf/bin* ]]; then
   PATH="${PATH:+${PATH}:}/home/lasim/.fzf/bin"
 fi
 
+if [ -d /opt/zotero ]; then
+  PATH="$PATH:/opt/zotero"
+fi
+
 export NVM_DIR="$HOME/.config/nvm"
 if [ -d $NVM_DIR ]; then
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -157,6 +159,7 @@ fi
 
 
 echo 🕐 "" $(date +"%Y-%m-%d %H:%M")
+echo 🔋 "" $(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage)
 
 weather=$(timeout 0.5 curl -s wttr.in?format=1)
 

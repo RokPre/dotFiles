@@ -1,5 +1,9 @@
+local vaultPath = "~/sync/vault"
 return {
   "RokPre/obsidian.nvim",
+  cond = function()
+    return vim.fn.isdirectory(vim.fn.expand(vaultPath)) ~= 0
+  end,
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
@@ -7,8 +11,9 @@ return {
     preferred_link_content = "filename",
     workspaces = {
       {
+        -- name = "vault",
         name = "vault",
-        path = "~/sync/vault",
+        path = vaultPath,
       },
     },
     disable_frontmatter = true,
@@ -46,10 +51,10 @@ return {
     ui = {
       enable = false,
     },
-    checkboxes = {
-      [" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
-      ["x"] = { char = "", hl_group = "ObsidianDone" },
-    },
+    -- checkboxes = {
+    --   [" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
+    --   ["x"] = { char = "", hl_group = "ObsidianDone" },
+    -- },
     attachments = {
       folder = "Attachment folder",
     },

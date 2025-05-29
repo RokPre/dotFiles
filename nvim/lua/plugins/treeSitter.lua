@@ -96,6 +96,7 @@ return {
 							["na"] = "@assignment.outer",
 							["nm"] = "@comment.outer",
 							["nb"] = "@block.outer",
+              ["nC"] = "@comment.outer",
 						},
 						goto_previous_start = {
 							["Nf"] = "@function.outer",
@@ -107,6 +108,7 @@ return {
 							["Na"] = "@assignment.outer",
 							["Nm"] = "@comment.outer",
 							["Nb"] = "@block.outer",
+              ["NC"] = "@comment.outer",
 						},
 						goto_next_end = {
 							["ef"] = "@function.outer",
@@ -118,6 +120,7 @@ return {
 							["ea"] = "@assignment.outer",
 							["em"] = "@comment.outer",
 							["eb"] = "@block.outer",
+              ["eC"] = "@comment.outer",
 						},
 						goto_previous_end = {
 							["bf"] = "@function.outer",
@@ -129,6 +132,7 @@ return {
 							["ba"] = "@assignment.outer",
 							["bm"] = "@comment.outer",
 							["bb"] = "@block.outer",
+              ["bC"] = "@comment.outer",
 						},
 					},
 				},

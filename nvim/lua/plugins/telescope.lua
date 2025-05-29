@@ -15,6 +15,7 @@ return {
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
     vim.keymap.set('n', '<leader>fc', builtin.find_files, { desc = 'Find files' })
     vim.keymap.set('n', '<leader>fh', function() builtin.find_files({cwd = os.getenv("HOME")}) end, { desc = 'Find in home' })
+vim.keymap.set('n', '<leader>fo', function() builtin.find_files({cwd = "~/sync/vault" }) end, { desc = 'Find in vault' })
     vim.keymap.set('n', '<leader>fg', builtin.git_files, { desc = 'Git files' })
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Buffers' })
     vim.keymap.set('n', '<leader>fm', builtin.marks, { desc = 'Marks' })

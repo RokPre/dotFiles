@@ -10,7 +10,7 @@ keymap("o", "gh", "^", { silent = true, noremap = true, desc = "Beginning of lin
 keymap("o", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
 
 if pcall(require, "oil") then
-  keymap("n", "<Leader>e", "<Cmd>Oil<CR>", opts)
+  keymap("n", "<Leader>ee", "<Cmd>Oil<CR>", opts)
 else
   keymap("n", "<Leader>e", "<Cmd>e .<CR>", opts)
 end
@@ -81,8 +81,10 @@ keymap("v", "p", '"0P', opts) -- Visual mode
 
 -- Paste from system clipboard
 keymap("n", "<C-S-v>", '"+p', opts)
-keymap("i", "<C-S-v>", '<Cmd>normal!"+pa<CR>', opts)
-keymap("t", "<C-S-v>", '<C-\\><C-N>"+pa', opts)
+-- keymap("i", "<C-S-v>", '<Cmd>normal!"+Pa<CR>', opts)
+keymap("i", "<C-S-v>", '<C-r>+', opts)
+-- keymap("t", "<C-S-v>", '<C-\\><C-N>"+Pa', opts)
+keymap("t", "<C-S-v>", '<C-\\><C-N>"+pi', opts)
 
 -- Close buffer
 keymap("n", "<C-w>", "<Cmd>bd!<Cr>", opts)
