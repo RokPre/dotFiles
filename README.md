@@ -10,7 +10,6 @@ Note taking: [obsidian](https://obsidian.md)
 # TODO
 - [ ] Make custom color sheme
 - [ ] Nvim: Debugging [link](https://youtu.be/fvRwG17XsaA)
-- [x] Nvim: Fix obsidian checkboxes. Make it so that there are only two options. Checked and unchecked.
 - [ ] Nvim: Obsidian: Fix cmp completion. First few letters somehow get repeated.
 - [ ] ST: Pass all keybindings to tmux
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)
@@ -22,6 +21,7 @@ Note taking: [obsidian](https://obsidian.md)
 - [x] Nvim: Added description to all keybindings, do need to require("which-key") to show them.
 - [x] Nvim: Ctrl+w close buffer remove delay
 - [x] Nvim: Custom snippets [link](https://youtu.be/Y3XWijJgdJs)
+- [x] Nvim: Fix obsidian checkboxes. Make it so that there are only two options. Checked and unchecked.
 - [x] Nvim: Fix paste in in terminal and insert mode
 - [x] Nvim: Image viewer in nvim (done with snacks.image)
 - [x] Nvim: Implement to no-neck-pain like plugin myself for md files.
