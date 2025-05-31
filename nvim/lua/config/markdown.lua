@@ -19,25 +19,28 @@ ls.add_snippets("markdown", {
     i(1),
     t('$')
   }),
-})
-
-ls.add_snippets("markdown", {
   s({ trig = "dm", snippetType = "autosnippet", wordTrig = true }, {
     t({ '$$$', "" }),
     i(1),
     t({ "", '$$$' }),
   }),
-})
-
-ls.add_snippets("markdown", {
   s({ trig = "today", snippetType = "autosnippet", wordTrig = true }, {
     f(today),
   }),
-})
-
-ls.add_snippets("markdown", {
   s({ trig = "danes", snippetType = "autosnippet", wordTrig = true }, {
     f(danes),
+  }),
+  s({ trig = "code", wordTrig = true }, {
+    t({"`"}),
+    i(1),
+    t({"`"}),
+  }),
+  s({ trig = "codeblock", wordTrig = true }, {
+    t({"```"}),
+    i(1),
+    t({"", ""}),
+    i(2),
+    t({"", "```"}),
   }),
 })
 

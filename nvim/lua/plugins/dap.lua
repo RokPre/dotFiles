@@ -42,14 +42,14 @@ return {
     -- *** Add this adapter definition ***
     dap.adapters.python = {
       type = "executable",
-      command = "/usr/bin/python3.8",  -- adjust to your actual Python, e.g. venv
+      command = "/usr/bin/python3.8", -- adjust to your actual Python, e.g. venv
       args = { "-m", "debugpy.adapter" },
     }
 
     -- Your existing configuration
     dap.configurations.python = {
       {
-        type = "python",  -- links to dap.adapters.python
+        type = "python", -- links to dap.adapters.python
         request = "launch",
         name = "Launch file",
         program = "${file}",

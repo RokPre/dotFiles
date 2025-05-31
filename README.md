@@ -9,7 +9,6 @@ Note taking: [obsidian](https://obsidian.md)
 
 # TODO
 - [ ] Make custom color sheme
-- [ ] Nvim: Debugging [link](https://youtu.be/fvRwG17XsaA)
 - [ ] Nvim: Obsidian: Fix cmp completion. First few letters somehow get repeated.
 - [ ] ST: Pass all keybindings to tmux
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)

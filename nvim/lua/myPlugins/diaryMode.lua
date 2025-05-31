@@ -18,7 +18,11 @@ local function enableDiaryMode()
   vim.api.nvim_create_autocmd("BufAdd", {
     group = group,
     callback = function()
+      local margin = math.floor((vim.o.columns - 160) / 2)
+      -- Window open has to be in this order.
+      vim.api.nvim_open_win(empty, false, { split = "left", width = margin, style = "minimal" } )
       vim.api.nvim_open_win(empty, true, { split = "right" })
+      vim.api.nvim_open_win(empty, false, { split = "right", width = margin, style = "minimal"  })
       vim.cmd("ObsidianToday") -- This then triggers the autocmd for setting the filetype
       vim.api.nvim_del_augroup_by_name("DiaryMode") -- prevent repeat
 

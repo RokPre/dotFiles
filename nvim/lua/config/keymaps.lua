@@ -36,7 +36,7 @@ keymap("v", "<", "<gv", opts)                  -- indent left
 
 -- Comment comment and paste below
 keymap("n", "gy", "yygccp", { silent = true, remap = true, desc = "Copy and comment current line" })
-keymap("v", "gy", "ygvgcgv`><Esc>p", { remap = true, desc = "Copy and comment selection" })
+keymap("v", "gy", "ygvgc`>o<Esc>gcco<Esc>p", { remap = true, desc = "Copy and comment selection" })
 
 -- Undo/redo
 keymap("n", "<S-u>", "<C-r>", opts)
@@ -81,8 +81,7 @@ keymap("v", "p", '"0P', opts) -- Visual mode
 
 -- Paste from system clipboard
 keymap("n", "<C-S-v>", '"+p', opts)
--- keymap("i", "<C-S-v>", '<Cmd>normal!"+Pa<CR>', opts)
-keymap("i", "<C-S-v>", '<C-r>+', opts)
+keymap("i", "<C-S-v>", '<Cmd>normal!"+pa<CR>', opts)
 -- keymap("t", "<C-S-v>", '<C-\\><C-N>"+Pa', opts)
 keymap("t", "<C-S-v>", '<C-\\><C-N>"+pi', opts)
 

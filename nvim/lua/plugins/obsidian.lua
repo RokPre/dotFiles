@@ -57,6 +57,7 @@ return {
     -- },
     attachments = {
       folder = "Attachment folder",
+      img_folder = "Attachment folder"
     },
   },
 }

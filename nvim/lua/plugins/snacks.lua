@@ -28,7 +28,7 @@ return {
           { icon = " ", key = "f", desc = "Find File", action = builtin.find_files },
           { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
           { icon = " ", key = "g", desc = "Find Text", action = builtin.live_grep },
-          { icon = " ", key = "p", desc = "Project Explorer", action = "<cmd>ProjectManagerShowProjects<cr>" },
+          { icon = " ", key = "p", desc = "Project Explorer", action = "<cmd>ProjectManager<cr>" },
           { icon = " ", key = "d", desc = "Daily note", action = "<cmd>DiaryModeToggle<cr>" },
           { icon = " ", key = "c", desc = "Config", action = function() builtin.find_files({cwd = vim.fn.stdpath('config')}) end },
           { icon = " ", key = "s", desc = "Restore Session", action = "<Cmd>ListSession<cr>" },

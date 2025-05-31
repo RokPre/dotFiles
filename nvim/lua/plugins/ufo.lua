@@ -3,37 +3,94 @@ return {
     "kevinhwang91/nvim-ufo",
     dependencies = { "kevinhwang91/promise-async" },
     config = function()
-      -- vim.o.foldcolumn = "1" -- sets foldcolumn to 1
-      vim.o.foldlevel = 99 -- high foldlevel for ufo provider
-      vim.o.foldlevelstart = 99 -- ensures folds are open by default
-      vim.o.foldenable = true -- enables folding
+      local ok, ufo = pcall(require, "ufo")
+      if not ok then
+        vim.notify("Failed to load nvim-ufo", vim.log.levels.WARN)
+        return
+      end
+
+      -- Fold settings
+      -- vim.o.foldcolumn = "1"
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
       vim.o.foldmethod = "expr"
       vim.o.foldexpr = "nvim_ufo#foldexpr()"
+      vim.o.foldtext = "" -- Use ufo's handler instead
 
-      -- Remap keys for opening and closing folds provided by nvim-ufo
-      vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-      vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+      -- Fold text display customization
+      local handler = function(virtText, lnum, endLnum, width, truncate)
+        local newVirtText = {}
+        local suffix = ("  %d lines "):format(endLnum - lnum)
+        local sufWidth = vim.fn.strdisplaywidth(suffix)
+        local targetWidth = width - sufWidth
+        local curWidth = 0
 
-      -- Folding folding folds
+        for _, chunk in ipairs(virtText) do
+          local chunkText = chunk[1]
+          local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+          if targetWidth > curWidth + chunkWidth then
+            table.insert(newVirtText, chunk)
+            curWidth = curWidth + chunkWidth
+          else
+            chunkText = truncate(chunkText, targetWidth - curWidth)
+            table.insert(newVirtText, { chunkText, chunk[2] })
+            break
+          end
+        end
+
+        table.insert(newVirtText, { suffix, "MoreMsg" })
+        return newVirtText
+      end
+
+      -- Smart fold/unfold behavior with h/l
       local function fold()
         local col = vim.api.nvim_win_get_cursor(0)[2]
-        local line = vim.fn.getline(".")
-        local fnbc1 = #vim.fn.matchstr(line, "^\\s*")
-        -- local fnbc2 = vim.fn.getline("."):find("%S")
-        -- local fnbc3 = vim.fn.match(vim.fn.getline("."), "\\S") + 1
-        if col <= fnbc1 then
-          vim.cmd(":silent! foldclose")
+        local indent = vim.fn.indent(".")
+        if col <= indent then
+          vim.cmd("silent! foldclose")
         else
           vim.api.nvim_feedkeys("h", "n", false)
         end
       end
-      vim.keymap.set("n", "h", fold, {})
 
-      require("ufo").setup(
-      {provider_selector = function(bufnr, filetype, buftype)
-        return { "treesitter", "indent" }
+      -- local function unfold()
+      --   if vim.fn.foldclosed(".") ~= -1 then
+      --     vim.cmd("silent! foldopen")
+      --   else
+      --     vim.api.nvim_feedkeys("l", "n", false)
+      --   end
+      -- end
+
+      local function unfold()
+        local ok, ufo = pcall(require, "ufo")
+        if not ok then
+          vim.api.nvim_feedkeys("l", "n", false)
+          return
+        end
+
+        local lnum = vim.api.nvim_win_get_cursor(0)[1]
+
+        if vim.fn.foldclosed(lnum) ~= -1 then
+          ufo.openFoldsExceptKinds({ lnum, lnum }, {}) -- unfold all nested folds at current line
+        else
+          vim.api.nvim_feedkeys("l", "n", false)
+        end
       end
-    }) -- initialize ufo
+
+      -- Keymaps
+      vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "Open all folds (UFO)" })
+      vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "Close all folds (UFO)" })
+      vim.keymap.set("n", "h", fold, { desc = "Smart fold (left)" })
+      vim.keymap.set("n", "l", unfold, { desc = "Smart unfold (right)" })
+
+      -- Setup ufo
+      ufo.setup({
+        provider_selector = function(bufnr, filetype, buftype)
+          return { "treesitter", "indent" }
+        end,
+        fold_virt_text_handler = handler,
+      })
     end,
   },
 }
