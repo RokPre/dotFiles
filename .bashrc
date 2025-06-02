@@ -152,6 +152,10 @@ if [ -d /opt/zotero ]; then
   PATH="$PATH:/opt/zotero"
 fi
 
+if [ -d "$HOME/sync/bashUtils" ]; then
+  export PATH="$HOME/sync/bashUtils:$PATH"
+fi
+
 export NVM_DIR="$HOME/.config/nvm"
 if [ -d $NVM_DIR ]; then
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

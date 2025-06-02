@@ -2,7 +2,7 @@ local vaultPath = "~/sync/vault"
 return {
   "RokPre/obsidian.nvim",
   cond = function()
-    return vim.fn.isdirectory(vim.fn.expand(vaultPath)) ~= 0
+    return vim.fn.isdirectory(vim.fn.expand(vaultPath)) ~= 0 and vim.bo.filetype == "markdown"
   end,
   dependencies = {
     "nvim-lua/plenary.nvim",

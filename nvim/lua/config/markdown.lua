@@ -1,4 +1,3 @@
--- TODO: When inside a math block ($, $$$) use the same snippets as nvim/lua/config/latex.lua
 local ls = require("luasnip")
 local s  = ls.snippet
 local t  = ls.text_node
@@ -93,6 +92,50 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown" },
+  callback = function()
+    local group = vim.api.nvim_create_augroup("MarkdownMathDetect", { clear = true })
+
+    local function is_in_math_block()
+      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      local cursor = vim.api.nvim_win_get_cursor(0)
+      local row = cursor[1]
+
+      local math_start = 0
+      for i = 1, row do
+        if lines[i]:match("^%s*%${2}") then
+          math_start = math_start + 1
+        end
+      end
+      if math_start % 2 == 1 then
+        print("math")
+      end
+      return math_start % 2 == 1
+    end
+
+    local function toggle_filetype()
+      if is_in_math_block() then
+        if vim.bo.filetype ~= "tex" then
+          vim.cmd("set filetype=tex")
+          vim.bo.filetype = "tex"
+        end
+      else
+        if vim.bo.filetype ~= "markdown" then
+          vim.cmd("set filetype=markdown")
+          vim.bo.filetype = "markdown"
+        end
+      end
+    end
+
+    vim.api.nvim_create_autocmd({ "CursorMoved", "CursorHold" }, {
+      group = group,
+      buffer = 0,
+      callback = toggle_filetype,
+    })
+  end,
+})
 
 local ts_utils = require('nvim-treesitter.ts_utils')
 
