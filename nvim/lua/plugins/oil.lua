@@ -1,5 +1,5 @@
 return {
-  "stevearc/oil.nvim",
+  "RokPre/oil.nvim",
   opts = {},
   dependencies = { { "echasnovski/mini.icons", opts = {} } },
   config = function()
@@ -7,6 +7,10 @@ return {
     vim.keymap.set("n", "<Leader>ee", "<Cmd>Oil<CR>", { noremap = true, silent = true, desc = "File picker" })
     require("oil").setup({
       default_file_explorer = true,
+      columns = {
+        "icon",
+        "size",
+      },
       view_options = {
         show_hidden = true,
       },

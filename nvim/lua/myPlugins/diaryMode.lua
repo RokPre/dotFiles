@@ -59,17 +59,29 @@ local function dissableDiaryMode()
 end
 
 local function toggleDiaryMode()
+  vim.g.DiaryMode = not vim.g.DiaryMode
+
   local ok = pcall(require, "obsidian")
   if not ok then
-    vim.notify("Obsidian.nvim is not loaded", vim.log.levels.ERROR)
-    return
+    local lazy_ok, lazy = pcall(require, "lazy")
+    if not lazy_ok then
+      vim.notify("Diary mode requires lazy.nvim and obsidian.nvim", vim.log.levels.ERROR)
+      return
+    end
+
+    -- Try again
+    ok = pcall(require, "obsidian")
+    if not ok then
+      vim.notify("Diary mode requires obsidian.nvim", vim.log.levels.ERROR)
+      return
+    end
   end
+
   if vim.g.DiaryMode then
-    dissableDiaryMode()
-  else
     enableDiaryMode()
+  else
+    dissableDiaryMode()
   end
-  vim.g.DiaryMode = not vim.g.DiaryMode
 end
 
 vim.keymap.set("n", "<C-d>", toggleDiaryMode, { desc = "Enable diary mode"})

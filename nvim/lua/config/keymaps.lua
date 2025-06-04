@@ -2,8 +2,10 @@ local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
 
 -- Navigation
-keymap("n", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
-keymap("n", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
+-- keymap("n", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
+-- keymap("n", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
+-- These keyboard shortcus have been movde to ufo.lua
+-- /home/lasim/sync/dotFiles/nvim/lua/plugins/ufo.lua
 keymap("v", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
 keymap("v", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
 keymap("o", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })

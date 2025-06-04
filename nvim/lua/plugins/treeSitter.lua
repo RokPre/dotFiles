@@ -25,6 +25,12 @@ vim.keymap.set("n", "NW", "B")
 vim.keymap.set("n", "eW", "E")
 vim.keymap.set("n", "bW", "BBE")
 
+-- These keymaps are in ufo.lua
+-- ~/sync/dotFiles/nvim/lua/plugins/ufo.lua
+-- local ufo = require("ufo")
+-- vim.keymap.set("n", "nz", ufo.goNextClosedFold, {desc = "Next closed fold (UFO)"})
+-- vim.keymap.set("n", "Nz", ufo.goPreviousClosedFold, {desc = "Next closed fold (UFO)"})
+
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",

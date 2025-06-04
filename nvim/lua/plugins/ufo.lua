@@ -10,7 +10,6 @@ return {
       end
 
       -- Fold settings
-      -- vim.o.foldcolumn = "1"
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
@@ -43,7 +42,6 @@ return {
         return newVirtText
       end
 
-      -- Smart fold/unfold behavior with h/l
       local function fold()
         local col = vim.api.nvim_win_get_cursor(0)[2]
         local indent = vim.fn.indent(".")
@@ -54,39 +52,48 @@ return {
         end
       end
 
-      -- local function unfold()
-      --   if vim.fn.foldclosed(".") ~= -1 then
-      --     vim.cmd("silent! foldopen")
-      --   else
-      --     vim.api.nvim_feedkeys("l", "n", false)
-      --   end
-      -- end
+      local function foldAll()
+        local col = vim.api.nvim_win_get_cursor(0)[2]
+        local indent = vim.fn.indent(".")
+        if col <= indent then
+          -- TODO: Fold the current line, but also fold all the sub folds that are in the fold that is on the current line. Sounds confusing.
+          vim.print("TODO")
+        else
+          vim.api.nvim_feedkeys("^", "n", false)
+        end
+      end
 
       local function unfold()
-        local ok, ufo = pcall(require, "ufo")
-        if not ok then
-          vim.api.nvim_feedkeys("l", "n", false)
-          return
-        end
-
         local lnum = vim.api.nvim_win_get_cursor(0)[1]
-
         if vim.fn.foldclosed(lnum) ~= -1 then
-          ufo.openFoldsExceptKinds({ lnum, lnum }, {}) -- unfold all nested folds at current line
+          vim.cmd("silent! foldopen")
         else
           vim.api.nvim_feedkeys("l", "n", false)
         end
       end
 
+      local function unfoldAll()
+        local lnum = vim.api.nvim_win_get_cursor(0)[1]
+        if vim.fn.foldclosed(lnum) ~= -1 then
+          vim.cmd("silent! foldopen!")
+        else
+          vim.api.nvim_feedkeys("$", "n", false)
+        end
+      end
       -- Keymaps
       vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "Open all folds (UFO)" })
       vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "Close all folds (UFO)" })
       vim.keymap.set("n", "h", fold, { desc = "Smart fold (left)" })
+      vim.keymap.set("n", "gh", foldAll, { desc = "Smart fold (left)" })
       vim.keymap.set("n", "l", unfold, { desc = "Smart unfold (right)" })
+      vim.keymap.set("n", "gl", unfoldAll, { desc = "Smart unfold (right)" })
+      vim.keymap.set("n", "zp", ufo.peekFoldedLinesUnderCursor, { desc = "Peek (preview) fold" })
+      vim.keymap.set("n", "nz", ufo.goNextClosedFold, {desc = "Next closed fold (UFO)"})
+      vim.keymap.set("n", "Nz", ufo.goPreviousClosedFold, {desc = "Next closed fold (UFO)"})
 
       -- Setup ufo
       ufo.setup({
-        provider_selector = function(bufnr, filetype, buftype)
+        provider_selector = function(_, filetype, _)
           return { "treesitter", "indent" }
         end,
         fold_virt_text_handler = handler,
