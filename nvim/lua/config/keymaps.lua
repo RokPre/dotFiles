@@ -88,9 +88,10 @@ keymap("i", "<C-S-v>", '<Cmd>normal!"+pa<CR>', opts)
 keymap("t", "<C-S-v>", '<C-\\><C-N>"+pi', opts)
 
 -- Close buffer
-keymap("n", "<C-w>", "<Cmd>bd!<Cr>", opts)
-pcall(vim.api.nvim_del_keymap, "n", "<C-W><C-d>")
-pcall(vim.api.nvim_del_keymap, "n", "<C-W>d")
+-- This has been moved to: ~/sync/dotFiles/nvim/lua/myPlugins/bufferClosing.lua
+-- keymap("n", "<C-w>", "<Cmd>bd!<Cr>", opts)
+-- pcall(vim.api.nvim_del_keymap, "n", "<C-W><C-d>")
+-- pcall(vim.api.nvim_del_keymap, "n", "<C-W>d")
 
 -- Open buffer
 keymap("n", "<C-t>", "<Cmd>new<Cr>", opts)
@@ -112,7 +113,15 @@ keymap("n", "<A-v>", ":wincmd v<CR>", opts)
 keymap("n", "<A-b>", ":wincmd s<CR>", opts)
 
 -- Close window
-keymap("n", "<A-w>", "<Cmd>w! | close<CR>", opts)
+keymap("n", "<A-w>", function()
+  local buftype = vim.bo.buftype
+  if buftype == "nofile" or buftype == "help" or buftype == "quickfix" then
+    vim.cmd("close")
+  else
+    vim.cmd("w | bd")
+  end
+end, { noremap = true, silent = true, desc = "Smart close" })
+
 
 -- Move windows around
 if pcall(require, "winshift") then

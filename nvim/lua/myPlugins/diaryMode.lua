@@ -1,7 +1,37 @@
 vim.g.DiaryMode = false
 local session_file = vim.fn.stdpath("cache") .. "/diary_sesion.vim"
 
+local function set_backgournd_color_of_margin(factor, win)
+  local bg_color = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
+  local bg_color_hex = string.format("#%06x", bg_color)
+  bg_color_hex = bg_color_hex:gsub("#", "")
+
+  local r = tonumber(bg_color_hex:sub(1, 2), 16)
+  local g = tonumber(bg_color_hex:sub(3, 4), 16)
+  local b = tonumber(bg_color_hex:sub(5, 6), 16)
+
+  r = math.max(0, math.min(255, math.floor(r * factor)))
+  g = math.max(0, math.min(255, math.floor(g * factor)))
+  b = math.max(0, math.min(255, math.floor(b * factor)))
+
+  local dimmed = string.format("#%02x%02x%02x", r, g, b)
+
+  -- Define custom highlight
+  vim.api.nvim_set_hl(0, "MyCustomBackground", { bg = dimmed })
+
+  -- Apply to window
+  vim.api.nvim_win_set_option(win, "winhighlight", "Normal:MyCustomBackground")
+end
+
 local function enableDiaryMode()
+  vim.cmd("%argdel") -- Clear all args
+  -- Delete all buffers
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    local name = vim.api.nvim_buf_get_name(buf)
+    if name ~= "" and name:match("Dnevnik/2025") then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
+  end
   vim.cmd("mksession! " .. session_file)
 
   -- Delete all buffers
@@ -20,9 +50,9 @@ local function enableDiaryMode()
     callback = function()
       local margin = math.floor((vim.o.columns - 160) / 2)
       -- Window open has to be in this order.
-      vim.api.nvim_open_win(empty, false, { split = "left", width = margin, style = "minimal" } )
+      local left_win = vim.api.nvim_open_win(empty, false, { split = "left", width = margin, style = "minimal"} )
       vim.api.nvim_open_win(empty, true, { split = "right" })
-      vim.api.nvim_open_win(empty, false, { split = "right", width = margin, style = "minimal"  })
+      local right_win = vim.api.nvim_open_win(empty, false, { split = "right", width = margin, style = "minimal"})
       vim.cmd("ObsidianToday") -- This then triggers the autocmd for setting the filetype
       vim.api.nvim_del_augroup_by_name("DiaryMode") -- prevent repeat
 
@@ -36,6 +66,8 @@ local function enableDiaryMode()
             local bufName = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
             if bufName:match("%.md$") then
               vim.api.nvim_win_call(win, function()
+                set_backgournd_color_of_margin(0.9, left_win)
+                set_backgournd_color_of_margin(0.9, right_win)
                 vim.cmd("setfiletype markdown")
               end)
             end
