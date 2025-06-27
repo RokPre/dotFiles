@@ -29,7 +29,7 @@ return {
           { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
           { icon = " ", key = "g", desc = "Find Text", action = builtin.live_grep },
           { icon = " ", key = "p", desc = "Project Explorer", action = "<cmd>ProjectManager<cr>" },
-          { icon = " ", key = "d", desc = "Daily note", action = "<cmd>DiaryModeToggle<cr>" },
+          { icon = " ", key = "d", desc = "Daily note", action = "<cmd>FloatingDiary<cr>" },
           { icon = " ", key = "c", desc = "Config", action = function() builtin.find_files({cwd = vim.fn.stdpath('config')}) end },
           { icon = " ", key = "s", desc = "Restore Session", action = "<Cmd>ListSession<cr>" },
           { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },

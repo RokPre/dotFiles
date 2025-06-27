@@ -84,6 +84,7 @@ end
 
 local function dissableDiaryMode()
   local bufs = vim.api.nvim_list_bufs()
+  vim.cmd("wa!")
   for _, buf in ipairs(bufs) do
     vim.api.nvim_buf_delete(buf, { force = true })
   end
@@ -116,5 +117,5 @@ local function toggleDiaryMode()
   end
 end
 
-vim.keymap.set("n", "<C-d>", toggleDiaryMode, { desc = "Enable diary mode"})
+vim.keymap.set("n", "<C-S-d>", toggleDiaryMode, { desc = "Enable diary mode"})
 vim.api.nvim_create_user_command("DiaryModeToggle", toggleDiaryMode, {})

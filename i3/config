@@ -10,6 +10,7 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+bindsym $mod+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -48,7 +49,7 @@ bindsym Mod1+space exec --no-startup-id rofi -show run
 
 # File explorer
 # bindsym $mod+e exec nautilus
-bindsym $mod+e exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim -- -c "e ."
+# bindsym $mod+e exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim -- -c "e ."
 bindsym $mod+Ctrl+e exec st nnn
 
 # VLC
@@ -204,10 +205,10 @@ exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOu
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" Button 2 "key Ctrl z"
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" Button 3 "key Ctrl Shift z"
 
-exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 1 "1"
-exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 2 "6"
-exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 3 "7"
-exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 4 "0"
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 1 "x"
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 2 "e"
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 3 "q"
+exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 4 "key Delete"
 
 # Automatically connect to bluetooth headphones
 exec_always --no-startup-id bluetoothctl connect 50:5E:5C:03:EC:63
@@ -218,18 +219,21 @@ set $ws3 "2.Web"
 set $ws2 "3.Term"
 set $ws4 "4.Obsidian"
 set $ws5 "5.Zotero"
+set $ws6 "6.File"
 
 bindsym $mod+n workspace $ws1
 bindsym $mod+i workspace $ws2
 bindsym $mod+t workspace $ws3
 bindsym $mod+o workspace $ws4
 bindsym $mod+z workspace $ws5
+bindsym $mod+e workspace $ws6
 
 bindsym $mod+shift+n move container to workspace $ws1
 bindsym $mod+shift+i move container to workspace $ws2
 bindsym $mod+shift+t move container to workspace $ws3
 bindsym $mod+shift+o move container to workspace $ws4
 bindsym $mod+shift+z move container to workspace $ws5
+# bindsym $mod+shift+e move container to workspace $ws6
 
 assign [class="neovide"] $ws1
 assign [class="^Vivaldi*"] $ws2
@@ -237,6 +241,7 @@ assign [class="kitty"] $ws3
 assign [class="st-256color"] $ws3
 assign [class="obsidian"] $ws4
 assign [class="Zotero"] $ws5
+assign [class="nnn"] $ws6
 
 # Launch programs on boot
 exec --no-startup-id exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim

@@ -8,12 +8,17 @@ File explorer: [oil.nvim](https://github.com/stevearc/oil.nvim)
 Note taking: [obsidian](https://obsidian.md)
 
 # TODO
+- [ ] I3: use autorandr to configure displays and program placement
 - [ ] Make custom color sheme
-- [ ] Nvim: Obsidian: Fix cmp completion. First few letters somehow get repeated.
+- [ ] Nvim: Add spell checker for english and slovene
+- [ ] Nvim: Closing the window also closes the buffer which i dont like.
+- [ ] Nvim: Obsidian: When linking to a note, if there are ščž in the line where you want the link to be, it counts these characters twice. So the link get inserted later and some characters get repeated.
+- [ ] Obsidian: Make a plugin that check similarty between two notes and give you the option to link them.
 - [ ] ST: Pass all keybindings to tmux
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)
 - [ ] Tmux: monacle mode
 - [ ] Tmux: swap panes batter
+- [ ] When closing the messages buffer with <C-w> it then open the previously accessed buffer which i guess i dont like, as then when i try to close the window it closes that buffer. So i end up having the same buffer opened in a smaller window at the bottom of the screen, but when i try to close this window it also closes the buffer above so its a mess
 - [x] Add ".bak" to `.gitignore`.
 - [x] Fix obsidian cmp. It prefers id over file name. Look in lua/cmp_obsidian.lua and lua/obsidian/utils.lua->wiki_link_id_prefix()
 - [x] I3: Add borders to programs
