@@ -109,18 +109,11 @@ keymap("t", "<A-k>", [[<C-\><C-n>:wincmd k<CR>]], opts)
 keymap("t", "<A-l>", [[<C-\><C-n>:wincmd l<CR>]], opts)
 
 -- Create new windows
-keymap("n", "<A-v>", ":wincmd v<CR>", opts)
-keymap("n", "<A-b>", ":wincmd s<CR>", opts)
+keymap("n", "<A-v>", "<Cmd>wincmd v<CR>", opts)
+keymap("n", "<A-b>", "<Cmd>wincmd s<CR>", opts)
 
 -- Close window
-keymap("n", "<A-w>", function()
-  local buftype = vim.bo.buftype
-  if buftype == "nofile" or buftype == "help" or buftype == "quickfix" then
-    vim.cmd("close")
-  else
-    vim.cmd("w | bd")
-  end
-end, { noremap = true, silent = true, desc = "Smart close" })
+keymap("n", "<A-w>", "<Cmd>q<CR>", { noremap = true, silent = true, desc = "Smart close" })
 
 
 -- Move windows around

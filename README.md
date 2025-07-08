@@ -8,7 +8,7 @@ File explorer: [oil.nvim](https://github.com/stevearc/oil.nvim)
 Note taking: [obsidian](https://obsidian.md)
 
 # TODO
-- [ ] I3: use autorandr to configure displays and program placement
+- [ ] I3: use autorandr to configure displays and program placement [Link](https://github.com/phillipberndt/autorandr)
 - [ ] Make custom color sheme
 - [ ] Nvim: Add spell checker for english and slovene
 - [ ] Nvim: Closing the window also closes the buffer which i dont like.
