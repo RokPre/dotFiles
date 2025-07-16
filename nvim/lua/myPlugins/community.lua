@@ -1,5 +1,6 @@
 -- TODO: Sort by birthdays
 -- TODO: Add caching,
+-- TODO: If i link a person in my daily notes it will automatically ask me if want to increase or decrease or just log their score, with linking that daily note. IDK if this is needed as you can just look at files that link to that person, so this may be pointless, but will see if its usefull. Mybe it helps with better keeping of scores. Do it as soon the name is writen, or when the file is saved?
 
 -- Constants
 M = {}
@@ -40,11 +41,11 @@ local function getScore(person)
 end
 
 local function getInteractionCount(person)
-  -- TODO: Use treesiter to count the number of headings that also contain a date.
   local lines = getLines(person)
   local count = 0
   for _, line in ipairs(lines) do
-    if line:find("^#") then
+    -- if line:find("^#") then
+    if line:find("^# %d%d%d%d%-%d%d%-%d%d %d%d:%d%d") then
       count = count + 1
     end
   end
@@ -189,7 +190,7 @@ local function showPeople(people)
       if item == newPersonString then
         return item
       end
-      -- TODO: If sort type is score, then this is redundant, otherwise it is not.
+      -- TODO: Speed optimization: If sort type is score, then this is redundant, otherwise it is not.
       local score = getScore(item)
       score = tostring(score)
       -- TODO: I am getting relevant_info twice, as i am already checking it in the sort function.
@@ -455,7 +456,7 @@ M.people = getPeople()
 -- vim.api.nvim_set_hl(0, "GoodScore", { bg = "#00ff00", fg = "#ffffff", bold = true })
 -- vim.api.nvim_set_hl(0, "BadScore", { bg = "#ff0000", fg = "#ffffff", bold = true })
 --
--- TODO: When showing people, if a person does not yet exist, show the options to create it.
+-- TODO: When showing people, if a person does not yet exist, show the options to create it. So that the user does not have to type "add new person".
 
 vim.keymap.set("n", "<Leader>c", "<Nop>", { silent = true, desc = "Community" })
 vim.keymap.set("n", "<Leader>ca", social, { silent = true, desc = "Activities" })

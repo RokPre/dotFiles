@@ -1,8 +1,12 @@
-local vaultPath = "~/sync/vault"
+local home = os.getenv("HOME")
+local vaultPath = home .. "/sync/vault"
+local uv = vim.loop
+
 return {
   "RokPre/obsidian.nvim",
   cond = function()
-    return vim.fn.isdirectory(vim.fn.expand(vaultPath))
+    local stat = uv.fs_stat(vaultPath)
+    return stat and stat.type == "directory"
   end,
   dependencies = {
     "nvim-lua/plenary.nvim",

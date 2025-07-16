@@ -1,5 +1,5 @@
 return {
-  "RokPre/oil.nvim",
+  "stevearc/oil.nvim",
   opts = {},
   dependencies = { { "echasnovski/mini.icons", opts = {} } },
   config = function()

@@ -3,6 +3,7 @@ local float_bufs = {}
 local float_bufs_set = {}
 local float_augroup = nil
 local float_setup_augroup = nil
+local SEARCH_STRING_FOR_CURSOR_POS = "___"
 
 local function add_buf(buf)
   if not float_bufs_set[buf] then
@@ -20,19 +21,27 @@ local function setup_obsidian_buffer(buf)
   vim.api.nvim_win_set_buf(float_win, buf)
 
   -- Hides the buffer from the bufferline
-  vim.api.nvim_set_option_value("buflisted", false, {buf = buf})
-  vim.api.nvim_set_option_value("bufhidden" ,  "wipe", {buf = buf})
+  vim.api.nvim_set_option_value("buflisted", false, { buf = buf })
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
 
   pcall(function()
     require("bufferline.ui").refresh()
   end)
 
-  vim.keymap.set("n", "<C-d>", toggle_split_float, {
-    buffer = buf,
-    desc = "Toggle Obsidian Float",
-  })
-
   vim.api.nvim_set_current_win(float_win)
+
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  for index, line in ipairs(lines) do
+    local ok, found = pcall(function()
+      return line:find(SEARCH_STRING_FOR_CURSOR_POS)
+    end)
+
+    if ok and found then
+      local row = index
+      vim.api.nvim_win_set_cursor(float_win, { row, 0 })
+      break
+    end
+  end
 end
 
 local function enable_floating_diary()
@@ -46,8 +55,8 @@ local function enable_floating_diary()
 
   local float_buf = vim.api.nvim_create_buf(false, true)
 
-  vim.api.nvim_set_option_value("buflisted", false, {buf = float_buf})
-  vim.api.nvim_set_option_value("bufhidden" ,  "wipe", {buf = float_buf})
+  vim.api.nvim_set_option_value("buflisted", false, { buf = float_buf })
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = float_buf })
 
   add_buf(float_buf)
 
@@ -81,8 +90,8 @@ local function enable_floating_diary()
       if not (float_win and vim.api.nvim_win_is_valid(float_win)) then return end
       local buf = vim.api.nvim_win_get_buf(float_win)
       if vim.api.nvim_buf_is_valid(buf) then
-        vim.api.nvim_set_option_value("buflisted", false, {buf = buf})
-        vim.api.nvim_set_option_value("bufhidden" ,  "wipe", {buf = buf})
+        vim.api.nvim_set_option_value("buflisted", false, { buf = buf })
+        vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
 
         pcall(function()
           require("bufferline.ui").refresh()
@@ -114,7 +123,9 @@ local function disable_floating_diary()
   -- Close tracked buffers
   for _, buf in ipairs(float_bufs) do
     if vim.api.nvim_buf_is_valid(buf) then
-      vim.api.nvim_buf_call(buf, function() vim.cmd("write") end)
+      if vim.api.nvim_buf_get_name(0) ~= "" then
+        vim.api.nvim_buf_call(buf, function() vim.cmd("write") end)
+      end
       vim.api.nvim_buf_delete(buf, { force = true })
     end
   end
@@ -132,6 +143,12 @@ local function disable_floating_diary()
 end
 
 function toggle_split_float()
+  local ok, _ = pcall(require, "obsidian")
+  if not ok then
+    vim.notify("Obsidian is not installed", vim.log.levels.ERROR)
+    return
+  end
+
   if float_win and vim.api.nvim_win_is_valid(float_win) then
     if vim.api.nvim_get_current_win() ~= float_win then
       vim.api.nvim_set_current_win(float_win)

@@ -58,8 +58,9 @@ keymap("n", ",", "n", { remap = false, desc = "Next search match" })
 keymap("n", ";", "N", { remap = false, desc = "Previous search match" })
 
 -- uppercase/lowercase
-keymap("n", "<C-u>", "~", opts)
-keymap("v", "<C-u>", "~", opts)
+-- Moved to
+-- keymap("n", "<C-u>", "~", opts)
+-- keymap("v", "<C-u>", "~", opts)
 
 -- Disable default behavior of 'd' to not copy to system clipboard
 -- Yank to system clipboard and "0.
@@ -94,7 +95,7 @@ keymap("t", "<C-S-v>", '<C-\\><C-N>"+pi', opts)
 -- pcall(vim.api.nvim_del_keymap, "n", "<C-W>d")
 
 -- Open buffer
-keymap("n", "<C-t>", "<Cmd>new<Cr>", opts)
+keymap("n", "<C-t>", "<Cmd>tabnew<CR>", opts)
 
 -- Windows
 -- Navigate between windows
@@ -160,7 +161,7 @@ keymap("n", "<leader>h", function()
 end, { desc = "Open Snacks Dashboard" })
 
 -- messages
-local function close_messages()
+local function messages_close()
   for _, win in ipairs(vim.api.nvim_list_wins()) do
     local buf = vim.api.nvim_win_get_buf(win)
     local name = vim.api.nvim_buf_get_name(buf)
@@ -171,7 +172,8 @@ local function close_messages()
   end
 end
 
-vim.keymap.set("n", "<leader>m", "<Nop>", { desc = "Messages" })
-vim.keymap.set("n", "<leader>mm", "<Cmd>messages<CR>", { desc = "Open messages" })
-vim.keymap.set("n", "<leader>md", "<Cmd>messages clear<CR>", { desc = "Delete messages" })
-vim.keymap.set("n", "<leader>mc", close_messages, { desc = "Close messages" })
+keymap("n", "<leader>m", "<Nop>", { desc = "Messages" })
+keymap("n", "<leader>mm", "<Cmd>messages<CR>", { desc = "Open messages" })
+keymap("n", "<leader>md", "<Cmd>messages clear<CR>", { desc = "Delete messages" })
+keymap("n", "<leader>mc", messages_close, { desc = "Close messages" })
+keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>", { desc = "Yank messages" })

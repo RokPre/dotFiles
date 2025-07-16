@@ -171,3 +171,7 @@ if [ -n "$weather" ]; then
   echo "$weather"
   echo 📡 "" $(hostname -I)
 fi
+
+if [ ! -f "$HOME/sync/vault/Dnevnik/$(date +"%Y - %j").md" ]; then
+  echo ⚠️ " " "Write in your daily note!"
+fi

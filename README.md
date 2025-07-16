@@ -12,6 +12,7 @@ Note taking: [obsidian](https://obsidian.md)
 - [ ] Make custom color sheme
 - [ ] Nvim: Add spell checker for english and slovene
 - [ ] Nvim: Closing the window also closes the buffer which i dont like.
+- [ ] Nvim: Make your own homepage
 - [ ] Nvim: Obsidian: When linking to a note, if there are ščž in the line where you want the link to be, it counts these characters twice. So the link get inserted later and some characters get repeated.
 - [ ] Obsidian: Make a plugin that check similarty between two notes and give you the option to link them.
 - [ ] ST: Pass all keybindings to tmux
