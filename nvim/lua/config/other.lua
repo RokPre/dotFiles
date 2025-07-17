@@ -10,6 +10,7 @@ vim.cmd("set nowrap")
 os.setlocale("en_US.UTF-8", "time")
 
 vim.opt.swapfile = false
+vim.opt.autoread = true
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undo"
 vim.opt.undofile = true

@@ -26,8 +26,8 @@ if [ "${#outputs[@]}" -eq 1 ]; then
   move_ws_to_output "$ws5" "${outputs[0]}"
 elif [ "${#outputs[@]}" -eq 2 ]; then
   # Two-monitor setup (customize as needed)
-  move_ws_to_output "$ws3" "${outputs[0]}"
-  move_ws_to_output "$ws4" "${outputs[1]}"
+  move_ws_to_output "$ws3" "${outputs[1]}"
+  move_ws_to_output "$ws4" "${outputs[0]}"
   move_ws_to_output "$ws5" "${outputs[1]}"
   move_ws_to_output "$ws1" "${outputs[0]}"
   move_ws_to_output "$ws2" "${outputs[1]}"
