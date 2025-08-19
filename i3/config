@@ -132,7 +132,7 @@ bindsym $mod+Shift+0 move container to workspace 10
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+bindsym $mod+Ctrl+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
@@ -193,8 +193,11 @@ bindsym Print exec --no-startup-id flameshot gui
 exec_always --no-startup-id --no-startup-id ~/.config/i3/scripts/displays.sh
 
 # Set background
-exec --no-startup-id sh -c 'sleep 5; feh --bg-fill /home/lasim/sync/rice/wallpapers/moon.webp'
-exec_always --no-startup-id feh --bg-fill /home/lasim/sync/rice/wallpapers/moon.webp
+exec --no-startup-id sh -c 'sleep 5; feh --bg-fill $HOME/sync/rice/wallpapers/moon.webp'
+exec_always --no-startup-id feh --bg-fill $HOME/sync/rice/wallpapers/moon.webp
+
+exec --no-startup-id sh -c "sleep 5; feh --bg-fill $HOME/sync/rice/wallpapers/moon.webp"
+exec_always --no-startup-id sh -c "sleep 5; feh --bg-fill $HOME/sync/rice/wallpapers/moon.webp"
 # exec_always --no-startup-id wal -i ~/sync/rice/wallpapers/house.jpg
 # exec_always --no-startup-id wal -i ~/sync/rice/wallpapers/mercury.png
 # exec_always --no-startup-id wal -i ~/sync/rice/wallpapers/tokyonight2.jpg
@@ -218,21 +221,23 @@ set $ws1 "1.Nvim"
 set $ws3 "2.Web"
 set $ws2 "3.Term"
 set $ws4 "4.Obsidian"
-set $ws5 "5.Zotero"
-set $ws6 "6.File"
+set $ws5 "5.PDF and Zotero"
+# set $ws6 "6.File"
 
 bindsym $mod+n workspace $ws1
 bindsym $mod+i workspace $ws2
 bindsym $mod+t workspace $ws3
 bindsym $mod+o workspace $ws4
 bindsym $mod+z workspace $ws5
-bindsym $mod+e workspace $ws6
+bindsym $mod+p workspace $ws5
+# bindsym $mod+e workspace $ws6
 
-bindsym $mod+shift+n move container to workspace $ws1
-bindsym $mod+shift+i move container to workspace $ws2
-bindsym $mod+shift+t move container to workspace $ws3
-bindsym $mod+shift+o move container to workspace $ws4
-bindsym $mod+shift+z move container to workspace $ws5
+bindsym $mod+shift+n move container to workspace $ws1 workspace $ws1
+bindsym $mod+shift+i move container to workspace $ws2 workspace $ws2
+bindsym $mod+shift+t move container to workspace $ws3 workspace $ws3
+bindsym $mod+shift+o move container to workspace $ws4 workspace $ws4
+bindsym $mod+shift+z move container to workspace $ws5 workspace $ws5
+bindsym $mod+shift+p move container to workspace $ws5 workspace $ws5
 # bindsym $mod+shift+e move container to workspace $ws6
 
 assign [class="neovide"] $ws1
@@ -241,30 +246,29 @@ assign [class="kitty"] $ws3
 assign [class="st-256color"] $ws3
 assign [class="obsidian"] $ws4
 assign [class="Zotero"] $ws5
-assign [class="nnn"] $ws6
+assign [class="Zathura"] $ws5
+# assign [class="nnn"] $ws6
 
 # Launch programs on boot
-exec --no-startup-id exec /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim
+exec --no-startup-id exec $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim
 # exec --no-startup-id exec /home/lasim/.local/kitty.app/bin/kitty
-exec --no-startup-id exec /usr/local/bin/st
+exec --no-startup-id exec $HOME/offline/bin/st
 exec --no-startup-id exec vivaldi-stable
 exec --no-startup-id exec obsidian obsidian://open?vault=vault
-exec --no-startup-id exec /opt/zotero/zotero
 
 # Keyboard shortcut for manual laucnh
-bindsym $mod+Ctrl+n exec --no-startup-id /home/lasim/offline/apps/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim
+bindsym $mod+Ctrl+n exec --no-startup-id $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim
 # bindsym $mod+Ctrl+t exec --no-startup-id /home/lasim/.local/kitty.app/bin/kitty
-bindsym $mod+Ctrl+t exec --no-startup-id /usr/local/bin/st
+bindsym $mod+Ctrl+t exec --no-startup-id $HOME/offline/bin/st
 bindsym $mod+Ctrl+i exec --no-startup-id vivaldi-stable
 bindsym $mod+Ctrl+o exec --no-startup-id obsidian obsidian://open?vault=vault
-bindsym $mod+Ctrl+z exec /opt/zotero/zotero
+bindsym $mod+Ctrl+z exec --no-startup-id zotero
 
-bindsym $mod+x exec --no-startup-id st tmux
+bindsym $mod+Ctrl+x exec --no-startup-id st tmux
 
 # Move workspace to display
-exec --no-startup-id ~/.config/i3/scripts/workspace_monitor.sh $ws1 $ws2 $ws3 $ws4 $ws5 5
-exec_always --no-startup-id ~/.config/i3/scripts/workspace_monitor.sh $ws1 $ws2 $ws3 $ws4 $ws5 0
+# TODO: Fix this to include all the workspaces
+exec_always --no-startup-id $HOME/.config/i3/scripts/workspace_monitor.sh $ws1 $ws2 $ws3 $ws4 $ws5
 
 # Move running programs to proper workspace
-exec --no-startup-id ~/.config/i3/scripts/move_programs_to_ws.sh $ws1 $ws2 $ws3 $ws4 $ws5 5
-exec_always --no-startup-id ~/.config/i3/scripts/move_programs_to_ws.sh $ws1 $ws2 $ws3 $ws4 $ws5 0
+bindsym $mod+Shift+r exec --no-startup-id $HOME/.config/i3/scripts/move_programs_to_ws.sh $ws1 $ws2 $ws3 $ws4 $ws5

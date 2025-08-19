@@ -12,7 +12,7 @@ return {
         "size",
       },
       view_options = {
-        show_hidden = true,
+        show_hidden = false,
       },
       keymaps = {
         ["<Leader>eh"] = "actions.show_help",

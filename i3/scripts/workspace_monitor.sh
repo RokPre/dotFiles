@@ -7,8 +7,6 @@ ws3=$3
 ws4=$4
 ws5=$5
 
-sleep $6
-
 # Get connected outputs
 outputs=($(xrandr | awk '/ connected/ {print $1}'))
 

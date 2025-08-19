@@ -101,12 +101,17 @@ local function show_projects()
     if not selected then
       return
     end
-    -- Save current session
-    pcall(function()
-      if sessionManager and sessionManager.SaveSession then
-        sessionManager.SaveSession()
-      end
-    end)
+
+    -- Save current session if its not the same sessions that the user is already in
+    local cwd = vim.fn.getcwd()
+    local session_name = cwd:gsub("[/\\]", "%%")
+    if session_name ~= selected:gsub("[/\\]", "%%") then
+      pcall(function()
+        if sessionManager and sessionManager.SaveSession then
+          sessionManager.SaveSession()
+        end
+      end)
+    end
 
     -- Close all buffers and windows
     vim.cmd("%bd!")

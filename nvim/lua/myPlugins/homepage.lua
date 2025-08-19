@@ -1,11 +1,9 @@
--- TODO: On window resize redraw the homepage.
 -- TODO: BUG: If two homepages are open in two windows, when one of them switches to a file, it does not reset the window options.
 local M = {}
 
 local lines_raw = {}
 local header_lines = {}
 local callbacks = {}
-local homepage_buf = nil
 
 
 function M.set_header(lines)
@@ -111,9 +109,7 @@ local function format_homepage()
 end
 
 function M.open()
-  if homepage_buf == nil or not vim.api.nvim_buf_is_valid(homepage_buf) then
-    homepage_buf = vim.api.nvim_create_buf(false, false)
-  end
+  local homepage_buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_set_current_buf(homepage_buf)
 
   -- Delete the initial buffer that is shown when nvim is launched without a file
@@ -122,18 +118,13 @@ function M.open()
         and vim.api.nvim_buf_get_name(buf) == ""
         and vim.api.nvim_buf_get_option(buf, "modifiable")
         and #vim.api.nvim_buf_get_lines(buf, 0, -1, false) == 1
-        and vim.api.nvim_buf_get_lines(buf, 0, -1, false)[1] == "" then
+        and vim.api.nvim_buf_get_lines(buf, 0, -1, false)[1] == ""
+        and buf ~= homepage_buf then
       vim.api.nvim_buf_delete(buf, { force = true })
       -- vim.notify("Deleted initial [No Name] buffer", vim.log.levels.INFO)
     end
   end
 
-  -- Set the options of the homepage buffer
-  vim.api.nvim_set_option_value("buftype", "nofile", { buf = homepage_buf })
-  vim.api.nvim_set_option_value("bufhidden", "hide", { buf = homepage_buf })
-  vim.api.nvim_set_option_value("swapfile", false, { buf = homepage_buf })
-  vim.api.nvim_set_option_value("modifiable", true, { buf = homepage_buf })
-  vim.api.nvim_set_option_value("buflisted", false, { buf = homepage_buf })
 
   -- Set the options of the homepage window
   local homepage_win = vim.api.nvim_get_current_win()
@@ -154,6 +145,10 @@ function M.open()
       silent = true,
     })
   end
+
+  -- Set the options of the homepage buffer
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = homepage_buf })
+  vim.api.nvim_set_option_value("modifiable", false, { buf = homepage_buf })
 
   vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
@@ -177,13 +172,11 @@ end
 local builtin = require("telescope.builtin")
 
 local header = [[
-      ___________________________________________
-     / _   __            _    __ _              /|
-    / / | / /___   ____ | |  / /(_)____ ___    / |
-   / /  |/ // _ \ / __ \| | / // // __ `__ \  /  |
-  / / /|  //  __// /_/ /| |/ // // / / / / / /   |
- / /_/ |_/ \___/ \____/ |___//_//_/ /_/ /_/ /____|
-/__________________________________________/      
+    _   __            _    __ _          
+   / | / /___   ____ | |  / /(_)____ ___ 
+  /  |/ // _ \ / __ \| | / // // __ `__ \
+ / /|  //  __// /_/ /| |/ // // / / / / /
+/_/ |_/ \___/ \____/ |___//_//_/ /_/ /_/ 
 ]]
 
 M.set_header(header)
@@ -196,7 +189,7 @@ M.set_keys({
   { icon = " ", key = "g", desc = "Find Text", action = builtin.live_grep },
   { icon = " ", key = "p", desc = "Project Explorer", action = function() vim.cmd("ProjectManager") end },
   { icon = " ", key = "c", desc = "Config", action = function() builtin.find_files({ cwd = vim.fn.stdpath("config") }) end },
-  { icon = " ", key = "s", desc = "Restore Session", action = function() vim.cmd("ListSession") end },
+  { icon = " ", key = "s", desc = "Restore Session", action = function() vim.cmd("LastSession") end },
   { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
   { icon = " ", key = "q", desc = "Quit", action = ":qa" },
 })

@@ -54,8 +54,8 @@ keymap("n", "f", "/", opts)
 keymap("v", "f", "/", opts)
 keymap("x", "/", "<Esc>/\\%V")                                       -- Search visual selection
 keymap("n", "<Esc>", ":noh<CR>", { noremap = false, silent = true }) -- Search highlight hide
-keymap("n", ",", "n", { remap = false, desc = "Next search match" })
-keymap("n", ";", "N", { remap = false, desc = "Previous search match" })
+keymap({ "n", "v", "x" }, ",", "n", { remap = false, desc = "Next search match" })
+keymap({ "n", "v", "x" }, ";", "N", { remap = false, desc = "Previous search match" })
 
 -- uppercase/lowercase
 -- Moved to
@@ -139,26 +139,22 @@ keymap("n", "<A-C-m>", ":wincmd o<CR>", opts)
 keymap("n", "<A-=>", ":wincmd =<CR>", opts)
 
 -- Surround
-keymap("v", "<leader>(", "<Esc>`>a)<Esc>`<i(<Esc>", { silent = true, noremap = true, desc = "()" })
-keymap("v", "<leader>)", "<Esc>`>a)<Esc>`<i(<Esc>", { silent = true, noremap = true, desc = "()" })
-keymap("v", "<leader>[", "<Esc>`>a]<Esc>`<i[<Esc>", { silent = true, noremap = true, desc = "[]" })
-keymap("v", "<leader>]", "<Esc>`>a]<Esc>`<i[<Esc>", { silent = true, noremap = true, desc = "[]" })
-keymap("v", "<leader>{", "<Esc>`>a}<Esc>`<i{<Esc>", { silent = true, noremap = true, desc = "{}" })
-keymap("v", "<leader>}", "<Esc>`>a}<Esc>`<i{<Esc>", { silent = true, noremap = true, desc = "{}" })
-keymap("v", "<leader><", "<Esc>`>a><Esc>`<i<<Esc>", { silent = true, noremap = true, desc = "<>" })
-keymap("v", "<leader>>", "<Esc>`>a><Esc>`<i<<Esc>", { silent = true, noremap = true, desc = "<>" })
-keymap("v", '<leader>"', '<Esc>`>a"<Esc>`<i"<Esc>', { silent = true, noremap = true, desc = '""' })
-keymap("v", "<leader>'", "<Esc>`>a'<Esc>`<i'<Esc>", { silent = true, noremap = true, desc = "''" })
-keymap("v", "<leader>`", "<Esc>`>a`<Esc>`<i`<Esc>", { silent = true, noremap = true, desc = "``" })
+keymap("v", "<Leader>(", "<Esc>`>a)<Esc>`<i(<Esc>", { silent = true, noremap = true, desc = "()" })
+keymap("v", "<Leader>)", "<Esc>`>a)<Esc>`<i(<Esc>", { silent = true, noremap = true, desc = "()" })
+keymap("v", "<Leader>[", "<Esc>`>a]<Esc>`<i[<Esc>", { silent = true, noremap = true, desc = "[]" })
+keymap("v", "<Leader>]", "<Esc>`>a]<Esc>`<i[<Esc>", { silent = true, noremap = true, desc = "[]" })
+keymap("v", "<Leader>{", "<Esc>`>a}<Esc>`<i{<Esc>", { silent = true, noremap = true, desc = "{}" })
+keymap("v", "<Leader>}", "<Esc>`>a}<Esc>`<i{<Esc>", { silent = true, noremap = true, desc = "{}" })
+keymap("v", "<Leader><", "<Esc>`>a><Esc>`<i<<Esc>", { silent = true, noremap = true, desc = "<>" })
+keymap("v", "<Leader>>", "<Esc>`>a><Esc>`<i<<Esc>", { silent = true, noremap = true, desc = "<>" })
+keymap("v", '<Leader>"', '<Esc>`>a"<Esc>`<i"<Esc>', { silent = true, noremap = true, desc = '""' })
+keymap("v", "<Leader>'", "<Esc>`>a'<Esc>`<i'<Esc>", { silent = true, noremap = true, desc = "''" })
+keymap("v", "<Leader>`", "<Esc>`>a`<Esc>`<i`<Esc>", { silent = true, noremap = true, desc = "``" })
+keymap("v", "<Leader>$", "<Esc>`>a$<Esc>`<i$<Esc>", { silent = true, noremap = true, desc = "()" })
 
 -- delete work, control backspace ctr + BS
 keymap("i", "<A-BS>", "<C-W>", opts)
 keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it up.
-
--- dashboard
-keymap("n", "<leader>h", function()
-  require("snacks.dashboard").open()
-end, { desc = "Open Snacks Dashboard" })
 
 -- messages
 local function messages_close()
@@ -177,3 +173,7 @@ keymap("n", "<leader>mm", "<Cmd>messages<CR>", { desc = "Open messages" })
 keymap("n", "<leader>md", "<Cmd>messages clear<CR>", { desc = "Delete messages" })
 keymap("n", "<leader>mc", messages_close, { desc = "Close messages" })
 keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>", { desc = "Yank messages" })
+
+keymap("n", "yae", "<Cmd>%y<Cr>", { desc = "Yank entire file" })
+keymap("n", "dae", "<Cmd>%d<Cr>", { desc = "Delete entire file" })
+keymap("n", "vae", "ggVG", { desc = "Select entire file" })

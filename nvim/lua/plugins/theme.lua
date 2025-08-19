@@ -22,4 +22,6 @@ return {
   -- {"sainnhe/edge"},
   -- {"savq/melange-nvim"},
   { "folke/tokyonight.nvim" },
+  { "EdenEast/nightfox.nvim" },
+  { "projekt0n/github-nvim-theme" }
 }

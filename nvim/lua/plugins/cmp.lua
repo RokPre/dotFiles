@@ -28,7 +28,8 @@ return {
       mapping = cmp.mapping.preset.insert({
         ["<Tab>"] = cmp.mapping.select_next_item(),
         ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-        ["<Esc>"] = cmp.mapping.abort(),
+        -- ["<Esc>"] = cmp.mapping.abort(),
+        ["<C-c>"] = cmp.mapping.abort(),
         ["<CR>"] = cmp.mapping.confirm({ select = false }), -- false: accepts only the currently explicitly selected item
       }),
 

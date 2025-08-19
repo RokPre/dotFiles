@@ -133,7 +133,7 @@ return {
           local cmd = ""
           for _, fold in ipairs(nestedFolds) do
             if vim.fn.foldclosed(fold.startLine + 1) == -1 then
-                cmd = (fold.startLine + 1) .. "foldclose"
+              cmd = (fold.startLine + 1) .. "foldclose"
               vim.cmd(cmd)
             end
           end
@@ -167,7 +167,14 @@ return {
       vim.keymap.set("n", "gh", foldAll, { desc = "Smart fold (left)" })
       vim.keymap.set("n", "l", unfold, { desc = "Smart unfold (right)" })
       vim.keymap.set("n", "gl", unfoldAll, { desc = "Smart unfold (right)" })
-      vim.keymap.set("n", "zp", ufo.peekFoldedLinesUnderCursor, { desc = "Peek (preview) fold" })
+      -- vim.keymap.set("n", "zp", ufo.peekFoldedLinesUnderCursor, { desc = "Peek (preview) fold" })
+      vim.keymap.set("n", "zp", function()
+        local lnum = vim.api.nvim_win_get_cursor(0)[1]
+        if vim.fn.foldclosed(lnum) ~= -1 then
+          ufo.peekFoldedLinesUnderCursor()
+          vim.cmd("wincmd w") -- switch window
+        end
+      end, { desc = "Peek (preview) fold" })
       vim.keymap.set("n", "nz", ufo.goNextClosedFold, { desc = "Next closed fold (UFO)" })
       vim.keymap.set("n", "Nz", ufo.goPreviousClosedFold, { desc = "Next closed fold (UFO)" })
 

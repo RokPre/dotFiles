@@ -10,10 +10,15 @@ Note taking: [obsidian](https://obsidian.md)
 # TODO
 - [ ] I3: use autorandr to configure displays and program placement [Link](https://github.com/phillipberndt/autorandr)
 - [ ] Make custom color sheme
+- [ ] Nvim: Add a new keyboard shortcut for finding files.
 - [ ] Nvim: Add spell checker for english and slovene
 - [ ] Nvim: Closing the window also closes the buffer which i dont like.
+- [ ] Nvim: Fix homepage so that it works properly lots of bugs
+- [ ] Nvim: Fix todo list. Many things to do.
 - [ ] Nvim: Make your own homepage
 - [ ] Nvim: Obsidian: When linking to a note, if there are ščž in the line where you want the link to be, it counts these characters twice. So the link get inserted later and some characters get repeated.
+- [ ] Nvim: Ufo peek enter window when opening peek.
+- [ ] Nvim: add a better way to find and replace
 - [ ] Obsidian: Make a plugin that check similarty between two notes and give you the option to link them.
 - [ ] ST: Pass all keybindings to tmux
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)

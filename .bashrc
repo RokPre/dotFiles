@@ -105,8 +105,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_alias ]; then
-  source ~/.bash_alias
+if [ -f ~/.bash_aliases ]; then
+  source ~/.bash_aliases
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -126,11 +126,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
-export ROS_MASTER_URI=http://192.168.9.138:11311
-export ROS_HOSTNAME=192.168.9.138
+export IP=$(hostname -I | awk '{print $1}')
+export ROS_MASTER_URI=http://$IP:11311
+export ROS_HOSTNAME=$IP
 export TURTLEBOT3_MODEL="waffle_pi"
 
 alias sb='source ~/.bashrc'
@@ -144,8 +144,12 @@ if [ -f ~/catkin_ws/devel/setup.bash ]; then
   source ~/catkin_ws/devel/setup.bash
 fi
 
-if [[ ! "$PATH" == */home/lasim/.fzf/bin* ]]; then
+if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
   PATH="${PATH:+${PATH}:}/home/lasim/.fzf/bin"
+fi
+
+if [[ ! "$PATH" == *$HOME/offline/bin* ]]; then
+  PATH="${PATH:+${PATH}:}$HOME/offline/bin"
 fi
 
 if [ -d /opt/zotero ]; then
@@ -175,3 +179,4 @@ fi
 if [ ! -f "$HOME/sync/vault/Dnevnik/$(date +"%Y - %j").md" ]; then
   echo ⚠️ " " "Write in your daily note!"
 fi
+PATH="$PATH:$HOME/.cargo/env"

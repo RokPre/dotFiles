@@ -1,6 +1,3 @@
-local keymap = vim.keymap.set
-local opts = { silent = true, noremap = true }
-
 local quickToggle = function()
   local word = vim.fn.expand("<cword>")
 
@@ -9,6 +6,8 @@ local quickToggle = function()
     ["False"] = "True",
     ["true"] = "false",
     ["false"] = "true",
+    ["min"] = "max",
+    ["max"] = "min",
   }
 
   if word_map[word] then
@@ -25,8 +24,10 @@ local quickToggle = function()
     ["-"] = "+",
     ["*"] = "/",
     ["/"] = "*",
-    ["="] = ":",
-    [":"] = "=",
+    ["."] = ":",
+    [":"] = ".",
+    [","] = ";",
+    [";"] = ",",
     [">"] = "<",
     ["<"] = ">",
     ["("] = ")",
@@ -46,4 +47,7 @@ local quickToggle = function()
   vim.cmd("normal! ~")
 end
 
-keymap("n", "<C-u>", quickToggle, opts)
+local keymap = vim.keymap.set
+local opts = { silent = true, noremap = true }
+
+keymap({ "n", "v", "x" }, "<C-u>", quickToggle, opts)

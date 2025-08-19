@@ -2,6 +2,17 @@ local home = os.getenv("HOME")
 local vaultPath = home .. "/sync/vault"
 local uv = vim.loop
 
+vim.keymap.set("n", "<Leader>o", "<Nop>", { noremap = true, silent = true, desc = "Obsidian" })
+vim.keymap.set("n", "<Leader>on", "<Cmd>ObsidianNew<CR>", { noremap = true, silent = true, desc = "New Note" })
+vim.keymap.set("n", "<Leader>oo", "<Cmd>ObsidianSearch<CR>", { noremap = true, silent = true, desc = "Open Notes" })
+vim.keymap.set("n", "<Leader>oO", "<Cmd>ObsidianOpen<CR>",
+  { noremap = true, silent = true, desc = "Open in Obsidian" })
+vim.keymap.set("n", "<Leader>or", "<Cmd>ObsidianRename<Cr>", { noremap = true, silent = true, desc = "Rename Note" })
+vim.keymap.set("n", "<Leader>ob", "<Cmd>ObsidianBacklinks<Cr>",
+  { noremap = true, silent = true, desc = "Show backlinks" })
+vim.keymap.set("n", "<Leader>ot", "<Cmd>ObsidianTemplate<Cr>",
+  { noremap = true, silent = true, desc = "Template" })
+
 return {
   "RokPre/obsidian.nvim",
   cond = function()
@@ -55,10 +66,6 @@ return {
     ui = {
       enable = false,
     },
-    -- checkboxes = {
-    --   [" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
-    --   ["x"] = { char = "", hl_group = "ObsidianDone" },
-    -- },
     attachments = {
       folder = "Attachment folder",
       img_folder = "Attachment folder"

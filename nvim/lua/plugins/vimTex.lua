@@ -1,10 +1,10 @@
 return {
   "lervag/vimtex",
-  lazy = false,     -- we don't want to lazy load VimTeX
-  -- tag = "v2.15", -- uncomment to pin to a specific release
+  lazy = false, -- load at startup; or use event = "BufReadPre *.tex" if you prefer
   init = function()
-    -- VimTeX configuration goes here, e.g.
-    vim.g.vimtex_view_method = "zathura"
+    -- Viewer and compiler
+    vim.g.vimtex_view_method = "zathura" -- use 'zathura_simple' on Wayland
+    vim.g.vimtex_view_use_temp_files = 0
     vim.g.vimtex_quickfix_mode = 0
-  end
+  end,
 }
