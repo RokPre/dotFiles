@@ -3,7 +3,7 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~/sync/dotFiles
+cd ~/catkin_ws/src/pametna_tovarna_pc
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -13,16 +13,16 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +261 i3/config
-badd +11 ~/sync/dotFiles//README.md
-badd +206 nvim/lua/myPlugins/homepage.lua
-badd +109 ~/steps.md
-badd +3 ~/sync/dotFiles/tmux.conf
+badd +12 README.md
+badd +20 launch/pametna_tovarna.launch
+badd +99 ~/catkin_ws/src/pametna_tovarna_pc/src/update_map.py
+badd +11 ~/catkin_ws/src/pametna_tovarna_pc/src/const.py
+badd +127 ~/catkin_ws/src/pametna_tovarna_pc/src/get_location_with_object_detection.py
 argglobal
 %argdel
-edit i3/config
+edit ~/catkin_ws/src/pametna_tovarna_pc/src/update_map.py
 argglobal
-balt ~/sync/dotFiles//README.md
+balt ~/catkin_ws/src/pametna_tovarna_pc/src/const.py
 setlocal fdm=manual
 setlocal fde=nvim_ufo#foldexpr()
 setlocal fmr={{{,}}}
@@ -32,13 +32,30 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
+11,13fold
+18,24fold
+16,24fold
+37,38fold
+39,44fold
+45,46fold
+36,46fold
+34,46fold
+33,46fold
+27,47fold
+49,57fold
+59,60fold
+69,74fold
+85,88fold
+84,99fold
+63,99fold
+101,102fold
 let &fdl = &fdl
-let s:l = 267 - ((32 * winheight(0) + 26) / 53)
+let s:l = 59 - ((20 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 267
-normal! 048|
+keepjumps 59
+normal! 08|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -52,7 +69,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

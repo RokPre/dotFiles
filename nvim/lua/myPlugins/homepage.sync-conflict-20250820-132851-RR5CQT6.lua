@@ -172,11 +172,11 @@ end
 local builtin = require("telescope.builtin")
 
 local header = [[
-    _   __            _    __ _
-   / | / /___   ____ | |  / /(_)____ ___
+    _   __            _    __ _          
+   / | / /___   ____ | |  / /(_)____ ___ 
   /  |/ // _ \ / __ \| | / // // __ `__ \
  / /|  //  __// /_/ /| |/ // // / / / / /
-/_/ |_/ \___/ \____/ |___//_//_/ /_/ /_/
+/_/ |_/ \___/ \____/ |___//_//_/ /_/ /_/ 
 ]]
 
 M.set_header(header)
@@ -202,11 +202,10 @@ vim.keymap.set("n", "<Leader>h", function() M.open() end, { noremap = true, sile
 
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
-    M.open()
-    -- vim.schedule(function()
-    --   if #vim.fn.argv() == 0 then
-    --     M.open()
-    --   end
-    -- end)
+    vim.schedule(function()
+      if #vim.fn.argv() == 0 then
+        M.open()
+      end
+    end)
   end
 })

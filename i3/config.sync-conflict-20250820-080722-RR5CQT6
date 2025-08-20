@@ -132,7 +132,7 @@ bindsym $mod+Shift+0 move container to workspace 10
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Ctrl+r restart
+bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
@@ -222,7 +222,7 @@ set $ws3 "2.Web"
 set $ws2 "3.Term"
 set $ws4 "4.Obsidian"
 set $ws5 "5.PDF and Zotero"
-# set $ws6 "6.File"
+set $ws6 "6.File"
 
 bindsym $mod+n workspace $ws1
 bindsym $mod+i workspace $ws2
@@ -230,14 +230,13 @@ bindsym $mod+t workspace $ws3
 bindsym $mod+o workspace $ws4
 bindsym $mod+z workspace $ws5
 bindsym $mod+p workspace $ws5
-# bindsym $mod+e workspace $ws6
+bindsym $mod+e workspace $ws6
 
-bindsym $mod+shift+n move container to workspace $ws1 workspace $ws1
-bindsym $mod+shift+i move container to workspace $ws2 workspace $ws2
-bindsym $mod+shift+t move container to workspace $ws3 workspace $ws3
-bindsym $mod+shift+o move container to workspace $ws4 workspace $ws4
-bindsym $mod+shift+z move container to workspace $ws5 workspace $ws5
-bindsym $mod+shift+p move container to workspace $ws5 workspace $ws5
+bindsym $mod+shift+n move container to workspace $ws1
+bindsym $mod+shift+i move container to workspace $ws2
+bindsym $mod+shift+t move container to workspace $ws3
+bindsym $mod+shift+o move container to workspace $ws4
+bindsym $mod+shift+z move container to workspace $ws5
 # bindsym $mod+shift+e move container to workspace $ws6
 
 assign [class="neovide"] $ws1
@@ -247,28 +246,30 @@ assign [class="st-256color"] $ws3
 assign [class="obsidian"] $ws4
 assign [class="Zotero"] $ws5
 assign [class="Zathura"] $ws5
-# assign [class="nnn"] $ws6
+assign [class="nnn"] $ws6
 
 # Launch programs on boot
 exec --no-startup-id exec $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim
 # exec --no-startup-id exec /home/lasim/.local/kitty.app/bin/kitty
-# exec --no-startup-id exec $HOME/offline/bin/st
-exec --no-startup-id exec st tmux
+exec --no-startup-id exec /usr/local/bin/st
 exec --no-startup-id exec vivaldi-stable
 exec --no-startup-id exec obsidian obsidian://open?vault=vault
 
 # Keyboard shortcut for manual laucnh
-bindsym $mod+Ctrl+n exec --no-startup-id $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim; workspace $ws1
-bindsym $mod+Ctrl+i exec --no-startup-id vivaldi-stable; workspace $ws2
+bindsym $mod+Ctrl+n exec --no-startup-id $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim
 # bindsym $mod+Ctrl+t exec --no-startup-id /home/lasim/.local/kitty.app/bin/kitty
-# bindsym $mod+Ctrl+t exec --no-startup-id $HOME/offline/bin/st && workspace $ws3
-bindsym $mod+Ctrl+t exec --no-startup-id st tmux; workspace $ws3
-bindsym $mod+Ctrl+o exec --no-startup-id obsidian obsidian://open?vault=vault; workspace $ws4
-bindsym $mod+Ctrl+z exec --no-startup-id zotero; workspace $ws5
+bindsym $mod+Ctrl+t exec --no-startup-id /usr/local/bin/st
+bindsym $mod+Ctrl+i exec --no-startup-id vivaldi-stable
+bindsym $mod+Ctrl+o exec --no-startup-id obsidian obsidian://open?vault=vault
+bindsym $mod+Ctrl+z exec /opt/zotero/zotero
+
+bindsym $mod+Ctrl+x exec --no-startup-id st tmux
 
 # Move workspace to display
 # TODO: Fix this to include all the workspaces
-exec_always --no-startup-id $HOME/.config/i3/scripts/workspace_monitor.sh $ws1 $ws2 $ws3 $ws4 $ws5
+exec --no-startup-id ~/.config/i3/scripts/workspace_monitor.sh $ws1 $ws2 $ws3 $ws4 $ws5 5
+exec_always --no-startup-id ~/.config/i3/scripts/workspace_monitor.sh $ws1 $ws2 $ws3 $ws4 $ws5 0
 
 # Move running programs to proper workspace
-bindsym $mod+Shift+r exec --no-startup-id $HOME/.config/i3/scripts/move_programs_to_ws.sh $ws1 $ws2 $ws3 $ws4 $ws5
+exec --no-startup-id ~/.config/i3/scripts/move_programs_to_ws.sh $ws1 $ws2 $ws3 $ws4 $ws5 5
+exec_always --no-startup-id ~/.config/i3/scripts/move_programs_to_ws.sh $ws1 $ws2 $ws3 $ws4 $ws5 0

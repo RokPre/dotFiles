@@ -17,7 +17,7 @@ argglobal
 %argdel
 argglobal
 enew
-setlocal fdm=manual
+setlocal fdm=expr
 setlocal fde=nvim_ufo#foldexpr()
 setlocal fmr={{{,}}}
 setlocal fdi=#

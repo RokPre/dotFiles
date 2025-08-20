@@ -9,8 +9,8 @@ Note taking: [obsidian](https://obsidian.md)
 
 # TODO
 - [ ] I3: use autorandr to configure displays and program placement [Link](https://github.com/phillipberndt/autorandr)
-- [ ] Make custom color sheme
 - [ ] Nvim: Add a new keyboard shortcut for finding files.
+- [ ] Nvim: Add gcalcli support into lualine
 - [ ] Nvim: Add spell checker for english and slovene
 - [ ] Nvim: Closing the window also closes the buffer which i dont like.
 - [ ] Nvim: Fix homepage so that it works properly lots of bugs
@@ -19,6 +19,7 @@ Note taking: [obsidian](https://obsidian.md)
 - [ ] Nvim: Obsidian: When linking to a note, if there are ščž in the line where you want the link to be, it counts these characters twice. So the link get inserted later and some characters get repeated.
 - [ ] Nvim: Ufo peek enter window when opening peek.
 - [ ] Nvim: add a better way to find and replace
+- [ ] Obisidian: Add gcalcli support into daily note.
 - [ ] Obsidian: Make a plugin that check similarty between two notes and give you the option to link them.
 - [ ] ST: Pass all keybindings to tmux
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)
@@ -28,6 +29,7 @@ Note taking: [obsidian](https://obsidian.md)
 - [x] Add ".bak" to `.gitignore`.
 - [x] Fix obsidian cmp. It prefers id over file name. Look in lua/cmp_obsidian.lua and lua/obsidian/utils.lua->wiki_link_id_prefix()
 - [x] I3: Add borders to programs
+- [x] Make custom color sheme (Decided that i like tokyonight-night)
 - [x] Nvim: Added description to all keybindings, do need to require("which-key") to show them.
 - [x] Nvim: Ctrl+w close buffer remove delay
 - [x] Nvim: Custom snippets [link](https://youtu.be/Y3XWijJgdJs)
