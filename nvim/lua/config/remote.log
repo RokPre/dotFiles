@@ -1,4 +1,0 @@
-[2025-04-10 14:28:03] Unmount
-Config: {"options": ["-p", "22"], "host": "192.168.9.130", "user": "ubuntu", "mount_point": "/home/lasim/cloudTB3", "passwd": "turtlebot", "remote_dir": "/Cloud"}
-Output: ":!umount /home/lasim/cloudTB3\r\n\numount: /home/lasim/cloudTB3: not mounted.\n\nshell returned 1\n"
-
