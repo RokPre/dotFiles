@@ -13,8 +13,11 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
+badd +0 ~/sync/dotFiles/.bashrc
 argglobal
 %argdel
+tabnew +setlocal\ bufhidden=wipe
+tabrewind
 argglobal
 enew
 setlocal fdm=expr
@@ -25,7 +28,47 @@ setlocal fdl=99
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-tabnext 1
+tabnext
+edit ~/sync/dotFiles/.bashrc
+argglobal
+setlocal fdm=manual
+setlocal fde=nvim_ufo#foldexpr()
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=99
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+6,9fold
+34,36fold
+39,41fold
+49,56fold
+48,57fold
+64,68fold
+72,77fold
+80,89fold
+108,110fold
+112,114fold
+120,124fold
+119,125fold
+143,145fold
+147,149fold
+151,153fold
+155,157fold
+159,161fold
+163,165fold
+168,170fold
+178,181fold
+183,185fold
+let &fdl = &fdl
+let s:l = 193 - ((53 * winheight(0) + 27) / 54)
+if s:l < 1 | let s:l = 1 | endif
+keepjumps exe s:l
+normal! zt
+keepjumps 193
+normal! 0
+tabnext 2
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
@@ -38,7 +81,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

@@ -3,7 +3,7 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~/sync/bashUtils
+cd ~/catkin_ws/src/pametna_tovarna_pc
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -13,49 +13,50 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +1 ~/.bashrc
+badd +28 README.md
+badd +148 src/fetch_thingsboard_data.py
+badd +26 src/fetch_thingsboard_data_shared_attributes.py
+badd +109 src/fetch_thingsboard_merged.py
 argglobal
 %argdel
-$argadd ~/.bashrc
-edit ~/.bashrc
+edit src/fetch_thingsboard_merged.py
+tcd ~/catkin_ws/src/pametna_tovarna_pc/src
 argglobal
-setlocal foldmethod=manual
-setlocal foldexpr=nvim_ufo#foldexpr()
-setlocal foldmarker={{{,}}}
-setlocal foldignore=#
-setlocal foldlevel=99
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldenable
+setlocal fdm=manual
+setlocal fde=nvim_ufo#foldexpr()
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=99
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
 silent! normal! zE
-6,9fold
-34,36fold
-39,41fold
-49,56fold
-48,57fold
-64,68fold
-72,77fold
-80,89fold
-108,110fold
-112,114fold
-120,124fold
-119,125fold
-143,145fold
-147,149fold
-151,153fold
-155,157fold
-159,161fold
-163,165fold
-168,170fold
-178,181fold
-183,185fold
+31,48fold
+55,58fold
+53,58fold
+69,70fold
+71,76fold
+67,76fold
+66,76fold
+79,84fold
+78,86fold
+77,86fold
+64,86fold
+61,87fold
+102,108fold
+101,109fold
+96,114fold
+95,114fold
+90,114fold
+118,121fold
+117,121fold
 let &fdl = &fdl
-let s:l = 164 - ((27 * winheight(0) + 25) / 50)
+let s:l = 109 - ((30 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 164
-normal! 09|
+keepjumps 109
+normal! 017|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -69,7 +70,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

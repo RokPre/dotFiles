@@ -1,4 +1,5 @@
 return {
+  -- TODO: Rewrite config for cmp and lsp. Right now im pretty sure its a mess.
   -- { import = "plugins.biscuits" }, -- Better debugging
   -- { import = "plugins.dap" },        -- Better debugging
   -- { import = "plugins.dapMason" },
@@ -14,7 +15,6 @@ return {
   -- { import = "plugins.persistence" },
   -- { import = "plugins.playground" },
   -- { import = "plugins.remote" }, -- ssh remote
-  -- { import = "plugins.renderMarkdown" },
   -- { import = "plugins.snacks" },      -- Many small plugins
   -- { import = "plugins.tabOut" }, -- Use tab for navigation
   -- { import = "plugins.todoComments" }, -- Todo comments
@@ -25,7 +25,6 @@ return {
   -- { import = "plugins.w3m" }, -- Web browser
   -- { import = "plugins.winShift" }, -- Window management
   -- { import = "plugins.zen" }, -- Zen mode
-  -- TODO: Rewrite config for cmp and lsp. Right now im pretty sure its a mess.
   { import = "plugins.bufferLine" },            -- Browser like buffers
   { import = "plugins.cmp" },                   -- Text completion
   { import = "plugins.colorizer" },             -- Colorcode highlight
@@ -43,6 +42,7 @@ return {
   { import = "plugins.oil" },                   -- File explorer
   { import = "plugins.pywal16" },               -- Colorscheme
   { import = "plugins.rainbowDelimiters" },     -- Rainbow delimiters
+  { import = "plugins.renderMarkdown" },
   { import = "plugins.superMaven" },            -- AI code completion
   { import = "plugins.telescope" },             -- Fuzzy finder
   { import = "plugins.theme" },                 -- Theme

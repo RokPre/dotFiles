@@ -15,6 +15,37 @@ return {
   },
 
   config = function()
+    -- 1) Default: non-focusable hover (for auto popups)
+    local default_hover = vim.lsp.with(vim.lsp.handlers.hover, {
+      focusable = false,
+      border = "rounded",
+      close_events = { "CursorMoved", "BufHidden", "InsertLeave" },
+    })
+    vim.lsp.handlers["textDocument/hover"] = default_hover
+
+    -- 2) Auto hover on CursorHold (uses non-focusable handler above)
+    vim.o.updatetime = 1000
+    vim.api.nvim_create_autocmd("CursorHold", {
+      callback = function()
+        silent_hover()
+        -- vim.lsp.buf.hover()
+      end,
+    })
+
+    function _G.silent_hover()
+      local params = vim.lsp.util.make_position_params()
+      vim.lsp.buf_request(0, "textDocument/hover", params, function(err, result, ctx, config)
+        if err
+            or not result
+            or not result.contents
+            or (type(result.contents) == "table" and vim.tbl_isempty(result.contents))
+        then
+          return -- nothing to show
+        end
+        vim.lsp.handlers.hover(err, result, ctx, config)
+      end)
+    end
+
     vim.diagnostic.config({
       signs = false,
     })
@@ -57,12 +88,33 @@ return {
 
     -- Set up your language servers here
     local lspconfig = require("lspconfig")
-    lspconfig.pyright.setup({
-      capabilities = capabilities,
+    -- lspconfig.pyright.setup({
+    --   capabilities = capabilities,
+    -- })
+    lspconfig.basedpyright.setup({
+      settings = {
+        basedpyright = {
+          analysis = {
+            typeCheckingMode = "basic", -- or "strict"
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+          },
+        },
+      },
     })
+
     lspconfig.matlab_ls.setup({
       capabilities = capabilities,
     })
+
+    -- lspconfig.ltex_plus.setup({
+    --   settings = {
+    --     ltex = {
+    --       language = "sl-SI",
+    --     },
+    --   },
+    -- })
+    lspconfig.texlab.setup({})
 
     lspconfig.lua_ls.setup({
       capabilities = capabilities,

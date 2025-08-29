@@ -3,7 +3,7 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~/sync/bashUtils
+cd ~
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -13,49 +13,18 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +1 ~/.bashrc
 argglobal
 %argdel
-$argadd ~/.bashrc
-edit ~/.bashrc
 argglobal
-setlocal foldmethod=manual
-setlocal foldexpr=nvim_ufo#foldexpr()
-setlocal foldmarker={{{,}}}
-setlocal foldignore=#
-setlocal foldlevel=99
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldenable
-silent! normal! zE
-6,9fold
-34,36fold
-39,41fold
-49,56fold
-48,57fold
-64,68fold
-72,77fold
-80,89fold
-108,110fold
-112,114fold
-120,124fold
-119,125fold
-143,145fold
-147,149fold
-151,153fold
-155,157fold
-159,161fold
-163,165fold
-168,170fold
-178,181fold
-183,185fold
-let &fdl = &fdl
-let s:l = 164 - ((27 * winheight(0) + 25) / 50)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 164
-normal! 09|
+enew
+setlocal fdm=expr
+setlocal fde=nvim_ufo#foldexpr()
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=99
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

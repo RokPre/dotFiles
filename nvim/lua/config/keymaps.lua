@@ -116,6 +116,9 @@ keymap("n", "<A-b>", "<Cmd>wincmd s<CR>", opts)
 -- Close window
 keymap("n", "<A-w>", "<Cmd>q<CR>", { noremap = true, silent = true, desc = "Smart close" })
 
+-- Fullscreen window
+keymap("n", "<A-m>", "<Cmd>only<CR>", opts)
+
 
 -- Move windows around
 if pcall(require, "winshift") then

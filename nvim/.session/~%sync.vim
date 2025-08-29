@@ -13,11 +13,11 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +2 syncthing.md
+badd +1 ~/.bash_alias
 argglobal
 %argdel
-$argadd syncthing.md
-edit syncthing.md
+$argadd ~/.bash_alias
+edit ~/.bash_alias
 argglobal
 setlocal foldmethod=manual
 setlocal foldexpr=nvim_ufo#foldexpr()
@@ -28,13 +28,13 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
-1,7fold
+40,41fold
 let &fdl = &fdl
-let s:l = 6 - ((5 * winheight(0) + 25) / 50)
+let s:l = 32 - ((31 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 6
+keepjumps 32
 normal! 010|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
@@ -49,7 +49,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

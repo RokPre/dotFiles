@@ -183,4 +183,11 @@ fi
 if [ ! -f "$HOME/sync/vault/Dnevnik/$(date +"%Y - %j").md" ]; then
   echo ⚠️ " " "Write in your daily note!"
 fi
+
+# if [ -n "$weather" ] && command -v gcalcli >/dev/null 2>&1 && [ -f "$HOME/sync/gcal/gcal.sh" ]; then
+#   echo 📅 "" "===================="
+#   bash "$HOME/sync/gcal/gcal.sh"
+# fi
+
 PATH="$PATH:$HOME/.cargo/env"
+

@@ -10,7 +10,10 @@ return {
         -- You can also customize some of the format options for the filetype
         rust = { "rustfmt", lsp_format = "fallback" },
         -- You can use a function here to determine the formatters dynamically
-        python = { "black" },
+        python = { "black", "blue" },
+        tex = { "latexindent" },
+        json = { "jq" },
+        -- Requires to install 'sudo apt install texlive-extra-utils'
         -- Use the "*" filetype to run formatters on all filetypes.
         -- ["*"] = { "codespell" },
         -- Use the "_" filetype to run formatters on filetypes that don't
@@ -19,6 +22,9 @@ return {
       },
       formatters = {
         black = {
+          prepend_args = { "--line-length", "1000" }, -- Inside functions you can add , at the end of the last parameter to make it format with multiple lines
+        },
+        blue = {
           prepend_args = { "--line-length", "1000" }, -- Inside functions you can add , at the end of the last parameter to make it format with multiple lines
         },
         codespell = {},

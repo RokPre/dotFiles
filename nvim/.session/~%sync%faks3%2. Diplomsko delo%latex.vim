@@ -3,7 +3,7 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~
+cd ~/sync/faks3/2.\ Diplomsko\ delo
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -13,11 +13,12 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +9 ~/offline/credentials/client_secret_180109995182-irutoifeah8qhpifte0fuejmdimjvlcu.apps.googleusercontent.com.json
 argglobal
 %argdel
-edit ~/offline/credentials/client_secret_180109995182-irutoifeah8qhpifte0fuejmdimjvlcu.apps.googleusercontent.com.json
+tcd ~/sync/faks3/2.\ Diplomsko\ delo/latex
 argglobal
+enew
+file oil:///home/lasim/sync/faks3/2.\ Diplomsko\ delo/latex/
 setlocal fdm=manual
 setlocal fde=nvim_ufo#foldexpr()
 setlocal fmr={{{,}}}
@@ -26,16 +27,6 @@ setlocal fdl=99
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-silent! normal! zE
-1,8fold
-1,9fold
-let &fdl = &fdl
-let s:l = 7 - ((6 * winheight(0) + 30) / 61)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 7
-normal! 020|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

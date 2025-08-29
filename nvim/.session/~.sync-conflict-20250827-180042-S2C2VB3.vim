@@ -13,10 +13,13 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
+badd +3 ~/credentials.md
 argglobal
 %argdel
 argglobal
 enew
+file oil:///home/rok/
+balt ~/credentials.md
 setlocal foldmethod=manual
 setlocal foldexpr=nvim_ufo#foldexpr()
 setlocal foldmarker={{{,}}}

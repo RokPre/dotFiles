@@ -88,7 +88,7 @@ bindsym $mod+v split h
 bindsym $mod+m fullscreen
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+# bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+r layout toggle split
 # bindsym $mod+e layout toggle split
@@ -255,7 +255,7 @@ exec --no-startup-id exec $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux
 # exec --no-startup-id exec $HOME/offline/bin/st
 exec --no-startup-id exec st tmux
 exec --no-startup-id exec vivaldi-stable
-exec --no-startup-id exec obsidian obsidian://open?vault=vault
+# exec --no-startup-id exec obsidian obsidian://open?vault=vault
 
 # Keyboard shortcut for manual laucnh
 bindsym $mod+Ctrl+n exec --no-startup-id $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim; workspace $ws1
@@ -265,6 +265,8 @@ bindsym $mod+Ctrl+i exec --no-startup-id vivaldi-stable; workspace $ws2
 bindsym $mod+Ctrl+t exec --no-startup-id st tmux; workspace $ws3
 bindsym $mod+Ctrl+o exec --no-startup-id obsidian obsidian://open?vault=vault; workspace $ws4
 bindsym $mod+Ctrl+z exec --no-startup-id zotero; workspace $ws5
+
+bindsym $mod+s exec --no-startup-id "flameshot gui"
 
 # Move workspace to display
 # TODO: Fix this to include all the workspaces

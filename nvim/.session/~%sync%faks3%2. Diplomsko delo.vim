@@ -13,15 +13,15 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +113 latex/main.tex
-badd +24 ~/sync/faks3/2.\ Diplomsko\ delo/6_1_distanceTestShapeCountExample.py
-badd +39 ~/sync/faks3/2.\ Diplomsko\ delo/6_2_distanceTestShapeSizeExample.py
-badd +50 ~/sync/faks3/2.\ Diplomsko\ delo/6_3_distanceTestLidarRangeExample.py
+badd +63 latex/main.tex
+badd +42 ~/sync/faks3/2.\ Diplomsko\ delo/response.md
+badd +920 latex/citati.bib
 argglobal
 %argdel
+tabnew +setlocal\ bufhidden=wipe
+tabrewind
 edit latex/main.tex
 argglobal
-balt ~/sync/faks3/2.\ Diplomsko\ delo/6_1_distanceTestShapeCountExample.py
 setlocal fdm=manual
 setlocal fde=nvim_ufo#foldexpr()
 setlocal fmr={{{,}}}
@@ -31,102 +31,232 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-42,47fold
-41,50fold
-32,50fold
-56,60fold
-64,71fold
-62,71fold
-74,79fold
-73,79fold
-55,81fold
-105,108fold
-109,112fold
-103,114fold
-88,114fold
-124,127fold
-133,136fold
-137,140fold
-131,142fold
-116,142fold
-154,157fold
-158,161fold
-152,163fold
-144,163fold
-175,177fold
-172,177fold
-182,184fold
-179,184fold
-186,187fold
-193,195fold
-189,197fold
-165,197fold
+75,81fold
+73,82fold
+90,93fold
+97,104fold
+95,104fold
+106,107fold
+87,107fold
+130,134fold
+135,139fold
+128,141fold
+114,141fold
+151,154fold
+160,164fold
+165,169fold
+158,171fold
+143,171fold
+183,187fold
+188,192fold
+181,194fold
+206,208fold
+203,208fold
 213,216fold
-217,220fold
-211,222fold
-199,222fold
-86,222fold
-236,240fold
-246,248fold
-250,252fold
-242,255fold
-233,255fold
-259,261fold
-265,268fold
-272,276fold
-257,276fold
-282,304fold
-280,305fold
-278,307fold
-228,307fold
-317,321fold
-314,321fold
-326,329fold
-331,335fold
-323,335fold
-340,344fold
-337,344fold
-309,344fold
-355,359fold
-346,359fold
-370,374fold
-361,374fold
-224,374fold
-389,394fold
-382,396fold
-402,406fold
-409,415fold
-398,417fold
-421,433fold
-419,433fold
-435,438fold
-440,441fold
-378,441fold
-460,463fold
-465,466fold
-473,476fold
-477,480fold
-471,482fold
-484,488fold
-469,488fold
-497,500fold
-501,504fold
-495,506fold
-493,506fold
-512,516fold
-510,516fold
-445,518fold
-527,537fold
-523,541fold
-25,544fold
+210,216fold
+218,219fold
+227,230fold
+234,237fold
+241,244fold
+223,246fold
+200,246fold
+173,246fold
+261,265fold
+266,270fold
+259,272fold
+248,272fold
+286,290fold
+283,290fold
+296,298fold
+301,303fold
+292,307fold
+312,314fold
+319,322fold
+326,330fold
+309,330fold
+336,358fold
+334,359fold
+332,361fold
+278,361fold
+371,375fold
+368,375fold
+380,383fold
+385,389fold
+377,389fold
+394,398fold
+391,398fold
+363,398fold
+409,413fold
+400,413fold
+429,433fold
+415,433fold
+274,433fold
+111,433fold
+445,450fold
+439,452fold
+458,462fold
+465,471fold
+454,473fold
+477,489fold
+475,489fold
+491,494fold
+496,498fold
+436,498fold
+505,506fold
+508,511fold
+516,521fold
+513,523fold
+534,538fold
+539,543fold
+532,545fold
+548,552fold
+525,556fold
+561,565fold
+571,575fold
+558,575fold
+582,585fold
+586,589fold
+580,591fold
+597,601fold
+577,601fold
+614,618fold
+609,618fold
+630,634fold
+636,640fold
+620,640fold
+647,651fold
+642,651fold
+502,651fold
+666,678fold
+655,678fold
+30,688fold
 let &fdl = &fdl
-let s:l = 114 - ((33 * winheight(0) + 26) / 53)
+let s:l = 63 - ((32 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 114
-normal! 012|
-tabnext 1
+keepjumps 63
+normal! 064|
+tabnext
+edit latex/main.tex
+argglobal
+balt ~/sync/faks3/2.\ Diplomsko\ delo/response.md
+setlocal fdm=manual
+setlocal fde=nvim_ufo#foldexpr()
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=99
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+75,81fold
+73,82fold
+90,93fold
+97,104fold
+95,104fold
+106,107fold
+87,107fold
+130,134fold
+135,139fold
+128,141fold
+114,141fold
+151,154fold
+160,164fold
+165,169fold
+158,171fold
+143,171fold
+183,187fold
+188,192fold
+181,194fold
+206,208fold
+203,208fold
+213,216fold
+210,216fold
+218,219fold
+227,230fold
+234,237fold
+241,244fold
+223,246fold
+200,246fold
+173,246fold
+261,265fold
+266,270fold
+259,272fold
+248,272fold
+286,290fold
+283,290fold
+296,298fold
+301,303fold
+292,307fold
+312,314fold
+319,322fold
+326,330fold
+309,330fold
+336,358fold
+334,359fold
+332,361fold
+278,361fold
+371,375fold
+368,375fold
+380,383fold
+385,389fold
+377,389fold
+394,398fold
+391,398fold
+363,398fold
+409,413fold
+400,413fold
+429,433fold
+415,433fold
+274,433fold
+111,433fold
+445,450fold
+439,452fold
+458,462fold
+465,471fold
+454,473fold
+477,489fold
+475,489fold
+491,494fold
+496,498fold
+436,498fold
+505,506fold
+508,511fold
+516,521fold
+513,523fold
+534,538fold
+539,543fold
+532,545fold
+548,552fold
+525,556fold
+561,565fold
+571,575fold
+558,575fold
+582,585fold
+586,589fold
+580,591fold
+597,601fold
+577,601fold
+614,618fold
+609,618fold
+630,634fold
+636,640fold
+620,640fold
+647,651fold
+642,651fold
+502,651fold
+666,678fold
+655,678fold
+30,688fold
+let &fdl = &fdl
+let s:l = 688 - ((0 * winheight(0) + 26) / 53)
+if s:l < 1 | let s:l = 1 | endif
+keepjumps exe s:l
+normal! zt
+keepjumps 688
+normal! 0
+tabnext 2
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif

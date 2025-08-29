@@ -13,16 +13,18 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +12 README.md
-badd +20 launch/pametna_tovarna.launch
-badd +66 ~/catkin_ws/src/pametna_tovarna_pc/src/update_map.py
-badd +35 src/const.py
+badd +29 README.md
+badd +129 ~/catkin_ws/src/pametna_tovarna_pc/src/update_map.py
+badd +186 ~/catkin_ws/src/pametna_tovarna_pc/src/sim_update_world.py
+badd +106 ~/catkin_ws/src/pametna_tovarna_pc/src/fetch_thingsboard_merged.py
+badd +17 ~/catkin_ws/src/pametna_tovarna_pc/src/debug/update_map_test.py
+badd +35 ~/catkin_ws/src/pametna_tovarna_pc/launch/pametna_tovarna_sim.launch
 argglobal
 %argdel
+$argadd ~/offline/credentials/git-credentials
+edit ~/catkin_ws/src/pametna_tovarna_pc/src/debug/update_map_test.py
 argglobal
-enew
-file oil:///home/rok/catkin_ws/src/pametna_tovarna_pc/src/
-balt src/const.py
+balt ~/catkin_ws/src/pametna_tovarna_pc/launch/pametna_tovarna_sim.launch
 setlocal fdm=manual
 setlocal fde=nvim_ufo#foldexpr()
 setlocal fmr={{{,}}}
@@ -31,6 +33,18 @@ setlocal fdl=99
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
+silent! normal! zE
+15,16fold
+30,31fold
+19,31fold
+34,35fold
+let &fdl = &fdl
+let s:l = 19 - ((18 * winheight(0) + 26) / 53)
+if s:l < 1 | let s:l = 1 | endif
+keepjumps exe s:l
+normal! zt
+keepjumps 19
+normal! 011|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

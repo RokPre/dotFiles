@@ -13,14 +13,13 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +261 i3/config
-badd +11 ~/sync/dotFiles//README.md
-badd +206 nvim/lua/myPlugins/homepage.lua
-badd +109 ~/steps.md
-badd +3 ~/sync/dotFiles/tmux.conf
+badd +167 .bashrc
+badd +21 ~/sync/dotFiles//README.md
+badd +91 ~/sync/dotFiles/i3/config
 argglobal
 %argdel
-edit i3/config
+$argadd .bashrc
+edit ~/sync/dotFiles/i3/config
 argglobal
 balt ~/sync/dotFiles//README.md
 setlocal fdm=manual
@@ -33,12 +32,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 267 - ((32 * winheight(0) + 26) / 53)
+let s:l = 91 - ((26 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 267
-normal! 048|
+keepjumps 91
+normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -52,7 +51,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :
