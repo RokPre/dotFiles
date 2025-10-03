@@ -12,6 +12,15 @@ function M.SaveSession()
     vim.fn.mkdir(session_folder, "p")
   end
 
+  -- Check if aerial is installed.
+  -- If installed close the aerial window before saving the session.
+  local ok, aerial = pcall(require, "aerial")
+
+  -- Close aerial window if it's open
+  if ok and aerial.is_open() then
+    aerial.close_all()
+  end
+
   local cwd = vim.fn.getcwd()
   local session_name = cwd:gsub(home_path, "~"):gsub("[/\\]", "%%") -- sanitize path
   local session_path = session_folder .. session_name .. ".vim"
@@ -22,11 +31,24 @@ end
 function M.LoadSession()
   local cwd = vim.fn.getcwd()
   local session_name = cwd:gsub(home_path, "~"):gsub("[/\\]", "%%") -- sanitize path
+  print("session_name", session_name)
+  print("session_folder", session_folder)
   local session_path = session_folder .. session_name .. ".vim"
+  print("session_path", session_path)
 
   if vim.fn.filereadable(session_path) == 1 then
     vim.cmd("silent! source " .. vim.fn.fnameescape(session_path))
-    vim.notify("Loaded session: " .. session_path:gsub(".vim$", ""):match(".*%%(.*)"), vim.log.levels.INFO)
+
+    local base = session_path:gsub("%.vim$", "")
+    -- prefer session_name; fall back to last % segment if present
+    local tail = session_name ~= "" and session_name
+        or base:match(".*%%(.+)$")
+        or base
+
+    -- pretty print
+    local pretty = tail:gsub("%%", "/")
+
+    vim.notify("Loaded session: " .. pretty, vim.log.levels.INFO)
     return 0
   else
     vim.notify("Session file not found: " .. session_path, vim.log.levels.WARN)
@@ -66,6 +88,7 @@ end
 
 local function loadLastSession()
   local sessions = vim.fn.readdir(session_folder)
+  print("sessions: ", sessions)
   if #sessions == 0 then
     vim.notify("No sessions found", vim.log.levels.INFO)
     return
@@ -80,10 +103,18 @@ local function loadLastSession()
     vim.notify("No sessions found", vim.log.levels.INFO)
     return
   end
-  local cmd = "cd " .. last_session:gsub("~", home_path):gsub("%%", "/"):gsub(".vim$", "")
+  local cmd = "cd " .. home_path
+  print(cmd)
+  cmd = cmd:gsub("~", home_path)
+  print(cmd)
+  cmd = cmd:gsub("%%", "/")
+  print(cmd)
+  cmd = cmd:gsub(".vim$", "")
+  print(cmd)
+  -- local cmd = "cd " .. last_session:gsub("~", home_path):gsub("%%", "/"):gsub(".vim$", "")
   vim.cmd(cmd)
   M.LoadSession()
-  return 1
+  -- return 1
 end
 
 local user_cmd = vim.api.nvim_create_user_command

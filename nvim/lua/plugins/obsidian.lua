@@ -13,6 +13,44 @@ vim.keymap.set("n", "<Leader>ob", "<Cmd>ObsidianBacklinks<Cr>",
 vim.keymap.set("n", "<Leader>ot", "<Cmd>ObsidianTemplate<Cr>",
   { noremap = true, silent = true, desc = "Template" })
 
+local function OpenExcalidraw()
+  -- Get current buffer name (full path)
+  local buffer_name = vim.api.nvim_buf_get_name(0)
+
+  -- Extract just the filename without path and extension
+  local filename = vim.fn.fnamemodify(buffer_name, ":t:r")
+
+  -- Append timestamp to make it unique
+  local sketch_name = filename .. "-" .. os.date("%Y-%m-%d-%H-%M-%S") .. ".excalidraw.md"
+
+  -- Build Obsidian URI (note the & before commandname!)
+  -- local uri = string.format(
+  --   "obsidian://advanced-uri?vault=%s&filename=%s&commandname=Excalidraw%%3A%%20New%%20drawing",
+  --   vaultPath,
+  --   sketch_name
+  -- )
+
+
+  local uri = string.format(
+    "obsidian://advanced-uri?vault=%s",
+    vaultPath
+  )
+
+  -- Debug prints
+  vim.print("URI: " .. uri)
+  vim.print("Sketch: " .. vaultPath)
+
+  -- Open Obsidian
+  uri = "obsidian://open?vault=vault&file=Dnevnik%2F2025%20-%20275"
+  vim.fn.jobstart({ "xdg-open", uri }, { detach = true })
+
+  -- Insert embed link into current note
+  local link = string.format("![[%s]]", sketch_name)
+  vim.api.nvim_put({ link }, "l", true, true)
+end
+
+vim.keymap.set("n", "<Leader>oe", OpenExcalidraw, {})
+
 return {
   "RokPre/obsidian.nvim",
   cond = function()

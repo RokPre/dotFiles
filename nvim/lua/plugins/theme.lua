@@ -23,5 +23,7 @@ return {
   -- {"savq/melange-nvim"},
   { "folke/tokyonight.nvim" },
   { "EdenEast/nightfox.nvim" },
-  { "projekt0n/github-nvim-theme" }
+  { "projekt0n/github-nvim-theme" },
+  { "gmr458/vscode_modern_theme.nvim" },
+  {"Mofiqul/vscode.nvim"}
 }

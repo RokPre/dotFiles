@@ -1,4 +1,5 @@
 return {
+  -- TODO: Rewrite config for cmp and lsp. Right now im pretty sure its a mess.
   -- { import = "plugins.biscuits" }, -- Better debugging
   -- { import = "plugins.dap" },        -- Better debugging
   -- { import = "plugins.dapMason" },
@@ -6,7 +7,6 @@ return {
   -- { import = "plugins.entireFile" }, -- For selecting entire file
   -- { import = "plugins.lazyGit" }, -- Lazy git
   -- { import = "plugins.livePreview" },
-  -- { import = "plugins.markdownPreview" }, -- Markdown redenring
   -- { import = "plugins.mdmath" }, -- Math rendering
   -- { import = "plugins.netrw" }, -- For scmooth scrolling
   -- { import = "plugins.noice" },
@@ -25,7 +25,8 @@ return {
   -- { import = "plugins.w3m" }, -- Web browser
   -- { import = "plugins.winShift" }, -- Window management
   -- { import = "plugins.zen" }, -- Zen mode
-  -- TODO: Rewrite config for cmp and lsp. Right now im pretty sure its a mess.
+  { import = "plugins.aerial" },                -- Keymaps menu
+  { import = "plugins.betterGoToFile" },        -- Browser like buffers
   { import = "plugins.bufferLine" },            -- Browser like buffers
   { import = "plugins.cmp" },                   -- Text completion
   { import = "plugins.colorizer" },             -- Colorcode highlight
@@ -35,8 +36,10 @@ return {
   { import = "plugins.gitSigns" },              -- Github signs in file
   { import = "plugins.luaLine" },               -- Status line
   { import = "plugins.luasnip" },               -- Snippets
+  { import = "plugins.markdownPreview" },       -- Markdown redenring
   { import = "plugins.marks" },                 -- Marks
   { import = "plugins.mason" },                 -- install lsp
+  { import = "plugins.mdPdf" },                 -- Browser like buffers
   { import = "plugins.mini" },                  -- A collection of mini plugins
   { import = "plugins.neoScroll" },             -- For scmooth scrolling
   { import = "plugins.obsidian" },              -- Obsidian.md support

@@ -45,10 +45,28 @@ return {
         ["<Leader>e."] = "actions.toggle_hidden",
         ["<Leader>e/"] = "actions.toggle_trash",
         ["<Leader>ey"] = "actions.yank_entry",
+        ["<Leader>eS"] = {
+          callback = function()
+            local connections = {
+              { name = "turtlebot3", uri = "ubuntu@192.168.9.111" },
+              -- add more connections here if you want
+            }
+            vim.ui.select(connections, {
+              prompt = "Select connection",
+              format_item = function(item) return item.name end,
+            }, function(selected)
+              if not selected then return end
+              local cmd = "e oil-ssh://" .. selected.uri .. "/"
+              print(cmd)
+              vim.cmd(cmd)
+            end)
+          end,
+          desc = "Connect over SSH with Oil",
+        },
       },
       preview_win = {
-        update_on_cursor_moved = true,   -- Automatically update the preview
-        preview_method = "fast_scratch", -- Ensure a fast preview experience
+        update_on_cursor_moved = true,
+        preview_method = "fast_scratch",
         preview_split = "below",
       },
     })

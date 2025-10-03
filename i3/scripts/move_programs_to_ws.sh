@@ -1,12 +1,14 @@
 #!/bin/bash
 
 # Define workspace names
+ws0=$6
 ws1=$1
 ws2=$2
 ws3=$3
 ws4=$4
 ws5=$5
 
+i3-msg '[class=".*"]' move to workspace "$ws0"
 i3-msg '[class="neovide"]' move to workspace "$ws1"
 i3-msg '[class="^Vivaldi*"]' move to workspace "$ws2"
 i3-msg '[class="kitty"]' move to workspace "$ws3"

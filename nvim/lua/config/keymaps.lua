@@ -137,6 +137,7 @@ keymap("n", "<A-C-l>", ":wincmd ><CR>", opts)
 keymap("n", "<A-C-h>", ":wincmd <<CR>", opts)
 keymap("n", "<A-C-m>", ":wincmd o<CR>", opts)
 keymap("n", "<A-=>", ":wincmd =<CR>", opts)
+keymap("n", "<A-m>", "<Cmd>only<Cr>", opts)
 
 -- Surround
 keymap("v", "<Leader>(", "<Esc>`>a)<Esc>`<i(<Esc>", { silent = true, noremap = true, desc = "()" })
@@ -177,3 +178,13 @@ keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>", { desc = "Yan
 keymap("n", "yae", "<Cmd>%y<Cr>", { desc = "Yank entire file" })
 keymap("n", "dae", "<Cmd>%d<Cr>", { desc = "Delete entire file" })
 keymap("n", "vae", "ggVG", { desc = "Select entire file" })
+
+-- Function to copy file:line link to clipboard
+local function copy_link_to_file()
+  local link = string.format("%s:%d:%d", vim.api.nvim_buf_get_name(0), vim.api.nvim_win_get_cursor(0)[1],
+    vim.api.nvim_win_get_cursor(0)[2] + 1)
+  vim.fn.setreg("+", link)
+  vim.fn.setreg('"', link)
+end
+
+keymap("n", "<leader>yf", copy_link_to_file, { desc = "Copy link to file" })

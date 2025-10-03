@@ -28,6 +28,7 @@ font pango:Cousine Nerd Font Mono 16
 # gaps inner 5
 
 bindsym Mod1+space exec --no-startup-id rofi -show run
+bindsym $mod+space exec --no-startup-id rofi -show window
 
 # Launch kitty
 # bindsym $mod+t exec /home/lasim/.local/kitty.app/bin/kitty
@@ -72,10 +73,17 @@ bindsym $mod+k focus up
 bindsym $mod+l focus right
 
 # move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+# bindsym $mod+Shift+h move left
+# bindsym $mod+Shift+j move down
+# bindsym $mod+Shift+k move up
+# bindsym $mod+Shift+l move right
+
+# move workspace to display
+bindsym $mod+shift+l move workspace to output right
+bindsym $mod+shift+j move workspace to output up
+bindsym $mod+shift+k move workspace to output down
+bindsym $mod+shift+h move workspace to output left
+
 
 # split in horizontal orientation
 bindsym $mod+b split v
@@ -100,7 +108,7 @@ bindsym $mod+f floating toggle
 bindsym $mod+g focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+bindsym $mod+p focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
@@ -115,7 +123,6 @@ bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -127,14 +134,13 @@ bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Ctrl+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+# bindsym $mod+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym $mod+Ctrl+h resize shrink width 10 px or 10 ppt
 bindsym $mod+Ctrl+j resize grow height 10 px or 10 ppt
@@ -187,17 +193,19 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%
 bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness.sh up
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness.sh down
 
+# Screenshot tool
 bindsym Print exec --no-startup-id flameshot gui
+bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui
 
 # Second display
 exec_always --no-startup-id --no-startup-id ~/.config/i3/scripts/displays.sh
 
 # Set background
-exec --no-startup-id sh -c 'sleep 5; feh --bg-fill $HOME/sync/rice/wallpapers/moon.webp'
-exec_always --no-startup-id feh --bg-fill $HOME/sync/rice/wallpapers/moon.webp
+exec --no-startup-id sh -c 'feh --bg-fill $HOME/sync/rice/wallpapers/getherCrop.jpg'
+exec_always --no-startup-id feh --bg-fill $HOME/sync/rice/wallpapers/getherCrop.jpg
 
-exec --no-startup-id sh -c "sleep 5; feh --bg-fill $HOME/sync/rice/wallpapers/moon.webp"
-exec_always --no-startup-id sh -c "sleep 5; feh --bg-fill $HOME/sync/rice/wallpapers/moon.webp"
+exec --no-startup-id sh -c "sleep 5; feh --bg-fill $HOME/sync/rice/wallpapers/getherCrop.jpg"
+exec_always --no-startup-id sh -c "sleep 5; feh --bg-fill $HOME/sync/rice/wallpapers/getherCrop.jpg"
 # exec_always --no-startup-id wal -i ~/sync/rice/wallpapers/house.jpg
 # exec_always --no-startup-id wal -i ~/sync/rice/wallpapers/mercury.png
 # exec_always --no-startup-id wal -i ~/sync/rice/wallpapers/tokyonight2.jpg
@@ -217,28 +225,29 @@ exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 4 "
 exec_always --no-startup-id bluetoothctl connect 50:5E:5C:03:EC:63
 
 # Open programs for specific workspace
+set $ws0 "0.All other"
 set $ws1 "1.Nvim"
-set $ws3 "2.Web"
-set $ws2 "3.Term"
+set $ws2 "2.Web"
+set $ws3 "3.Term"
 set $ws4 "4.Obsidian"
 set $ws5 "5.PDF and Zotero"
-# set $ws6 "6.File"
+set $ws6 "6.File"
 
+bindsym $mod+a workspace $ws0
 bindsym $mod+n workspace $ws1
 bindsym $mod+i workspace $ws2
 bindsym $mod+t workspace $ws3
 bindsym $mod+o workspace $ws4
 bindsym $mod+z workspace $ws5
-bindsym $mod+p workspace $ws5
-# bindsym $mod+e workspace $ws6
+bindsym $mod+e workspace $ws6
 
+bindsym $mod+shift+a move container to workspace $ws0 workspace $ws0
 bindsym $mod+shift+n move container to workspace $ws1 workspace $ws1
 bindsym $mod+shift+i move container to workspace $ws2 workspace $ws2
 bindsym $mod+shift+t move container to workspace $ws3 workspace $ws3
 bindsym $mod+shift+o move container to workspace $ws4 workspace $ws4
 bindsym $mod+shift+z move container to workspace $ws5 workspace $ws5
-bindsym $mod+shift+p move container to workspace $ws5 workspace $ws5
-# bindsym $mod+shift+e move container to workspace $ws6
+bindsym $mod+shift+e move container to workspace $ws6 workspace $ws6
 
 assign [class="neovide"] $ws1
 assign [class="^Vivaldi*"] $ws2
@@ -247,7 +256,8 @@ assign [class="st-256color"] $ws3
 assign [class="obsidian"] $ws4
 assign [class="Zotero"] $ws5
 assign [class="Zathura"] $ws5
-# assign [class="nnn"] $ws6
+assign [class="nnn"] $ws6
+assign [class=".*"] $ws0
 
 # Launch programs on boot
 exec --no-startup-id exec $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim
@@ -255,14 +265,15 @@ exec --no-startup-id exec $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux
 # exec --no-startup-id exec $HOME/offline/bin/st
 exec --no-startup-id exec st tmux
 exec --no-startup-id exec vivaldi-stable
-exec --no-startup-id exec obsidian obsidian://open?vault=vault
+# exec --no-startup-id exec obsidian obsidian://open?vault=vault
 
 # Keyboard shortcut for manual laucnh
 bindsym $mod+Ctrl+n exec --no-startup-id $HOME/offline/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim; workspace $ws1
 bindsym $mod+Ctrl+i exec --no-startup-id vivaldi-stable; workspace $ws2
 # bindsym $mod+Ctrl+t exec --no-startup-id /home/lasim/.local/kitty.app/bin/kitty
 # bindsym $mod+Ctrl+t exec --no-startup-id $HOME/offline/bin/st && workspace $ws3
-bindsym $mod+Ctrl+t exec --no-startup-id st tmux; workspace $ws3
+bindsym $mod+Ctrl+t exec --no-startup-id st; workspace $ws3
+bindsym $mod+Ctrl+x exec --no-startup-id st tmux; workspace $ws3
 bindsym $mod+Ctrl+o exec --no-startup-id obsidian obsidian://open?vault=vault; workspace $ws4
 bindsym $mod+Ctrl+z exec --no-startup-id zotero; workspace $ws5
 
@@ -271,4 +282,4 @@ bindsym $mod+Ctrl+z exec --no-startup-id zotero; workspace $ws5
 exec_always --no-startup-id $HOME/.config/i3/scripts/workspace_monitor.sh $ws1 $ws2 $ws3 $ws4 $ws5
 
 # Move running programs to proper workspace
-bindsym $mod+Shift+r exec --no-startup-id $HOME/.config/i3/scripts/move_programs_to_ws.sh $ws1 $ws2 $ws3 $ws4 $ws5
+bindsym $mod+Shift+r exec --no-startup-id $HOME/.config/i3/scripts/move_programs_to_ws.sh $ws1 $ws2 $ws3 $ws4 $ws5 $ws0

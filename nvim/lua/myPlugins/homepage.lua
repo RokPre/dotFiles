@@ -1,4 +1,3 @@
--- TODO: BUG: If two homepages are open in two windows, when one of them switches to a file, it does not reset the window options.
 local M = {}
 
 local lines_raw = {}
@@ -110,6 +109,8 @@ end
 
 function M.open()
   local homepage_buf = vim.api.nvim_create_buf(false, true)
+
+  -- Set the homepage as the current buffer
   vim.api.nvim_set_current_buf(homepage_buf)
 
   -- Delete the initial buffer that is shown when nvim is launched without a file
@@ -135,7 +136,6 @@ function M.open()
 
   local lines_to_display, formatted_shortcuts = format_homepage()
   vim.api.nvim_buf_set_lines(homepage_buf, 0, -1, false, lines_to_display)
-  vim.api.nvim_buf_set_option(homepage_buf, "modifiable", true)
 
   for _, item in ipairs(formatted_shortcuts) do
     vim.keymap.set("n", item.key, item.callback, {
@@ -160,11 +160,14 @@ function M.open()
       end
     end,
   })
+
   vim.api.nvim_create_autocmd("WinResized", {
     buffer = homepage_buf,
     callback = function()
       lines_to_display, _ = format_homepage()
+      vim.api.nvim_set_option_value("modifiable", true, { buf = homepage_buf })
       vim.api.nvim_buf_set_lines(homepage_buf, 0, -1, false, lines_to_display)
+      vim.api.nvim_set_option_value("modifiable", false, { buf = homepage_buf })
     end
   })
 end
@@ -202,11 +205,11 @@ vim.keymap.set("n", "<Leader>h", function() M.open() end, { noremap = true, sile
 
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
-    M.open()
-    -- vim.schedule(function()
-    --   if #vim.fn.argv() == 0 then
-    --     M.open()
-    --   end
-    -- end)
+    -- M.open()
+    vim.schedule(function()
+      if #vim.fn.argv() == 0 then
+        M.open()
+      end
+    end)
   end
 })

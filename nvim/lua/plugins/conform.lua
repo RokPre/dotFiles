@@ -11,6 +11,8 @@ return {
         rust = { "rustfmt", lsp_format = "fallback" },
         -- You can use a function here to determine the formatters dynamically
         python = { "black" },
+
+        xml = { "xmlformatter" },
         -- Use the "*" filetype to run formatters on all filetypes.
         -- ["*"] = { "codespell" },
         -- Use the "_" filetype to run formatters on filetypes that don't
@@ -22,6 +24,11 @@ return {
           prepend_args = { "--line-length", "1000" }, -- Inside functions you can add , at the end of the last parameter to make it format with multiple lines
         },
         codespell = {},
+        xmlformatter = {
+          command = "/home/rok/.local/share/nvim/mason/bin/xmlformat",
+          args = { "--indent", "2", "--blanks", "-" }, -- or "-i" depending on tool
+          stdin = true,                                -- important
+        },
       },
       -- Set this to change the default values when calling conform.format()
       -- This will also affect the default values for format_on_save/format_after_save
