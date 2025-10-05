@@ -7,6 +7,7 @@ require("myPlugins.bufferClosing")                   -- ✅
 require("myPlugins.community")                       -- ❌
 require("myPlugins.floatingDiary")                   -- ✅
 require("myPlugins.homepage")                        -- ❌
+require("myPlugins.linking")                         -- ✅
 require("myPlugins.projectManager")                  -- ❌
 require("myPlugins.quickToggle")                     -- ✅
 require("myPlugins.reopenBuffer")                    -- ✅

@@ -1,0 +1,78 @@
+:root {
+  font-size: 20px;
+  font-family: "Roboto";
+}
+
+main{
+  background-color: #101213;
+}
+
+#page-header{
+  background-color: #181a1b;
+  padding: 1em;
+  width: 100%;
+  border-right: 1px solid #282a2b;
+  border-left: 1px solid #282a2b;
+}
+
+.markdown-body{
+  background-color: #181a1b;
+  padding: 1em;
+  width: 100%;
+  border-right: 1px solid #282a2b;
+  border-left: 1px solid #282a2b;
+}
+
+h1 { font-size: 1.92em; }
+h2 { font-size: 1.75em; }
+h3 { font-size: 1.59em; }
+h4 { font-size: 1.45em; }
+h5 { font-size: 1.32em; }
+h6 { font-size: 1.2em; }
+
+img {
+  display: block;
+  margin: auto;
+  max-height: 32em;
+}
+
+p {
+  width: 80ch;
+  font-size: 20px;
+}
+
+a {
+  color: #22DDDD
+}
+
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #282a2b ;}
+
+tr:hover {background-color: #181a1b;}
+
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #282a2b;
+  color: white;
+}
+
+.katex-html {
+  height: 1.5em;
+}
+
+.anchor {
+  fill: #ffffff;
+}

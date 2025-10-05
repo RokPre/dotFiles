@@ -1,5 +1,6 @@
 local home = os.getenv("HOME")
-local vaultPath = home .. "/sync/vault"
+local vaultName = "knowledgeVault"
+local vaultPath = home .. "/sync/" .. vaultName
 local uv = vim.loop
 
 vim.keymap.set("n", "<Leader>o", "<Nop>", { noremap = true, silent = true, desc = "Obsidian" })
@@ -14,38 +15,56 @@ vim.keymap.set("n", "<Leader>ot", "<Cmd>ObsidianTemplate<Cr>",
   { noremap = true, silent = true, desc = "Template" })
 
 local function OpenExcalidraw()
-  -- Get current buffer name (full path)
+  -- Check is obisidian is open
+  local result = vim.fn.systemlist("pgrep -x obsidian")
+  local defer = 0
+  if #result == 0 then
+    local uri = string.format("obsidian://open?vault=%s", vaultName)
+    vim.fn.jobstart({ "xdg-open", uri }, { detach = true })
+    defer = 2000
+  end
+
   local buffer_name = vim.api.nvim_buf_get_name(0)
-
-  -- Extract just the filename without path and extension
   local filename = vim.fn.fnamemodify(buffer_name, ":t:r")
+  local sketch_name = filename .. "_" .. os.date("%Y-%m-%d-%H-%M-%S") .. ".excalidraw.md"
+  local sketch_image = sketch_name:gsub(".md", ".svg")
+  local sketch_path = "Attachment%20folder%2FExcalidraw%2F" .. sketch_name
 
-  -- Append timestamp to make it unique
-  local sketch_name = filename .. "-" .. os.date("%Y-%m-%d-%H-%M-%S") .. ".excalidraw.md"
+  local content = [[---
 
-  -- Build Obsidian URI (note the & before commandname!)
-  -- local uri = string.format(
-  --   "obsidian://advanced-uri?vault=%s&filename=%s&commandname=Excalidraw%%3A%%20New%%20drawing",
-  --   vaultPath,
-  --   sketch_name
-  -- )
+excalidraw-plugin: parsed
+tags: [excalidraw]
 
+---
+%23%23 Drawing
+```compressed-json
+N4IgLgngDgpiBcIYA8DGBDANgSwCYCd0B3EAGhADcZ8BnbAewDsEAmcm+gV31TkQAswYKDXgB6MQHNsYfpwBGAOlT0AtmIBeNCtlQbs6RmPry6uA4wC0KDDgLFLUTJ2lH8MTDHQ0YNMWHRJMRZFAEYAVjCyJE9VGEYwGgQAbQBdcnQoKABlALA+UFkYOIQQXHR8AGtoyXw8bOwNPkZOTExyHRgiACF0VErarkZcAGF6THp8UoBiADN5hZAAXyWgA
+```
+%25%25
+]]
 
-  local uri = string.format(
-    "obsidian://advanced-uri?vault=%s",
-    vaultPath
+  local uri_new = string.format(
+    "obsidian://new?vault=%s&file=%s&content=%s",
+    vaultName,
+    sketch_path,
+    content
   )
 
-  -- Debug prints
-  vim.print("URI: " .. uri)
-  vim.print("Sketch: " .. vaultPath)
+  local uri_open = string.format(
+    "obsidian://open?vault=%s&file=%s",
+    vaultName,
+    sketch_path
+  )
 
   -- Open Obsidian
-  uri = "obsidian://open?vault=vault&file=Dnevnik%2F2025%20-%20275"
-  vim.fn.jobstart({ "xdg-open", uri }, { detach = true })
-
+  vim.defer_fn(function()
+    vim.fn.jobstart({ "xdg-open", uri_new }, { detach = true })
+    vim.defer_fn(function()
+      vim.fn.jobstart({ "xdg-open", uri_open }, { detach = true })
+    end, 2000)
+  end, defer)
   -- Insert embed link into current note
-  local link = string.format("![[%s]]", sketch_name)
+  local link = string.format("![image](%s)", sketch_image)
   vim.api.nvim_put({ link }, "l", true, true)
 end
 

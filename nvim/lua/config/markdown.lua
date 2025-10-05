@@ -3,6 +3,7 @@ local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
+local fmt = require("luasnip.extras.fmt").fmt
 
 -- Utility function to format links
 local function link_for_day(offset, label)
@@ -31,9 +32,9 @@ ls.add_snippets("markdown", {
 
   -- Display math
   s({ trig = "dm", snippetType = "autosnippet", wordTrig = true }, {
-    t({ "$$$", "" }),
+    t({ "$$", "" }),
     i(1),
-    t({ "", "$$$" }),
+    t({ "", "$$" }),
   }),
 
   -- Inline code
@@ -103,47 +104,71 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+local ts_utils = require("nvim-treesitter.ts_utils")
 
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = { "markdown" },
---   callback = function()
---     local group = vim.api.nvim_create_augroup("MarkdownMathDetect", { clear = true })
---
---     local function is_in_math_block()
---       local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
---       local cursor = vim.api.nvim_win_get_cursor(0)
---       local row = cursor[1]
---
---       local math_start = 0
---       for i = 1, row do
---         if lines[i]:match("^%s*%${2}") then
---           math_start = math_start + 1
---         end
---       end
---       if math_start % 2 == 1 then
---         print("math")
---       end
---       return math_start % 2 == 1
---     end
---
---     local function toggle_filetype()
---       if is_in_math_block() then
---         if vim.bo.filetype ~= "tex" then
---           vim.cmd("set filetype=tex")
---           vim.bo.filetype = "tex"
---         end
---       else
---         if vim.bo.filetype ~= "markdown" then
---           vim.cmd("set filetype=markdown")
---           vim.bo.filetype = "markdown"
---         end
---       end
---     end
---
---     vim.api.nvim_create_autocmd({ "CursorMoved", "CursorHold" }, {
---       group = group,
---       buffer = 0,
---       callback = toggle_filetype,
---     })
---   end,
--- })
+local function in_math()
+  local node = ts_utils.get_node_at_cursor()
+  while node do
+    local type = node:type()
+    if type == "inline_formula" or type == "displayed_equation" then
+      return true
+    end
+    node = node:parent()
+  end
+  return false
+end
+
+-- Snippeti aktivni samo znotraj math
+ls.add_snippets("markdown", {
+  s({ trig = "fr", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    fmt("\\frac{{{}}}{{{}}}", { i(1), i(2) })
+  ),
+  s({ trig = "sq", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    fmt("\\sqrt{{{}}}", { i(1) })
+  ),
+  s({ trig = "al", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\alpha")
+  ),
+  s({ trig = "be", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\beta")
+  ),
+  s({ trig = "plus", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("+")
+  ),
+  s({ trig = "minus", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("-")
+  ),
+  s({ trig = "je", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("=")
+  ),
+  s({ trig = "nic", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("0")
+  ),
+  s({ trig = "ne", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\ne")
+  ),
+  s({ trig = "vec", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\gt")
+  ),
+  s({ trig = "manj", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\ls")
+  ),
+  s({ trig = "torej", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\Rightarrow")
+  ),
+  s({ trig = "Ra", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\Rightarrow")
+  ),
+  s({ trig = "ra", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\rightarrow")
+  ),
+  s({ trig = "La", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\Leftarrow")
+  ),
+  s({ trig = "la", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\Leftarrow")
+  ),
+  s({ trig = "tedaj", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\Leftrightarrow")
+  ),
+})
