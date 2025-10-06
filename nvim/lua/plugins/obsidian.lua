@@ -1,6 +1,8 @@
+-- TODO: Add better image embeding
 local home = os.getenv("HOME")
 local vaultName = "knowledgeVault"
 local vaultPath = home .. "/sync/" .. vaultName
+local excalidraw_folder = "Excalidraw/"
 local uv = vim.loop
 
 vim.keymap.set("n", "<Leader>o", "<Nop>", { noremap = true, silent = true, desc = "Obsidian" })
@@ -13,6 +15,8 @@ vim.keymap.set("n", "<Leader>ob", "<Cmd>ObsidianBacklinks<Cr>",
   { noremap = true, silent = true, desc = "Show backlinks" })
 vim.keymap.set("n", "<Leader>ot", "<Cmd>ObsidianTemplate<Cr>",
   { noremap = true, silent = true, desc = "Template" })
+vim.keymap.set("n", "<Leader>oi", "<Cmd>ObsidianPasteImg<Cr>",
+  { noremap = true, silent = true, desc = "Paste image" })
 
 local function OpenExcalidraw()
   -- Check is obisidian is open
@@ -64,7 +68,7 @@ N4IgLgngDgpiBcIYA8DGBDANgSwCYCd0B3EAGhADcZ8BnbAewDsEAmcm+gV31TkQAswYKDXgB6MQHNsY
     end, 2000)
   end, defer)
   -- Insert embed link into current note
-  local link = string.format("![image](%s)", sketch_image)
+  local link = string.format("![image](%s%s)", excalidraw_folder, sketch_image)
   vim.api.nvim_put({ link }, "l", true, true)
 end
 

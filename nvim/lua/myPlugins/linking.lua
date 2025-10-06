@@ -1,3 +1,4 @@
+-- TODO: Make this compatible with folders as well.
 local keymap = vim.keymap.set
 
 local the_file_path = nil
