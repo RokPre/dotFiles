@@ -13,53 +13,18 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +26 nvim/lua/plugins/obsidian.lua
 argglobal
 %argdel
-edit nvim/lua/plugins/obsidian.lua
 argglobal
+enew
 setlocal foldmethod=manual
-setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
+setlocal foldexpr=nvim_ufo#foldexpr()
 setlocal foldmarker={{{,}}}
 setlocal foldignore=#
 setlocal foldlevel=99
 setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
-silent! normal! zE
-9,10fold
-12,13fold
-14,15fold
-21,25fold
-46,51fold
-53,57fold
-62,64fold
-60,65fold
-17,69fold
-75,78fold
-79,81fold
-85,89fold
-84,90fold
-97,99fold
-100,102fold
-103,105fold
-106,108fold
-109,111fold
-96,112fold
-92,113fold
-114,118fold
-119,122fold
-123,125fold
-126,129fold
-82,130fold
-73,131fold
-let &fdl = &fdl
-let s:l = 26 - ((25 * winheight(0) + 25) / 50)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 26
-normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

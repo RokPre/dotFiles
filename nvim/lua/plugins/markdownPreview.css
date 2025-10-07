@@ -34,6 +34,7 @@ img {
   display: block;
   margin: auto;
   max-height: 32em;
+  max-width: 80ch;
 }
 
 p {
@@ -69,8 +70,8 @@ th {
   color: white;
 }
 
-.katex-html {
-  height: 1.5em;
+.katex {
+  font-size: 1.2em!important;
 }
 
 .anchor {

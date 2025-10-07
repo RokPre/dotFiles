@@ -37,6 +37,7 @@ return {
   { import = "plugins.luaLine" },               -- Status line
   { import = "plugins.luasnip" },               -- Snippets
   { import = "plugins.markdownPreview" },       -- Markdown redenring
+  { import = "plugins.markdownTable" },         -- Markdown table formatter
   { import = "plugins.marks" },                 -- Marks
   { import = "plugins.mason" },                 -- install lsp
   { import = "plugins.mdPdf" },                 -- Browser like buffers
@@ -55,4 +56,5 @@ return {
   { import = "plugins.vimTex" },                -- Tex support
   { import = "plugins.webDevIcons" },           -- Web icons
   { import = "plugins.whichKey" },              -- Keymaps menu
+
 }

@@ -126,6 +126,15 @@ ls.add_snippets("markdown", {
   s({ trig = "sq", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     fmt("\\sqrt{{{}}}", { i(1) })
   ),
+  s({ trig = "_", wordTrig = false, condition = in_math, snippetType = "autosnippet" },
+    fmt("_{{{}}}", { i(1) })
+  ),
+  s({ trig = "pow", wordTrig = false, condition = in_math, snippetType = "autosnippet" },
+    fmt("^{{{}}}", { i(1) })
+  ),
+  s({ trig = "log", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    fmt("\\log{{{}}}", { i(1) })
+  ),
   s({ trig = "al", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("\\alpha")
   ),

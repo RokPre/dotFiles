@@ -1,4 +1,3 @@
--- TODO: Add better image embeding
 local home = os.getenv("HOME")
 local vaultName = "knowledgeVault"
 local vaultPath = home .. "/sync/" .. vaultName
@@ -8,15 +7,12 @@ local uv = vim.loop
 vim.keymap.set("n", "<Leader>o", "<Nop>", { noremap = true, silent = true, desc = "Obsidian" })
 vim.keymap.set("n", "<Leader>on", "<Cmd>ObsidianNew<CR>", { noremap = true, silent = true, desc = "New Note" })
 vim.keymap.set("n", "<Leader>oo", "<Cmd>ObsidianSearch<CR>", { noremap = true, silent = true, desc = "Open Notes" })
-vim.keymap.set("n", "<Leader>oO", "<Cmd>ObsidianOpen<CR>",
-  { noremap = true, silent = true, desc = "Open in Obsidian" })
+vim.keymap.set("n", "<Leader>oO", "<Cmd>ObsidianOpen<CR>", { noremap = true, silent = true, desc = "Open in Obsidian" })
 vim.keymap.set("n", "<Leader>or", "<Cmd>ObsidianRename<Cr>", { noremap = true, silent = true, desc = "Rename Note" })
 vim.keymap.set("n", "<Leader>ob", "<Cmd>ObsidianBacklinks<Cr>",
   { noremap = true, silent = true, desc = "Show backlinks" })
-vim.keymap.set("n", "<Leader>ot", "<Cmd>ObsidianTemplate<Cr>",
-  { noremap = true, silent = true, desc = "Template" })
-vim.keymap.set("n", "<Leader>oi", "<Cmd>ObsidianPasteImg<Cr>",
-  { noremap = true, silent = true, desc = "Paste image" })
+vim.keymap.set("n", "<Leader>ot", "<Cmd>ObsidianTemplate<Cr>", { noremap = true, silent = true, desc = "Template" })
+vim.keymap.set("n", "<Leader>oi", "<Cmd>ObsidianPasteImg<Cr>", { noremap = true, silent = true, desc = "Paste image" })
 
 local function OpenExcalidraw()
   -- Check is obisidian is open
@@ -72,7 +68,7 @@ N4IgLgngDgpiBcIYA8DGBDANgSwCYCd0B3EAGhADcZ8BnbAewDsEAmcm+gV31TkQAswYKDXgB6MQHNsY
   vim.api.nvim_put({ link }, "l", true, true)
 end
 
-vim.keymap.set("n", "<Leader>oe", OpenExcalidraw, {})
+vim.keymap.set("n", "<Leader>oe", OpenExcalidraw, { noremap = true, silent = true, desc = "Embed excalidraw" })
 
 return {
   "RokPre/obsidian.nvim",
@@ -92,6 +88,7 @@ return {
         path = vaultPath,
       },
     },
+
     disable_frontmatter = true,
     templates = {
       folder = "template",
@@ -129,7 +126,11 @@ return {
     },
     attachments = {
       folder = "Attachment folder",
-      img_folder = "Attachment folder"
+      img_folder = "Attachment folder",
+      img_text_func = function(client, path)
+        path = client:vault_relative_path(path) or path
+        return string.format("![image](%s)", path.name, path)
+      end,
     },
   },
 }

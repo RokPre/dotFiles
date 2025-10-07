@@ -3,7 +3,7 @@ let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~
+cd ~/sync/knowledgeVault/0.\ Faks/metodeModeliranja
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -13,13 +13,17 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +0 .config/nvim/lua/config/pluginlist.lua
+badd +10 ~/sync/knowledgeVault/0.\ Faks/metodeModeliranja/README.md
+badd +9 ~/sync/knowledgeVault/0.\ Faks/metodeModeliranja/01Predavanje.md
+badd +72 ~/.config/nvim/lua/plugins/obsidian.lua
 argglobal
 %argdel
-edit .config/nvim/lua/config/pluginlist.lua
+$argadd .
+edit ~/sync/knowledgeVault/0.\ Faks/metodeModeliranja/01Predavanje.md
 argglobal
+balt ~/.config/nvim/lua/plugins/obsidian.lua
 setlocal foldmethod=manual
-setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
+setlocal foldexpr=nvim_ufo#foldexpr()
 setlocal foldmarker={{{,}}}
 setlocal foldignore=#
 setlocal foldlevel=99
@@ -27,14 +31,13 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
-1,60fold
 let &fdl = &fdl
-let s:l = 46 - ((35 * winheight(0) + 25) / 50)
+let s:l = 9 - ((8 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 46
-normal! 023|
+keepjumps 9
+normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

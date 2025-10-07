@@ -13,20 +13,14 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +86 ~/sync/Projektna_naloga/README.md
-badd +4 ~/sync/Projektna_naloga/get_data.py
-badd +90 ~/sync/Projektna_naloga/dump.txt
-badd +1 ~/sync/Projektna_naloga/main.py
-badd +1 ~/sync/Projektna_naloga/anime_data_premium.csv
-badd +1 ~/sync/Projektna_naloga/kaja/__pycache__/oi2_pridobi.cpython-311.pyc
+badd +0 ~/sync/Projektna_naloga/get_data.py
 argglobal
 %argdel
-$argadd ./
-edit ~/sync/Projektna_naloga/README.md
+$argadd .
+edit ~/sync/Projektna_naloga/get_data.py
 argglobal
-balt ~/sync/Projektna_naloga/dump.txt
 setlocal foldmethod=manual
-setlocal foldexpr=0
+setlocal foldexpr=nvim_ufo#foldexpr()
 setlocal foldmarker={{{,}}}
 setlocal foldignore=#
 setlocal foldlevel=99
@@ -34,16 +28,39 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
-7,9fold
-1,9fold
-12,33fold
-11,83fold
+1,4fold
+12,17fold
+18,19fold
+32,39fold
+27,41fold
+26,41fold
+11,42fold
+47,50fold
+45,50fold
+54,57fold
+58,62fold
+79,81fold
+68,83fold
+64,83fold
+53,85fold
+89,92fold
+94,96fold
+106,108fold
+169,172fold
+166,172fold
+110,222fold
+230,231fold
+228,231fold
+227,233fold
+104,235fold
+100,235fold
+88,237fold
 let &fdl = &fdl
-let s:l = 33 - ((29 * winheight(0) + 24) / 49)
+let s:l = 242 - ((47 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 33
+keepjumps 242
 normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
@@ -58,7 +75,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

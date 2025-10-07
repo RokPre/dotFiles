@@ -13,16 +13,15 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +46 ~/sync/knowledgeVault/0.\ Faks/informacijaInKodi/README.md
-badd +1 ~/.config/nvim/lua/plugins/obsidian.lua
-badd +7 ~/.config/nvim/lua/plugins/markdownPreview.lua
+badd +1 ~/sync/faks4/digitalnoVodenje/DigitalnoVodenjeUcbenik.pdf
+badd +2 ~/sync/knowledgeVault/0.\ Faks/digitalnoVodenje/README.md
+badd +10 ~/sync/knowledgeVault/0.\ Faks/digitalnoVodenje/01Predavanje.md
 argglobal
 %argdel
-$argadd .
-edit ~/.config/nvim/lua/plugins/markdownPreview.lua
+edit ~/sync/knowledgeVault/0.\ Faks/digitalnoVodenje/01Predavanje.md
 argglobal
 setlocal foldmethod=manual
-setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
+setlocal foldexpr=nvim_ufo#foldexpr()
 setlocal foldmarker={{{,}}}
 setlocal foldignore=#
 setlocal foldlevel=99
@@ -30,15 +29,14 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
-5,9fold
-1,11fold
+1,10fold
 let &fdl = &fdl
-let s:l = 7 - ((6 * winheight(0) + 24) / 49)
+let s:l = 10 - ((9 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 7
-normal! 078|
+keepjumps 10
+normal! 0146|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
