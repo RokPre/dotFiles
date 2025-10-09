@@ -81,16 +81,17 @@ return {
   },
   opts = {
     preferred_link_content = "filename",
-    workspaces = {
+    workspaces             = {
       {
         -- name = "vault",
         name = "vault",
         path = vaultPath,
       },
     },
-
-    disable_frontmatter = true,
-    templates = {
+    legacy_commands        = false,
+    -- disable_frontmatter = true,
+    frontmatter            = { enabled = false },
+    templates              = {
       folder = "template",
       date_format = "%Y - %j",
       time_format = "%H:%M",
@@ -112,19 +113,19 @@ return {
         end,
       },
     },
-    daily_notes = {
+    daily_notes            = {
       folder = "Dnevnik",
       date_format = "%Y - %j",
       template = "Neovim-DailyNote-template.md",
     },
-    completion = {
+    completion             = {
       nvim_cmp = true,
       min_chars = 2,
     },
-    ui = {
+    ui                     = {
       enable = false,
     },
-    attachments = {
+    attachments            = {
       folder = "Attachment folder",
       img_folder = "Attachment folder",
       img_text_func = function(client, path)

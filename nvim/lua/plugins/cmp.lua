@@ -15,9 +15,10 @@ return {
   },
 
   config = function()
-    vim.diagnostic.config({
-      signs = false,
-    })
+    -- Diagnostic signs off
+    vim.diagnostic.config({ signs = false })
+
+    -- nvim-cmp setup
     local cmp = require("cmp")
     cmp.setup({
       snippet = {
@@ -28,13 +29,10 @@ return {
       mapping = cmp.mapping.preset.insert({
         ["<S-j>"] = cmp.mapping.select_next_item(),
         ["<S-k>"] = cmp.mapping.select_prev_item(),
-        -- ["<Esc>"] = cmp.mapping.abort(),
         ["<C-c>"] = cmp.mapping.abort(),
-        ["<CR>"] = cmp.mapping.confirm({ select = false }), -- false: accepts only the currently explicitly selected item
+        ["<CR>"] = cmp.mapping.confirm({ select = false }),
       }),
-
       sources = cmp.config.sources({
-        -- { name = "supermaven" },
         { name = "buffer" },
         { name = "calc" },
         { name = "cmdline" },
@@ -52,39 +50,33 @@ return {
       }),
     })
 
-    -- Set up lspconfig capabilities
+    -- Capabilities for completion
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-    -- Set up your language servers here
-    local lspconfig = require("lspconfig")
-    lspconfig.pyright.setup({
+    -- ✅ NEW LSP CONFIG STYLE
+    vim.lsp.config["pyright"] = {
       capabilities = capabilities,
-    })
-    lspconfig.matlab_ls.setup({
-      capabilities = capabilities,
-    })
+    }
 
-    lspconfig.lua_ls.setup({
+    vim.lsp.config["matlab_ls"] = {
+      capabilities = capabilities,
+    }
+
+    vim.lsp.config["lua_ls"] = {
       capabilities = capabilities,
       settings = {
         Lua = {
-          runtime = {
-            -- tell the server you're using LuaJIT
-            version = 'LuaJIT',
-          },
-          diagnostics = {
-            -- recognize the vim and require globals
-            globals = { 'vim', 'require' },
-          },
-          workspace = {
-            -- make the server aware of Neovim runtime files
-            library = vim.api.nvim_get_runtime_file("", true),
-          },
-          telemetry = {
-            enable = false,
-          },
+          runtime = { version = "LuaJIT" },
+          diagnostics = { globals = { "vim", "require" } },
+          workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+          telemetry = { enable = false },
         },
       },
-    })
+    }
+
+    -- Enable the servers
+    vim.lsp.enable("pyright")
+    vim.lsp.enable("matlab_ls")
+    vim.lsp.enable("lua_ls")
   end,
 }

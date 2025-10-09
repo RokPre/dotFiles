@@ -88,7 +88,8 @@ return {
       },
     },
 
-    disable_frontmatter = true,
+    legacy_commands = false,
+    frontmatter = { enabled = false },
     templates = {
       folder = "template",
       date_format = "%Y - %j",
