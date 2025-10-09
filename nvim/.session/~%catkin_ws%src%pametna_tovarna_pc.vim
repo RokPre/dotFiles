@@ -13,6 +13,7 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
+badd +1 ~/sync/dotFiles/nvim/.session/~\%catkin_ws\%src\%pametna_tovarna_pc.vim
 badd +16 README.md
 badd +8 launch/nav.launch
 badd +205 urdf/turtlebot3_waffle_pi.urdf.xacro
@@ -27,7 +28,7 @@ argglobal
 edit urdf/turtlebot3_waffle_pi.urdf.xacro
 tcd ~/catkin_ws/src/pametna_tovarna_pc
 argglobal
-balt ~/catkin_ws/src/pametna_tovarna_pc/launch/nav.launch
+balt ~/catkin_ws/src/pametna_tovarna_pc/urdf/turtlebot3_waffle_pi.gazebo.xacro
 setlocal fdm=manual
 setlocal fde=nvim_ufo#foldexpr()
 setlocal fmr={{{,}}}

@@ -1,6 +1,7 @@
 -- .config/nvim/lua/myPlugins/sessionManager.lua
 -- Session name: cwd path replaced with %%
 -- Sessions saved in vim.fn.stdpath("data"): ~/.local/state/nvim/sessions/
+-- TODO: Requires a complete rewrite. I just need to :source session.vim
 
 local session_folder = vim.fn.stdpath("config") .. "/.session/"
 local home_path = tostring(os.getenv("HOME"))
@@ -88,7 +89,6 @@ end
 
 local function loadLastSession()
   local sessions = vim.fn.readdir(session_folder)
-  print("sessions: ", sessions)
   if #sessions == 0 then
     vim.notify("No sessions found", vim.log.levels.INFO)
     return
@@ -103,18 +103,9 @@ local function loadLastSession()
     vim.notify("No sessions found", vim.log.levels.INFO)
     return
   end
-  local cmd = "cd " .. home_path
-  print(cmd)
-  cmd = cmd:gsub("~", home_path)
-  print(cmd)
-  cmd = cmd:gsub("%%", "/")
-  print(cmd)
-  cmd = cmd:gsub(".vim$", "")
-  print(cmd)
-  -- local cmd = "cd " .. last_session:gsub("~", home_path):gsub("%%", "/"):gsub(".vim$", "")
+
+  local cmd = "source " .. session_folder .. vim.fn.fnameescape(last_session)
   vim.cmd(cmd)
-  M.LoadSession()
-  -- return 1
 end
 
 local user_cmd = vim.api.nvim_create_user_command

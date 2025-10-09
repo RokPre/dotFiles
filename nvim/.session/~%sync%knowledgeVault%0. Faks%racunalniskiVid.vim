@@ -13,14 +13,17 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +9 projektnaNaloga.md
+badd +18 ~/sync/knowledgeVault/Tinea\ pedis.md
+badd +170 ~/.config/nvim/lua/config/markdown.lua
+badd +1 02Predavanje.md
 argglobal
 %argdel
-$argadd projektnaNaloga.md
-edit projektnaNaloga.md
+$argadd 02Predavanje.md
+edit ~/.config/nvim/lua/config/markdown.lua
 argglobal
+balt ~/sync/knowledgeVault/Tinea\ pedis.md
 setlocal foldmethod=manual
-setlocal foldexpr=nvim_ufo#foldexpr()
+setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
 setlocal foldmarker={{{,}}}
 setlocal foldignore=#
 setlocal foldlevel=99
@@ -28,13 +31,41 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
-4,10fold
+12,16fold
+9,17fold
+29,31fold
+34,38fold
+41,43fold
+46,48fold
+27,57fold
+69,77fold
+59,80fold
+83,85fold
+82,86fold
+88,92fold
+103,105fold
+102,106fold
+112,115fold
+111,116fold
+121,125fold
+131,134fold
+130,135fold
+141,143fold
+139,145fold
+153,157fold
+152,158fold
+148,159fold
+138,162fold
+166,171fold
+94,172fold
+338,342fold
+178,343fold
 let &fdl = &fdl
-let s:l = 10 - ((9 * winheight(0) + 25) / 50)
+let s:l = 170 - ((24 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 10
+keepjumps 170
 normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'

@@ -7,20 +7,19 @@ main{
   background-color: #101213;
 }
 
+#page-ctn{
+  max-width: min(100%!important, calc(80ch + 2em));
+}
+
 #page-header{
   background-color: #181a1b;
-  padding: 1em;
-  width: 100%;
-  border-right: 1px solid #282a2b;
-  border-left: 1px solid #282a2b;
+  border: none;
 }
 
 .markdown-body{
   background-color: #181a1b;
+  border: none!important;
   padding: 1em;
-  width: 100%;
-  border-right: 1px solid #282a2b;
-  border-left: 1px solid #282a2b;
 }
 
 h1 { font-size: 1.92em; }
@@ -34,12 +33,13 @@ img {
   display: block;
   margin: auto;
   max-height: 32em;
-  max-width: 80ch;
+  max-width: min(80ch, 100%);
 }
 
 p {
   width: 80ch;
   font-size: 20px;
+  max-width: 100%;
 }
 
 a {
@@ -72,6 +72,8 @@ th {
 
 .katex {
   font-size: 1.2em!important;
+  max-width: min(80ch, 100%);
+  overflow-x: auto;
 }
 
 .anchor {

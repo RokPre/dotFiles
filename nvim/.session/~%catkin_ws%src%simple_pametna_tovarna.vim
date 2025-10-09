@@ -13,16 +13,16 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +3 launch/simple_pametna_tovarna.launch
-badd +7 README.md
-badd +22 param/dwa_local_planner_params_waffle_pi.yaml
-badd +0 ~/sync/faks4/racunalniskiVid/README.md
+badd +30 launch/simple_pametna_tovarna.launch
+badd +20 oil-ssh://ubuntu@192.168.9.111//home/ubuntu/catkin_ws/src/simplePametnaTovarna/launch/tb3_bringup.launch
+badd +2 oil-ssh://ubuntu@192.168.9.111//home/ubuntu/catkin_ws/src/simplePametnaTovarna/launch/tb3_ar_track_alvar.launch
+badd +0 ~/sync/dotFiles/i3/config
 argglobal
 %argdel
-edit ~/sync/faks4/racunalniskiVid/README.md
+edit ~/sync/dotFiles/i3/config
 tcd ~/catkin_ws/src/simple_pametna_tovarna
 argglobal
-balt ~/catkin_ws/src/simple_pametna_tovarna/README.md
+balt ~/catkin_ws/src/simple_pametna_tovarna/launch/simple_pametna_tovarna.launch
 setlocal fdm=manual
 setlocal fde=nvim_ufo#foldexpr()
 setlocal fmr={{{,}}}
@@ -32,22 +32,13 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-1,4fold
-9,13fold
-15,16fold
-18,21fold
-23,24fold
-6,24fold
-26,35fold
-37,38fold
-40,42fold
 let &fdl = &fdl
-let s:l = 3 - ((2 * winheight(0) + 26) / 53)
+let s:l = 277 - ((44 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 3
-normal! 027|
+keepjumps 277
+normal! 086|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -61,7 +52,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

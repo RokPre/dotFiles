@@ -43,7 +43,8 @@ return {
   { import = "plugins.mdPdf" },                 -- Browser like buffers
   { import = "plugins.mini" },                  -- A collection of mini plugins
   { import = "plugins.neoScroll" },             -- For scmooth scrolling
-  { import = "plugins.obsidian" },              -- Obsidian.md support
+  -- { import = "plugins.obsidian" },              -- Obsidian.md support
+  { import = "plugins.obsidianNew" },           -- Obsidian.md support
   { import = "plugins.oil" },                   -- File explorer
   { import = "plugins.pywal16" },               -- Colorscheme
   { import = "plugins.rainbowDelimiters" },     -- Rainbow delimiters

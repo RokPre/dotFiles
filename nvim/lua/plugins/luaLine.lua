@@ -119,24 +119,62 @@ return {
       },
       tabline = {},
       sections = {
-        lualine_a = { "branch" },
-        lualine_b = { "diff" },
-        lualine_c = {},
-        lualine_x = {
-          "filename",
-          function()
+        -- lualine_a = { "branch" },
+        -- lualine_b = { "diff" },
+        -- lualine_c = {},
+        -- lualine_y = {
+        --   "filename",
+        --   function()
+        --     return vim.fn.expand("%:p:h")
+        --   end,
+        --   "data",
+        -- },
+        -- lualine_x = {
+        --   function()
+        --     -- Get the current activity
+        --     local activity = get_activity()
+        --     return activity
+        --   end,
+        --   "data",
+        -- },
+        lualine_a = { function()
+          local msg = vim.fn.expand("%:p:h")
+          local home = os.getenv("HOME")
+          if not home then
+            return "󰚌"
+          end
+          if msg:match("oil%-ssh://") then
+            return "󰛳"
+          elseif msg:match("oil") then
+            return ""
+          elseif msg:match(home) then
+            return "󰋞"
+          else
+            return ""
+          end
+        end, "data" },
+        lualine_b = { function()
+          local home = os.getenv("HOME")
+          local msg = vim.fn.expand("%:p:h")
+          if msg:match("oil://") then
+            return msg:gsub("oil://", "")
+          elseif msg:match("oil%-ssh://") then
+            return msg:gsub("oil%-ssh://", "")
+          elseif home and msg:match(home) then
+            return msg:gsub(home, "")
+          elseif msg == "oil:" then
+            return "/"
+          else
             return vim.fn.expand("%:p:h")
-          end,
-          "data",
+          end
+        end
+        , "data"
         },
-        lualine_y = {
-          function()
-            -- Get the current activity
-            local activity = get_activity()
-            return activity
-          end,
-          "data",
-        },
+        lualine_c = { function()
+          return vim.fn.expand("%:p:t")
+        end, "data" },
+        lualine_x = { "diff" },
+        lualine_y = { "branch" },
         lualine_z = {
           function()
             local time = os.date("*t")

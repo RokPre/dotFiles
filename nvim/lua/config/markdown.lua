@@ -85,6 +85,147 @@ vim.filetype.add({
   },
 })
 
+vim.cmd([[
+function! FootnoteComplete(A,L,P)
+  return g:footnotes
+endfunction
+]])
+
+local function new_footnote()
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  if not lines then return end
+
+  local footnotes = {}
+  local footnotes_int = {}
+
+  -- Check all the footnotes
+  for _, line in ipairs(lines) do
+    if line:match("^%s*%[%^.-%]") then
+      footnotes[#footnotes + 1] = line:match("^%s*%[%^(.-)%]")
+    end
+  end
+
+
+  -- Remove duplicates from footnotes
+  local seen, uniq = {}, {}
+  for _, item in ipairs(footnotes) do
+    if not seen[item] then
+      uniq[#uniq + 1] = item
+      seen[item] = true
+    end
+  end
+  footnotes = uniq
+
+
+  vim.g.footnotes = footnotes -- make it visible to Vimscript
+  local name = vim.fn.input({
+    prompt = "Please enter a footnote name: ",
+    completion = "customlist,FootnoteComplete",
+    cancelreturn = "__cancel__",
+  })
+
+  if not name or name == "__cancel__" then return end
+
+  local prexisting_footnote = false
+  for _, footnote in ipairs(footnotes) do
+    if footnote == name then
+      prexisting_footnote = true
+      break
+    end
+  end
+
+  -- If the user has no input, find the smallest available intiger
+  if name == "" then
+    for index, footnote in ipairs(footnotes) do
+      local intiger = tonumber(footnote)
+      if not intiger then
+        intiger = 0
+      end
+      footnotes_int[index] = intiger
+    end
+
+    local smallest_int = 1
+    if #footnotes_int ~= 0 then
+      -- Find smallest available intiger
+      table.sort(footnotes_int)
+
+      for _, num in ipairs(footnotes_int) do
+        if num == smallest_int then
+          smallest_int = num + 1
+        elseif num > smallest_int then
+          break
+        end
+      end
+    end
+
+    name = tostring(smallest_int)
+  end
+
+  local footnote = "[^" .. name .. "]"
+  vim.api.nvim_paste(footnote, false, -1)
+  if not prexisting_footnote then
+    local bottom_footnote = footnote .. ": "
+    vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), -1, -1, false, { bottom_footnote })
+    vim.api.nvim_win_set_cursor(0, { vim.api.nvim_buf_line_count(0), #bottom_footnote })
+    vim.cmd("startinsert")
+  end
+end
+
+
+local function goto_footnote(match, bottom)
+  local pattern = vim.fn.escape(match, "\\/.*$^~[]")
+  vim.fn.setreg("/", pattern)
+  vim.api.nvim_win_set_cursor(0, { 1, 0 })
+  if bottom then
+    vim.cmd("normal! n")
+  else
+    vim.cmd("normal! N")
+  end
+end
+
+local function footnotes()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line = vim.api.nvim_get_current_line()
+  if not line then
+    return false, nil
+  end
+
+  -- Convert to Lua 1-based indexing
+  col = col + 1
+
+  -- Check if the cursor is on a footnote
+  local match = nil
+  for s, e in line:gmatch("()%[%^.-%]()") do
+    if col >= s and col <= e then
+      match = line:sub(s, e - 1)
+      break
+    end
+  end
+
+  if not match then
+    new_footnote()
+    return
+  end
+
+  -- Find last footnote definition in file
+  local last_index = nil
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  for line_number, l in ipairs(lines) do
+    local pattern = "^%s*%[%^" .. vim.pesc(match:sub(3, -2)) .. "%]:"
+    if l:match(pattern) then
+      last_index = line_number
+    end
+  end
+
+  -- Detect if we are on the last definition
+  local is_bottom = match
+      and line:match("^%s*" .. vim.pesc(match) .. ":")
+      and row == last_index
+
+  goto_footnote(match, is_bottom)
+end
+
+
 local opts = { silent = true, noremap = true, buffer = true }
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "markdown" },
@@ -95,6 +236,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.wrap = true
     vim.opt_local.linebreak = true
     vim.opt_local.spell = false
+    vim.keymap.set({ "i", "n" }, "<Leader>of", footnotes,
+      { silent = true, noremap = true, buffer = true, desc = "Footnotes" })
 
     -- Codeblocks
     vim.keymap.set("i", "<C-A-c>", "``<Esc>h", { remap = true })
@@ -141,6 +284,9 @@ ls.add_snippets("markdown", {
   s({ trig = "be", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("\\beta")
   ),
+  s({ trig = "la", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    t("\\lambda")
+  ),
   s({ trig = "plus", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("+")
   ),
@@ -165,19 +311,35 @@ ls.add_snippets("markdown", {
   s({ trig = "torej", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("\\Rightarrow")
   ),
-  s({ trig = "Ra", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+  s({ trig = "Rr", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("\\Rightarrow")
   ),
-  s({ trig = "ra", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+  s({ trig = "rr", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("\\rightarrow")
   ),
-  s({ trig = "La", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+  s({ trig = "Lr", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("\\Leftarrow")
   ),
-  s({ trig = "la", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+  s({ trig = "lr", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("\\Leftarrow")
   ),
   s({ trig = "tedaj", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
     t("\\Leftrightarrow")
+  ),
+  s({ trig = "m3x3", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    fmt(
+      [[
+    \begin{{bmatrix}}
+    {} & {} & {} \\
+    {} & {} & {} \\
+    {} & {} & {}
+    \end{{bmatrix}}
+    ]],
+      {
+        i(1), i(2), i(3),
+        i(4), i(5), i(6),
+        i(7), i(8), i(9),
+      }
+    )
   ),
 })
