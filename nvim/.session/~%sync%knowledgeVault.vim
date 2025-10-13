@@ -14,21 +14,17 @@ else
   set shortmess=aoO
 endif
 badd +1 0.\ Faks/digitalnoVodenje/01Predavanje.md
-badd +0 ~/sync/knowledgeVault/Dnevnik/2025\ -\ 279.md
+badd +1 ~/sync/knowledgeVault/0.\ Faks/racunalniskiVid/02Predavanje.md
+badd +159 ~/sync/knowledgeVault/0.\ Faks/racunalniskiVid/01Predavanje.md
+badd +15 ~/.config/nvim/lua/config/appearance.lua
 argglobal
 %argdel
 $argadd 0.\ Faks/digitalnoVodenje/01Predavanje.md
-edit 0.\ Faks/digitalnoVodenje/01Predavanje.md
-wincmd t
-let s:save_winminheight = &winminheight
-let s:save_winminwidth = &winminwidth
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
+edit ~/.config/nvim/lua/config/appearance.lua
 argglobal
+balt ~/sync/knowledgeVault/0.\ Faks/racunalniskiVid/01Predavanje.md
 setlocal foldmethod=manual
-setlocal foldexpr=nvim_ufo#foldexpr()
+setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
 setlocal foldmarker={{{,}}}
 setlocal foldignore=#
 setlocal foldlevel=99
@@ -36,26 +32,14 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
-4,13fold
-17,20fold
-15,20fold
-22,25fold
-27,28fold
-31,35fold
-44,46fold
-30,48fold
-73,75fold
-78,79fold
-50,79fold
-81,82fold
-84,86fold
+19,25fold
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 25) / 50)
+let s:l = 13 - ((12 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
-normal! 0
+keepjumps 13
+normal! 025|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -63,8 +47,6 @@ endif
 unlet! s:wipebuf
 set winheight=1 winwidth=20
 let &shortmess = s:shortmess_save
-let &winminheight = s:save_winminheight
-let &winminwidth = s:save_winminwidth
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)

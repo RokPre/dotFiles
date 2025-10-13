@@ -25,6 +25,8 @@ return {
   -- { import = "plugins.w3m" }, -- Web browser
   -- { import = "plugins.winShift" }, -- Window management
   -- { import = "plugins.zen" }, -- Zen mode
+  -- { import = "plugins.obsidian" },              -- Obsidian.md support
+  -- { import = "plugins.pywal16" },               -- Colorscheme
   { import = "plugins.aerial" },                -- Keymaps menu
   { import = "plugins.betterGoToFile" },        -- Browser like buffers
   { import = "plugins.bufferLine" },            -- Browser like buffers
@@ -43,10 +45,8 @@ return {
   { import = "plugins.mdPdf" },                 -- Browser like buffers
   { import = "plugins.mini" },                  -- A collection of mini plugins
   { import = "plugins.neoScroll" },             -- For scmooth scrolling
-  -- { import = "plugins.obsidian" },              -- Obsidian.md support
   { import = "plugins.obsidianNew" },           -- Obsidian.md support
   { import = "plugins.oil" },                   -- File explorer
-  { import = "plugins.pywal16" },               -- Colorscheme
   { import = "plugins.rainbowDelimiters" },     -- Rainbow delimiters
   { import = "plugins.superMaven" },            -- AI code completion
   { import = "plugins.telescope" },             -- Fuzzy finder
@@ -57,5 +57,4 @@ return {
   { import = "plugins.vimTex" },                -- Tex support
   { import = "plugins.webDevIcons" },           -- Web icons
   { import = "plugins.whichKey" },              -- Keymaps menu
-
 }

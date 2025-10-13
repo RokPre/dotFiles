@@ -88,6 +88,7 @@ return {
       get_highlight = function()
         vim.api.nvim_set_hl(0, "AerialLine", { fg = "None", bg = "#283457", bold = true })
       end,
+      link_tree_to_folds = true,
     })
     vim.keymap.set("n", "<leader>a", "<Nop>", { desc = "Aerial" })
     vim.keymap.set("n", "<leader>aa", "<cmd>AerialOpen left<cr>", { desc = "Open aerial" })

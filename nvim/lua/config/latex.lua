@@ -7,30 +7,10 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-local lines = {
-  "\\documentclass{article}",
-  "\\usepackage{amsmath}",
-  "\\begin{document}",
-  "\\end{document}",
-}
-
-vim.api.nvim_create_autocmd({ "BufWinEnter", "BufReadPost" }, {
-  pattern = "main.tex",
-  nested = true,
-  callback = function()
-    local is_empty = vim.fn.line("$") == 1 and vim.fn.getline(1) == ""
-    if is_empty then
-      vim.api.nvim_buf_set_lines(0, 0, 0, false, lines)
-    end
-  end,
-})
-
-
 local ls     = require("luasnip")
 local s      = ls.snippet
 local t      = ls.text_node
 local i      = ls.insert_node
-local f      = ls.function_node
 local extras = require("luasnip.extras")
 local r      = extras.rep
 

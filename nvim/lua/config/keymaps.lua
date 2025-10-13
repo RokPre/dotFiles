@@ -2,31 +2,16 @@ local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
 
 -- Navigation
--- keymap("n", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
--- keymap("n", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
--- These keyboard shortcus have been movde to ufo.lua
--- /home/lasim/sync/dotFiles/nvim/lua/plugins/ufo.lua
-keymap("v", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
-keymap("v", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
-keymap("o", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
-keymap("o", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
-
-if pcall(require, "oil") then
-  keymap("n", "<Leader>ee", "<Cmd>Oil<CR>", opts)
-else
-  keymap("n", "<Leader>e", "<Cmd>e .<CR>", opts)
-end
+-- This was moved to ufo as it also works as a folding keymap ../plugins/ufo.lua
+-- keymap("v", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
+-- keymap("v", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
+-- keymap("o", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
+-- keymap("o", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
 
 -- Scroll
 -- Vertical scroll is handled by neoscroll plugin
-keymap("n", "<A-s>", "5z<Left>", opts)
-keymap("n", "<A-g>", "5z<Right>", opts)
-keymap("i", "<A-s>", "5z<Left>", opts)
-keymap("i", "<A-s>", "5z<Left>", opts)
-keymap("v", "<A-g>", "5z<Right>", opts)
-keymap("v", "<A-g>", "5z<Right>", opts)
-keymap("t", "<A-g>", "5z<Right>", opts)
-keymap("t", "<A-g>", "5z<Right>", opts)
+keymap({ "n", "i", "v", "t" }, "<A-s>", "<Cmd>5z<Left><CR>", opts)
+keymap({ "n", "i", "v", "t" }, "<A-g>", "<Cmd>5z<Right><CR>", opts)
 
 -- Move highlighted text between lines
 keymap("n", "<C-j>", ":m .+1<CR>==", opts)     -- move line up
@@ -52,47 +37,27 @@ keymap("n", "<C-f>", "*", opts)
 keymap("v", "<C-f>", '"zy/<C-R>z<CR>', opts)
 keymap("n", "f", "/", opts)
 keymap("v", "f", "/", opts)
-keymap("x", "/", "<Esc>/\\%V")                                       -- Search visual selection
-keymap("n", "<Esc>", ":noh<CR>", { noremap = false, silent = true }) -- Search highlight hide
-keymap({ "n", "v", "x" }, ",", "n", { remap = false, desc = "Next search match" })
-keymap({ "n", "v", "x" }, ";", "N", { remap = false, desc = "Previous search match" })
+keymap("x", "/", "<Esc>/\\%V")         -- Search visual selection
+keymap("n", "<Esc>", ":noh<CR>", opts) -- Search highlight hide
+keymap({ "n", "v" }, ",", "n", { noremap = true, desc = "Next search match" })
+keymap({ "n", "v" }, ";", "N", { noremap = true, desc = "Previous search match" })
 
 -- uppercase/lowercase
--- Moved to
--- keymap("n", "<C-u>", "~", opts)
--- keymap("v", "<C-u>", "~", opts)
+-- Moved to ../myPlugins/quickToggle.lua
 
 -- Disable default behavior of 'd' to not copy to system clipboard
--- Yank to system clipboard and "0.
--- Cuts to "0.
--- Pastes from "0.
-keymap("n", "d", '"0d', opts) -- Normal mode
-keymap("v", "d", '"0d', opts) -- Visual mode
-keymap("n", "D", '"0D', opts) -- Normal mode
-keymap("v", "D", '"0D', opts) -- Visual mode
-keymap("n", "x", '"0x', opts) -- Normal mode
-keymap("v", "x", '"0x', opts) -- Visual mode
-keymap("n", "c", '"0c', opts) -- Normal mode
-keymap("v", "c", '"0c', opts) -- Visual mode
-keymap("n", "C", '"0C', opts) -- Normal mode
-keymap("v", "C", '"0C', opts) -- Visual mode
+-- Yank to system clipboard and "0. Cuts to "0. Pastes from "0.
+keymap({ "n", "v" }, "d", '"0d', opts)
+keymap({ "n", "v" }, "D", '"0D', opts)
+keymap({ "n", "v" }, "x", '"0x', opts)
+keymap({ "n", "v" }, "c", '"0c', opts)
+keymap({ "n", "v" }, "C", '"0C', opts)
 
-keymap("n", "p", '"0p', opts) -- Normal mode
-keymap("v", "p", '"0p', opts) -- Visual mode
-keymap("n", "P", '"0P', opts) -- Normal mode
-keymap("v", "p", '"0P', opts) -- Visual mode
-
--- Paste from system clipboard
-keymap("n", "<C-S-v>", '"+p', opts)
-keymap("i", "<C-S-v>", '<Cmd>normal!"+pa<CR>', opts)
--- keymap("t", "<C-S-v>", '<C-\\><C-N>"+Pa', opts)
-keymap("t", "<C-S-v>", '<C-\\><C-N>"+pi', opts)
+keymap({ "n", "v" }, "p", '"0p', opts)
+keymap({ "n", "v" }, "P", '"0P', opts)
 
 -- Close buffer
--- This has been moved to: ~/sync/dotFiles/nvim/lua/myPlugins/bufferClosing.lua
--- keymap("n", "<C-w>", "<Cmd>bd!<Cr>", opts)
--- pcall(vim.api.nvim_del_keymap, "n", "<C-W><C-d>")
--- pcall(vim.api.nvim_del_keymap, "n", "<C-W>d")
+-- This has been moved to: ../myPlugins/bufferClosing.lua
 
 -- Open buffer
 keymap("n", "<C-t>", "<Cmd>tabnew<CR>", opts)
@@ -114,8 +79,7 @@ keymap("n", "<A-v>", "<Cmd>wincmd v<CR>", opts)
 keymap("n", "<A-b>", "<Cmd>wincmd s<CR>", opts)
 
 -- Close window
-keymap("n", "<A-w>", "<Cmd>q<CR>", { noremap = true, silent = true, desc = "Smart close" })
-
+keymap("n", "<A-w>", "<Cmd>q<CR>", opts)
 
 -- Move windows around
 if pcall(require, "winshift") then
@@ -153,9 +117,9 @@ keymap("v", "<Leader>'", "<Esc>`>a'<Esc>`<i'<Esc>", { silent = true, noremap = t
 keymap("v", "<Leader>`", "<Esc>`>a`<Esc>`<i`<Esc>", { silent = true, noremap = true, desc = "``" })
 keymap("v", "<Leader>$", "<Esc>`>a$<Esc>`<i$<Esc>", { silent = true, noremap = true, desc = "()" })
 
--- delete work, control backspace ctr + BS
+-- delete words
 keymap("i", "<A-BS>", "<C-W>", opts)
-keymap("i", "<C-BS>", "<C-W>", opts) -- does not work. I think terminal eats it up.
+keymap("i", "<C-BS>", "<C-W>", opts)
 
 -- messages
 local function messages_close()
@@ -169,12 +133,13 @@ local function messages_close()
   end
 end
 
-keymap("n", "<leader>m", "<Nop>", { desc = "Messages" })
-keymap("n", "<leader>mm", "<Cmd>messages<CR>", { desc = "Open messages" })
-keymap("n", "<leader>md", "<Cmd>messages clear<CR>", { desc = "Delete messages" })
-keymap("n", "<leader>mc", messages_close, { desc = "Close messages" })
-keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>", { desc = "Yank messages" })
+keymap("n", "<leader>m", "<Nop>", { silent = true, noremap = true, desc = "Messages" })
+keymap("n", "<leader>mm", "<Cmd>messages<CR>", { silent = true, noremap = true, desc = "Open messages" })
+keymap("n", "<leader>md", "<Cmd>messages clear<CR>", { silent = true, noremap = true, desc = "Delete messages" })
+keymap("n", "<leader>mc", messages_close, { silent = true, noremap = true, desc = "Close messages" })
+keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>",
+  { silent = true, noremap = true, desc = "Yank messages" })
 
-keymap("n", "yae", "<Cmd>%y<Cr>", { desc = "Yank entire file" })
-keymap("n", "dae", "<Cmd>%d<Cr>", { desc = "Delete entire file" })
-keymap("n", "vae", "ggVG", { desc = "Select entire file" })
+keymap("n", "yae", "<Cmd>%y<Cr>", { silent = true, noremap = true, desc = "Yank entire file" })
+keymap("n", "dae", "<Cmd>%d<Cr>", { silent = true, noremap = true, desc = "Delete entire file" })
+keymap("n", "vae", "ggVG", { silent = true, noremap = true, desc = "Select entire file" })

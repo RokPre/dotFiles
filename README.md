@@ -22,27 +22,96 @@ Note taking: [obsidian](https://obsidian.md)
 - [ ] Status bar [link](https://www.reddit.com/r/i3wm/comments/79m7td/is_there_a_list_of_status_bars/)
 - [ ] Tmux: Fix ctrl backspace being processed as ctrl h
 - [ ] Tmux: swap panes batter
-- [x] Add ".bak" to `.gitignore`.
-- [x] Fix obsidian cmp. It prefers id over file name. Look in lua/cmp_obsidian.lua and lua/obsidian/utils.lua->wiki_link_id_prefix()
-- [x] I3: Add borders to programs
-- [x] Make custom color sheme (Decided that i like tokyonight-night)
-- [x] Nvim: Add a new keyboard shortcut for finding files.
-- [x] Nvim: Added description to all keybindings, do need to require("which-key") to show them.
-- [x] Nvim: Closing the window also closes the buffer which i dont like.
-- [x] Nvim: Ctrl+w close buffer remove delay
-- [x] Nvim: Custom snippets [link](https://youtu.be/Y3XWijJgdJs)
-- [x] Nvim: Fix obsidian checkboxes. Make it so that there are only two options. Checked and unchecked.
-- [x] Nvim: Fix paste in in terminal and insert mode
-- [x] Nvim: Image viewer in nvim (done with snacks.image)
-- [x] Nvim: Implement to no-neck-pain like plugin myself for md files.
-- [x] Nvim: Reopen last closed buffer
-- [x] Nvim: Simple snippet for inserting date, time or date and time.
-- [x] Nvim: Snippets for python and such. (eg: print("x", x))
-- [x] Nvim: Text objects inside function.
-- [x] Nvim: Toggle checkboxes error not writable buffer
-- [x] Nvim: Ufo peek enter window when opening peek.
-- [x] Nvim: Window movement. Move window by one. Right now its move window all the way to the right, left, up or down. Winshift.nvim
-- [x] Nvim: w3m terminal browser plugin
-- [x] Replace kitty with a simpler terminal, use tmux for tabs and window management.
-- [x] Tmux: monacle mode
-- [x] Use [pywal](https://github.com/uZer/pywal16.nvim) to set theme of [nvim](https://github.com/uZer/pywal16.nvim), [obsidian](https://github.com/poach3r/pywal-obsidianmd) or [link](https://forum.obsidian.md/t/pywal-css-template-for-obsidian/88461), terminal/tmux and [rofi](https://github.com/dylanaraps/pywal/wiki/Customization#rofi). [link](https://github.com/dylanaraps/pywal/wiki/Customization)
+
+├── init.lua
+└── lua
+    ├── config
+    │   ├── ✅ appearance.lua
+    │   ├── ✅ keymaps.lua
+    │   ├── ✅ latex.lua
+    │   ├── ✅ lazy.lua
+    │   ├── ✅ markdown.lua
+    │   ├── ✅ neovide.lua
+    │   ├── ✅ other.lua
+    │   ├── pluginlist.lua
+    │   ├── ✅ snippets.lua
+    │   └── ✅ terminal.lua
+    ├── myPlugins
+    │   ├── bufferClosing.lua
+    │   ├── community.lua
+    │   ├── debug.lua
+    │   ├── diaryMode.lua
+    │   ├── floatingDiary.lua
+    │   ├── focusMode.lua
+    │   ├── homepage.lua
+    │   ├── linking.lua
+    │   ├── projectManager.lua
+    │   ├── quickToggle.lua
+    │   ├── reopenBuffer.lua
+    │   ├── sessionManager.lua
+    │   └── todoList.lua
+    └── plugins
+        ├── ✅ aerial.lua
+        ├── betterGoToFile.lua
+        ├── bufferLine.lua
+        ├── ccc.lua
+        ├── cmp.lua
+        ├── colorizer.lua
+        ├── conform.lua
+        ├── dap.lua
+        ├── dapMason.lua
+        ├── dapui.lua
+        ├── dressing.lua
+        ├── entireFile.lua
+        ├── flash.lua
+        ├── gitSigns.lua
+        ├── lazyGit.lua
+        ├── livePreview.lua
+        ├── luaLine.lua
+        ├── luasnip.lua
+        ├── markdownPreview.css
+        ├── markdownPreview.lua
+        ├── markdownTable.lua
+        ├── markdownTOC.lua
+        ├── marks.lua
+        ├── mason.lua
+        ├── mdmath.lua
+        ├── mdPdf.lua
+        ├── menu.lua
+        ├── mini.lua
+        ├── neoScroll.lua
+        ├── neoTree.lua
+        ├── netrw.lua
+        ├── noice.lua
+        ├── notify.lua
+        ├── obsidian.lua
+        ├── obsidianNew.lua
+        ├── oil.lua
+        ├── persistence.lua
+        ├── playground.lua
+        ├── precognition.lua
+        ├── projectExplorer.lua
+        ├── pywal16.lua
+        ├── rainbowDelimiters.lua
+        ├── remote.lua
+        ├── renderMarkdown.lua
+        ├── snacks.lua
+        ├── superMaven.lua
+        ├── tabOut.lua
+        ├── telescope.lua
+        ├── theme.lua
+        ├── todoComments.lua
+        ├── toggleCheckboxes.lua
+        ├── treeSitter.lua
+        ├── treeSitterTextObjects.lua
+        ├── ufo.lua
+        ├── ufoTest.lua
+        ├── undoTree.lua
+        ├── venn.lua
+        ├── vimTex.lua
+        ├── vsnip.lua
+        ├── w3m.lua
+        ├── webDevIcons.lua
+        ├── whichKey.lua
+        ├── winShift.lua
+        └── zen.lua

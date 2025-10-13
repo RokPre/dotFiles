@@ -9,13 +9,11 @@ vim.cmd("set nowrap")
 
 os.setlocale("en_US.UTF-8", "time")
 
-vim.opt.swapfile = false
-vim.opt.autoread = true
+vim.opt.autoread = true -- automatically read file when changed outside of Vim
 vim.opt.backup = false
+vim.opt.ignorecase = true
+vim.opt.scrolloff = 8
+vim.opt.smartcase = true
+vim.opt.swapfile = false
 vim.opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undo"
 vim.opt.undofile = true
-
-vim.opt.scrolloff = 8
-
-vim.opt.ignorecase = true
-vim.opt.smartcase = true

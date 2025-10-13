@@ -3,8 +3,7 @@ return {
   opts = {},
   dependencies = { { "echasnovski/mini.icons", opts = {} } },
   config = function()
-    vim.keymap.set("n", "<Leader>e", "<Nop>", { noremap = true, silent = true, desc = "Oil" })
-    vim.keymap.set("n", "<Leader>ee", "<Cmd>Oil<CR>", { noremap = true, silent = true, desc = "File picker" })
+    vim.keymap.set("n", "<Leader>e", "<Cmd>Oil<CR>", { noremap = true, silent = true, desc = "File picker" })
     require("oil").setup({
       default_file_explorer = true,
       columns = {
@@ -15,19 +14,19 @@ return {
         show_hidden = false,
       },
       keymaps = {
-        ["<Leader>eh"] = "actions.show_help",
+        ["<leader>h"] = "actions.show_help",
         ["l"] = "actions.select",
-        ["<Leader>ev"] = {
+        ["<leader>v"] = {
           "actions.select",
           opts = { vertical = true },
           desc = "Open the entry in a vertical split",
         },
-        ["<Leader>eb"] = {
+        ["<leader>b"] = {
           "actions.select",
           opts = { horizontal = true },
           desc = "Open the entry in a horizontal split",
         },
-        ["<Leader>et"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
+        ["<leader>t"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
         ["<C-p>"] = {
           callback = function()
             local oil = require("oil")
@@ -35,17 +34,17 @@ return {
           end,
         },
         ["q"] = "actions.close",
-        ["<Leader>er"] = "actions.refresh",
+        ["<leader>r"] = "actions.refresh",
         ["h"] = "actions.parent",
-        ["<Leader>ec"] = "actions.open_cwd",
-        ["<Leader>ed"] = "actions.cd",
+        ["<leader>c"] = "actions.open_cwd",
+        ["<leader>d"] = "actions.cd",
         ["<Leader>cwd"] = { "actions.cd", opts = { scope = "tab" }, desc = ":tcd to the current oil directory" },
-        ["<Leader>es"] = "actions.change_sort",
-        ["<Leader>ex"] = "actions.open_external",
-        ["<Leader>e."] = "actions.toggle_hidden",
-        ["<Leader>e/"] = "actions.toggle_trash",
-        ["<Leader>ey"] = "actions.yank_entry",
-        ["<Leader>eS"] = {
+        ["<leader>s"] = "actions.change_sort",
+        ["<leader>x"] = "actions.open_external",
+        ["<leader>."] = "actions.toggle_hidden",
+        ["<leader>/"] = "actions.toggle_trash",
+        ["<leader>y"] = "actions.yank_entry",
+        ["<leader>S"] = {
           callback = function()
             local connections = {
               { name = "turtlebot3", uri = "ubuntu@192.168.9.111" },

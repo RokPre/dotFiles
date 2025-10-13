@@ -1,6 +1,5 @@
 -- Lazy
-require("config.lazy")
--- ~/sync/dotFiles/nvim/lua/config/pluginlist.lua
+require("config.lazy") -- lua/config/lazy.lua
 
 -- My plugins
 require("myPlugins.bufferClosing")                   -- ✅
@@ -15,12 +14,11 @@ require("myPlugins.todoList")                        -- ❌
 SessionManager = require("myPlugins.sessionManager") -- ✅
 
 -- Config
-require("config.appearance") -- TODO: Move these into here.
+require("config.appearance")
 require("config.keymaps")
 require("config.latex")
 require("config.markdown")
 require("config.other")
-require("config.python")
 require("config.snippets")
 require("config.terminal")
 

@@ -2,7 +2,7 @@ local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
 
 local function openOrSwitchTerm()
-  -- Check if a terminal is already open in any window
+  -- Check if a terminal is already open in any window, switch to that window
   for _, win in ipairs(vim.api.nvim_list_wins()) do
     local buf = vim.api.nvim_win_get_buf(win)
     if vim.bo[buf].buftype == "terminal" then
@@ -11,7 +11,7 @@ local function openOrSwitchTerm()
       return
     end
   end
-  -- Check if a terminal buffer exists
+  -- Check if a terminal buffer exists, switch to that buffer
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if vim.bo[buf].buftype == "terminal" then
       vim.cmd("buffer " .. buf) -- Switch to existing terminal buffer
@@ -19,6 +19,7 @@ local function openOrSwitchTerm()
       return
     end
   end
+  -- Open up new terminal if none exists
   vim.cmd("terminal")
 end
 
@@ -26,11 +27,3 @@ end
 keymap("n", "<A-t>", openOrSwitchTerm, opts)
 keymap("t", "<A-t>", "<C-\\><C-n>", opts)
 keymap("t", "<Esc>", "<C-\\><C-n>", opts)
-
-vim.api.nvim_create_autocmd({ "WinNew", "BufNew" }, {
-  callback = function()
-    if vim.bo.buftype == "terminal" then
-      vim.cmd("startinsert")
-    end
-  end,
-})
