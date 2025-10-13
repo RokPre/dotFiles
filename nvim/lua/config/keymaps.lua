@@ -60,7 +60,7 @@ keymap({ "n", "v" }, "P", '"0P', opts)
 -- This has been moved to: ../myPlugins/bufferClosing.lua
 
 -- Open buffer
-keymap("n", "<C-t>", "<Cmd>tabnew<CR>", opts)
+keymap("n", "<C-t>", "<Cmd>:ene | startinsert<CR>", opts)
 
 -- Windows
 -- Navigate between windows

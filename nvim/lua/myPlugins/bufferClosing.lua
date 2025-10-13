@@ -54,7 +54,7 @@ local function close_buffer()
   vim.api.nvim_buf_delete(current, { force = true })
 end
 
-keymap("n", "<C-w>", close_buffer, { noremap = true, silent = true })
+keymap({ "n", "i" }, "<C-w>", close_buffer, { noremap = true, silent = true })
 
 pcall(vim.api.nvim_del_keymap, "n", "<C-W><C-d>")
 pcall(vim.api.nvim_del_keymap, "n", "<C-W>d")
