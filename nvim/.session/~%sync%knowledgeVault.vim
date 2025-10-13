@@ -13,17 +13,14 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +1 0.\ Faks/digitalnoVodenje/01Predavanje.md
-badd +1 ~/sync/knowledgeVault/0.\ Faks/racunalniskiVid/02Predavanje.md
-badd +159 ~/sync/knowledgeVault/0.\ Faks/racunalniskiVid/01Predavanje.md
-badd +46 ~/.config/nvim/lua/config/appearance.lua
-badd +27 ~/.config/nvim/lua/plugins/bufferLine.lua
+badd +233 ~/sync/knowledgeVault/0.\ Faks/digitalnoVodenje/predavanja.md
+badd +109 ~/.config/nvim/lua/config/appearance.lua
 argglobal
 %argdel
 $argadd 0.\ Faks/digitalnoVodenje/01Predavanje.md
 edit ~/.config/nvim/lua/config/appearance.lua
 argglobal
-balt ~/.config/nvim/lua/plugins/bufferLine.lua
+balt ~/sync/knowledgeVault/0.\ Faks/digitalnoVodenje/predavanja.md
 setlocal foldmethod=manual
 setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
 setlocal foldmarker={{{,}}}
@@ -33,14 +30,23 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
-25,44fold
+6,11fold
+13,16fold
+12,17fold
+4,52fold
+60,63fold
+64,67fold
+83,104fold
+56,105fold
+55,106fold
+54,107fold
 let &fdl = &fdl
-let s:l = 44 - ((43 * winheight(0) + 24) / 49)
+let s:l = 109 - ((48 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 44
-normal! 0
+keepjumps 109
+normal! 031|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -54,6 +60,7 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :
