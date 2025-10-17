@@ -116,6 +116,7 @@ keymap("v", '<Leader>"', '<Esc>`>a"<Esc>`<i"<Esc>', { silent = true, noremap = t
 keymap("v", "<Leader>'", "<Esc>`>a'<Esc>`<i'<Esc>", { silent = true, noremap = true, desc = "''" })
 keymap("v", "<Leader>`", "<Esc>`>a`<Esc>`<i`<Esc>", { silent = true, noremap = true, desc = "``" })
 keymap("v", "<Leader>$", "<Esc>`>a$<Esc>`<i$<Esc>", { silent = true, noremap = true, desc = "()" })
+keymap("v", "<Leader>*", "<Esc>`>a*<Esc>`<i*<Esc>", { silent = true, noremap = true, desc = "**" })
 
 -- delete words
 keymap("i", "<A-BS>", "<C-W>", opts)

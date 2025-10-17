@@ -56,7 +56,6 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     vim.schedule(function()
       local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
       -- local normal_dark = vim.api.nvim_get_hl(0, { name = "NormalFloat" })
-      vim.print(normal.b)
       local normal_dark = {
         -- fg = adjust_oklch(string.format("#%06x", normal_dark.fg), { dL = -0.1 }),
         bg = adjust_oklch(string.format("#%06x", normal.bg), { dL = -0.08 })

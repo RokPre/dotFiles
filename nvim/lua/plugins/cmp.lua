@@ -39,14 +39,12 @@ return {
         { name = "emoji" },
         { name = "luasnip" },
         { name = "nerdfont" },
-        { name = "nvim_lsp" },
-        { name = "nvim_lsp:lua_ls" },
         { name = "obsidian" },
         { name = "obsidian_new" },
         { name = "obsidian_tags" },
         { name = "path" },
       }, {
-        { name = "buffer" },
+        -- fallback sources
       }),
     })
 

@@ -12,6 +12,7 @@ alias v="nvim"
 alias nvimLazy='NVIM_APPNAME="nvimLazy" nvim'
 alias nvimAstro='NVIM_APPNAME="nvimAstro" nvim'
 alias nvimChad='NVIM_APPNAME="nvimChad" nvim'
+alias nvimMinMax='NVIM_APPNAME="nvimMinMax" nvim'
 
 # Ros
 alias teleop="roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch"

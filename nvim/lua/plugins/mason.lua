@@ -4,7 +4,10 @@ return {
 		ensure_installed = {
 			"shfmt",
 			"pyright",
-			"lua-language-server", -- Note the hyphen instead of underscore
+			"stylua",
+			"black",
+			"xmlformatter",
+			"doctoc",
 		},
 	},
 	---@param opts MasonSettings | {ensure_installed: string[]}

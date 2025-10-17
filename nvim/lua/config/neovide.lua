@@ -23,3 +23,6 @@ vim.keymap.set("n", "<C-+>", function()
   scale_factor = scale_factor + 0.1
   vim.g.neovide_scale_factor = scale_factor
 end)
+
+vim.keymap.set("i", "<C-S-v>", '<cmd>normal! "+p<CR>', { desc = "Paste clipboard" })
+vim.keymap.set({"n", "x"}, "<C-S-v>", '"+p', { desc = "Paste clipboard" })

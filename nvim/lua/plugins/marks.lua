@@ -22,26 +22,26 @@ local function delete_mark_on_current_line()
 end
 
 local function auto_add_marks(searchWord, mark)
-  vim.api.nvim_create_autocmd("BufReadPost", {
-    pattern = "*",
-    callback = function()
-      for i = 1, vim.fn.line("$") do
-        local line = vim.fn.getline(i)
-        if line:match("function%s+" .. searchWord) or
-           line:match("def%s+" .. searchWord) or
-           line:match("int%s+" .. searchWord) then
-          vim.cmd(i .. "mark " .. mark)
-          break
-        end
-      end
-    end
-  })
+	vim.api.nvim_create_autocmd("BufReadPost", {
+		pattern = "*",
+		callback = function()
+			for i = 1, vim.fn.line("$") do
+				local line = vim.fn.getline(i)
+				if
+					line:match("function%s+" .. searchWord)
+					or line:match("def%s+" .. searchWord)
+					or line:match("int%s+" .. searchWord)
+				then
+					vim.cmd(i .. "mark " .. mark)
+					break
+				end
+			end
+		end,
+	})
 end
 
 auto_add_marks("main", "m")
 auto_add_marks("init", "i")
-auto_add_marks("exception", "e")
-auto_add_marks("finalize", "f")
 
 keymap("n", "m", "`", opts)
 keymap("v", "m", "`", opts)

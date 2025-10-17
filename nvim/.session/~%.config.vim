@@ -13,13 +13,13 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +0 zathura/zathurarc
+badd +15 ~/.bash_alias
 argglobal
 %argdel
-$argadd zathura/zathurarc
-edit zathura/zathurarc
+$argadd ~/.bash_alias
+edit ~/.bash_alias
 argglobal
-setlocal foldmethod=expr
+setlocal foldmethod=manual
 setlocal foldexpr=nvim_ufo#foldexpr()
 setlocal foldmarker={{{,}}}
 setlocal foldignore=#
@@ -27,12 +27,16 @@ setlocal foldlevel=99
 setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
-let s:l = 5 - ((4 * winheight(0) + 25) / 50)
+silent! normal! zE
+41,42fold
+46,47fold
+let &fdl = &fdl
+let s:l = 15 - ((14 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 5
-normal! 028|
+keepjumps 15
+normal! 042|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

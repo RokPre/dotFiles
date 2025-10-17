@@ -13,33 +13,31 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +61 ~/sync/dotFiles/README.md
-badd +12 ~/sync/dotFiles/nvim/lua/config/other.lua
+badd +206 .bashrc
+badd +20 README.md
+badd +82 ~/.tmux.conf
 argglobal
 %argdel
-edit ~/sync/dotFiles/README.md
-tcd ~/sync/dotFiles/nvim
+$argadd .bashrc
+edit ~/.tmux.conf
 argglobal
-balt ~/sync/dotFiles/nvim/lua/config/other.lua
-setlocal foldmethod=manual
-setlocal foldexpr=nvim_ufo#foldexpr()
-setlocal foldmarker={{{,}}}
-setlocal foldignore=#
-setlocal foldlevel=99
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldenable
+balt README.md
+setlocal fdm=manual
+setlocal fde=nvim_ufo#foldexpr()
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=99
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
 silent! normal! zE
-1,8fold
-11,48fold
-10,148fold
 let &fdl = &fdl
-let s:l = 61 - ((23 * winheight(0) + 24) / 49)
+let s:l = 82 - ((80 * winheight(0) + 49) / 98)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 61
-normal! 014|
+keepjumps 82
+normal! 027|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

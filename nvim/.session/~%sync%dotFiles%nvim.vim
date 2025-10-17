@@ -13,18 +13,14 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +56 README.md
-badd +32 nvim/lua/config/pluginlist.lua
-badd +37 nvim/lua/plugins/bufferLine.lua
-badd +17 nvim/init.lua
-badd +27 nvim/lua/config/appearance.lua
+badd +11 README.md
+badd +12 nvim/lua/config/other.lua
 argglobal
 %argdel
-tabnew +setlocal\ bufhidden=wipe
-tabrewind
-edit nvim/lua/plugins/bufferLine.lua
+edit nvim/lua/config/other.lua
 tcd ~/sync/dotFiles/nvim
 argglobal
+balt ~/sync/dotFiles/README.md
 setlocal foldmethod=manual
 setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
 setlocal foldmarker={{{,}}}
@@ -34,52 +30,14 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
-4,14fold
-22,28fold
-29,31fold
-21,32fold
-33,35fold
-16,36fold
-15,37fold
-43,45fold
-42,46fold
-41,47fold
-38,48fold
-1,49fold
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 24) / 49)
+let s:l = 12 - ((11 * winheight(0) + 16) / 33)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
+keepjumps 12
 normal! 0
-tabnext
-edit ~/sync/dotFiles/nvim/lua/config/appearance.lua
-tcd ~/sync/dotFiles/nvim
-argglobal
-balt ~/sync/dotFiles/nvim/init.lua
-setlocal foldmethod=manual
-setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
-setlocal foldmarker={{{,}}}
-setlocal foldignore=#
-setlocal foldlevel=99
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldenable
-silent! normal! zE
-15,21fold
-29,33fold
-28,34fold
-25,35fold
-24,36fold
-let &fdl = &fdl
-let s:l = 27 - ((26 * winheight(0) + 24) / 49)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 27
-normal! 046|
-tabnext 2
+tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif

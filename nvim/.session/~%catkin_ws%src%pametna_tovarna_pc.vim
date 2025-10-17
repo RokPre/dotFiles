@@ -16,7 +16,7 @@ endif
 badd +1 ~/sync/dotFiles/nvim/.session/~\%catkin_ws\%src\%pametna_tovarna_pc.vim
 badd +16 README.md
 badd +8 launch/nav.launch
-badd +205 urdf/turtlebot3_waffle_pi.urdf.xacro
+badd +206 urdf/turtlebot3_waffle_pi.urdf.xacro
 badd +117 urdf/turtlebot3_waffle_pi.gazebo.xacro
 badd +48 objects/module_small/model.sdf
 badd +1 objects/module_small/meshes/module_small.dae
@@ -105,12 +105,12 @@ silent! normal! zE
 242,246fold
 2,248fold
 let &fdl = &fdl
-let s:l = 205 - ((26 * winheight(0) + 26) / 53)
+let s:l = 206 - ((27 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 205
-normal! 027|
+keepjumps 206
+normal! 010|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
