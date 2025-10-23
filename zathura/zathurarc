@@ -1,5 +1,0 @@
-set selection-clipboard clipboard
-# set recolor true
-set highlight-color "#00aa00"
-set highlight-active-color ""
-set highlight-transparency 0.1

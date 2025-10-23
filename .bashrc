@@ -1,0 +1,206 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+*i*) ;;
+*) return ;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+	debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color | *-256color | xterm-kitty) color_prompt=yes ;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+		# We have color support; assume it's compliant with Ecma-48
+		# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+		# a case would tend to support setf rather than setaf.)
+		color_prompt=yes
+	else
+		color_prompt=
+	fi
+fi
+
+# if [ "$color_prompt" = yes ]; then
+# 	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+# else
+# 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+# fi
+if [ "$color_prompt" = yes ]; then
+  PS1='\[\033[1;34m\]\u > \[\033[1;32m\]\w $([[ $? -eq 0 ]] && echo "\[\033[1;34m\]> " || echo "\[\033[1;31m\]> ")\[\033[0m\]'
+else
+  PS1='\u > \w > '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm* | rxvt*)
+	PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+	;;
+*) ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	alias ls='ls --color=auto'
+	#alias dir='dir --color=auto'
+	#alias vdir='vdir --color=auto'
+
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/sync/dotFiles/.bash_aliases ]; then
+  source ~/sync/dotFiles/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		. /usr/share/bash-completion/bash_completion
+	elif [ -f /etc/bash_completion ]; then
+		. /etc/bash_completion
+	fi
+fi
+
+source ~/sync/dotFiles/nnn/nnn.sh
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+
+# Ros
+# export IP=192.168.9.115
+# export ROS_MASTER=$IP
+# export ROS_MASTER_URI=http://$IP:11311
+# export TURTLEBOT3_MODEL="waffle_pi"
+# export ROS_IP=192.168.9.115
+export ROS_IP=192.168.221.214
+export ROS_MASTER_URI=http://192.168.221.214:11311
+export TURTLEBOT3_MODEL="waffle_pi"
+
+alias sb='source ~/.bashrc'
+alias cm='cd ~/catkin_ws && catkin_make'
+
+if [ -f /opt/ros/noetic/setup.bash ]; then
+  source /opt/ros/noetic/setup.bash
+fi
+
+if [ -d "$HOME/catkin_ws/src/pametna_tovarna_pc/objects" ]; then
+  export GAZEBO_MODEL_PATH="$HOME/catkin_ws/src/pametna_tovarna_pc/objects:$GAZEBO_MODEL_PATH"
+fi
+
+
+if [ -f ~/catkin_ws/devel/setup.bash ]; then
+  source ~/catkin_ws/devel/setup.bash
+fi
+
+if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/lasim/.fzf/bin"
+fi
+
+if [[ ! "$PATH" == *$HOME/offline/bin* ]]; then
+  PATH="${PATH:+${PATH}:}$HOME/offline/bin"
+fi
+
+#nvm in custom location
+export NVM_DIR="$HOME/sync/dotFiles/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"   # loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+
+# ensure current Node's bin is on PATH (belt-and-suspenders)
+export PATH="$NVM_DIR/versions/node/$(nvm version)/bin:$PATH"
+
+if [ -d /opt/zotero ]; then
+  PATH="$PATH:/opt/zotero"
+fi
+
+if [ -d "$HOME/sync/bashUtils" ]; then
+  export PATH="$HOME/sync/bashUtils:$PATH"
+fi
+
+export NVM_DIR="$HOME/.config/nvm"
+if [ -d $NVM_DIR ]; then
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+fi
+
+
+# echo 🕐 "" $(date +"%Y-%m-%d %H:%M")
+# echo 🔋 "" $(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage)
+#
+# weather=$(timeout 0.5 curl -s wttr.in?format=1)
+
+# if [ -n "$weather" ]; then
+#   echo "$weather"
+#   echo 📡 "" $(hostname -I)
+# fi
+
+if [ ! -f "$HOME/sync/vault/Dnevnik/$(date +"%Y - %j").md" ]; then
+  echo ⚠️ " " "Write in your daily note!"
+fi
+
+# if [ -n "$weather" ] && gcalcli --version >/dev/null 2>&1 && [ -f "$HOME/sync/gcal/gcal.sh" ]; then
+#   echo 📅 ""
+#   bash $HOME/sync/gcal/gcal.sh
+# fi
+
+PATH="$PATH:$HOME/.cargo/env"
