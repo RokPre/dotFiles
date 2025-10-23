@@ -47,6 +47,7 @@ return {
 	{ import = "plugins.neoScroll" }, -- For scmooth scrolling
 	{ import = "plugins.obsidianNew" }, -- Obsidian.md support
 	{ import = "plugins.oil" }, -- File explorer
+	-- { import = "plugins.precognition" }, -- Show keymaps in buffer for easy navigation
 	{ import = "plugins.rainbowDelimiters" }, -- Rainbow delimiters
 	{ import = "plugins.superMaven" }, -- AI code completion
 	{ import = "plugins.telescope" }, -- Fuzzy finder

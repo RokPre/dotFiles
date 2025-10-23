@@ -112,6 +112,7 @@ ls.add_snippets("markdown", {
 	),
 	s({ trig = "_", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("_{{{}}}", { i(1) })),
 	s({ trig = "pow", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("^{{{}}}", { i(1) })),
+	s({ trig = "inv", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, t("^{-1}")),
 	s(
 		{ trig = "log", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		fmt("\\log{{{}}}", { i(1) })
@@ -124,6 +125,11 @@ ls.add_snippets("markdown", {
 	s(
 		{ trig = "fancy", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		fmt("\\mathcal{{{}}}", { i(1) })
+	),
+	s({ trig = "abs", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("|{}|", { i(1) })),
+	s(
+		{ trig = "lim", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+		fmt("\\lim_{{{}}}", { i(1) })
 	),
 	s(
 		{ trig = "sum", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
@@ -160,35 +166,13 @@ ls.add_snippets("markdown", {
 	s({ trig = "ne", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\ne")),
 	s({ trig = "vec", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\gt")),
 	s({ trig = "manj", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\ls")),
+	s({ trig = "proti", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\rightarrow")),
 	s({ trig = "torej", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Rightarrow")),
 	s({ trig = "Rr", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Rightarrow")),
 	s({ trig = "rr", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\rightarrow")),
 	s({ trig = "Lr", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Leftarrow")),
 	s({ trig = "lr", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Leftarrow")),
 	s({ trig = "tedaj", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Leftrightarrow")),
-	s(
-		{ trig = "m3x3", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt(
-			[[
-    \begin{{bmatrix}}
-    {} & {} & {} \\
-    {} & {} & {} \\
-    {} & {} & {}
-    \end{{bmatrix}}
-    ]],
-			{
-				i(1),
-				i(2),
-				i(3),
-				i(4),
-				i(5),
-				i(6),
-				i(7),
-				i(8),
-				i(9),
-			}
-		)
-	),
 })
 
 -- Checkboxes

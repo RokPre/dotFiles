@@ -20,6 +20,7 @@ Note taking: [obsidian](https://obsidian.md)
 - [ ] Nvim: Add precognition plugin and inside it add treesiter objects
 - [ ] Nvim: Add spell checker for english and slovene
 - [ ] Nvim: Make your own homepage
+- [ ] Nvim: Remove obsidian plugin and make your own alternativs
 - [ ] Nvim: add a better way to find and replace. (:%Vs/`something`/`something`)
 - [ ] Nvim: community.lua
 - [ ] Nvim: homepage.lua
@@ -27,7 +28,6 @@ Note taking: [obsidian](https://obsidian.md)
 - [ ] Nvim: sessionManager.lua
 - [ ] Nvim: todoList.lua
 - [ ] Tmux: swap panes batter
-- [ ] Nvim: Add keyboard shortcut for linking notes <Leader>ol. When linking obsidian note use the format [name/alias](<relative file path>). (Use telescope)
 
 
 [Official markdown spec](https://spec.commonmark.org)

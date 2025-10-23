@@ -4,6 +4,7 @@ require("config.lazy") -- lua/config/lazy.lua
 -- My plugins
 require("myPlugins.bufferClosing")                   -- ✅
 require("myPlugins.community")                       -- ❌
+require("myPlugins.precognitionTreesitter")                       -- ❌
 require("myPlugins.floatingDiary")                   -- ✅
 require("myPlugins.homepage")                        -- ❌
 require("myPlugins.linking")                         -- ✅

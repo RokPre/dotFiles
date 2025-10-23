@@ -14,11 +14,15 @@ else
   set shortmess=aoO
 endif
 badd +1 param/costmap_common_params_waffle_pi.yaml
-badd +36 param/dwa_local_planner_params_waffle_pi.yaml
+badd +12 param/dwa_local_planner_params_waffle_pi.yaml
 badd +15 README.md
+badd +16 param/base_local_planner_params.yaml
+badd +1 param/global_costmap_params.yaml
+badd +1 param/local_costmap_params.yaml
+badd +5 param/move_base_params.yaml
 argglobal
 %argdel
-edit param/dwa_local_planner_params_waffle_pi.yaml
+edit param/base_local_planner_params.yaml
 tcd ~/catkin_ws/src/simple_pametna_tovarna
 argglobal
 balt ~/catkin_ws/src/simple_pametna_tovarna/README.md
@@ -31,14 +35,14 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-1,47fold
+1,26fold
 let &fdl = &fdl
-let s:l = 36 - ((35 * winheight(0) + 26) / 53)
+let s:l = 16 - ((15 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 36
-normal! 0
+keepjumps 16
+normal! 025|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

@@ -13,16 +13,13 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +206 .bashrc
-badd +20 README.md
-badd +82 ~/.tmux.conf
+badd +0 .gitignore
 argglobal
 %argdel
-$argadd .bashrc
-edit ~/.tmux.conf
+$argadd .gitignore
+edit .gitignore
 argglobal
-balt README.md
-setlocal fdm=manual
+setlocal fdm=expr
 setlocal fde=nvim_ufo#foldexpr()
 setlocal fmr={{{,}}}
 setlocal fdi=#
@@ -30,14 +27,12 @@ setlocal fdl=99
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 82 - ((80 * winheight(0) + 49) / 98)
+let s:l = 16 - ((15 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 82
-normal! 027|
+keepjumps 16
+normal! 011|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

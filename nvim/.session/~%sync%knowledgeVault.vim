@@ -13,47 +13,74 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +101 ~/sync/dotFiles/nvim/lua/myPlugins/linking.lua
-badd +13 ~/sync/knowledgeVault/test.md
-badd +1 0.\ Faks/digitalnoVodenje/01Predavanje.md
-badd +1 ~/sync/knowledgeVault//0faks/racunalniskiVid/README.md
+badd +440 0faks/digitalnoVodenje/predavanja.md
 argglobal
 %argdel
 $argadd 0.\ Faks/digitalnoVodenje/01Predavanje.md
-edit ~/sync/knowledgeVault//0faks/racunalniskiVid/README.md
+edit 0faks/digitalnoVodenje/predavanja.md
 argglobal
-balt ~/sync/dotFiles/nvim/lua/myPlugins/linking.lua
-setlocal fdm=manual
-setlocal fde=nvim_ufo#foldexpr()
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=99
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
+setlocal foldmethod=manual
+setlocal foldexpr=nvim_ufo#foldexpr()
+setlocal foldmarker={{{,}}}
+setlocal foldignore=#
+setlocal foldlevel=99
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldenable
 silent! normal! zE
-5,7fold
-4,7fold
 13,15fold
-12,15fold
-17,18fold
-21,23fold
-20,23fold
-25,26fold
-9,26fold
-35,39fold
-29,40fold
-28,40fold
-42,43fold
-46,47fold
-45,47fold
+16,17fold
+27,30fold
+40,42fold
+7,44fold
+4,48fold
+49,58fold
+62,65fold
+60,65fold
+67,70fold
+72,73fold
+76,80fold
+89,91fold
+75,95fold
+120,122fold
+125,126fold
+97,126fold
+142,154fold
+156,173fold
+128,173fold
+183,193fold
+175,193fold
+195,198fold
+203,204fold
+200,208fold
+210,233fold
+235,236fold
+238,241fold
+245,249fold
+253,266fold
+277,281fold
+268,281fold
+286,291fold
+295,296fold
+298,334fold
+338,348fold
+350,368fold
+370,384fold
+393,412fold
+414,421fold
+386,421fold
+424,426fold
+423,426fold
+430,432fold
+436,438fold
+428,442fold
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 26) / 53)
+let s:l = 239 - ((40 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
-normal! 0
+keepjumps 239
+normal! 02|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

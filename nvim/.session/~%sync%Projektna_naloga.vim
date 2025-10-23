@@ -13,11 +13,11 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +1 .git/rebase-merge/git-rebase-todo
+badd +0 .gitignore
 argglobal
 %argdel
-$argadd .git/rebase-merge/git-rebase-todo
-edit .git/rebase-merge/git-rebase-todo
+$argadd .gitignore
+edit .gitignore
 argglobal
 setlocal foldmethod=expr
 setlocal foldexpr=nvim_ufo#foldexpr()
@@ -27,12 +27,12 @@ setlocal foldlevel=99
 setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldenable
-let s:l = 1 - ((0 * winheight(0) + 25) / 50)
+let s:l = 6 - ((5 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
-normal! 0
+keepjumps 6
+normal! 022|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
