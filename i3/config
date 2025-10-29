@@ -176,9 +176,6 @@ exec_always --no-startup-id i3-msg '[class="Zathura"] move to workspace $ws4'
 # Here are the parameters that are os specific
 include ~/.config/i3/params
 
-exec_always --no-startup-id exec echo $nvim_bin >> ~/.config/i3/log.log
-exec_always --no-startup-id exec echo $qute_command >> ~/.config/i3/log.log
-
 # bindsym $mod+Ctrl+n exec --no-startup-id /usr/bin/neovide --neovim-bin $nvim_bin; workspace $ws1
 # bindsym $mod+Ctrl+i exec --no-startup-id $qute_command; workspace $ws2
 bindsym $mod+Ctrl+t exec --no-startup-id st; workspace $ws3
