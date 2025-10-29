@@ -14,12 +14,12 @@ keymap({ "n", "i", "v", "t" }, "<A-s>", "<Cmd>5z<Left><CR>", opts)
 keymap({ "n", "i", "v", "t" }, "<A-g>", "<Cmd>5z<Right><CR>", opts)
 
 -- Move highlighted text between lines
-keymap("n", "<C-j>", ":m .+1<CR>==", opts)     -- move line up
-keymap("n", "<C-k>", ":m .-2<CR>==", opts)     -- move line down
+keymap("n", "<C-j>", ":m .+1<CR>==", opts) -- move line up
+keymap("n", "<C-k>", ":m .-2<CR>==", opts) -- move line down
 keymap("v", "<C-j>", ":m '>+1<CR>gv=gv", opts) -- move line up
 keymap("v", "<C-k>", ":m '<-2<CR>gv=gv", opts) -- move line down
-keymap("v", ">", ">gv", opts)                  -- indent right
-keymap("v", "<", "<gv", opts)                  -- indent left
+keymap("v", ">", ">gv", opts) -- indent right
+keymap("v", "<", "<gv", opts) -- indent left
 
 -- Comment comment and paste below
 keymap("n", "gy", "yygccp", { silent = true, remap = true, desc = "Copy and comment current line" })
@@ -37,7 +37,7 @@ keymap("n", "<C-f>", "*", opts)
 keymap("v", "<C-f>", '"zy/<C-R>z<CR>', opts)
 keymap("n", "f", "/", opts)
 keymap("v", "f", "/", opts)
-keymap("x", "/", "<Esc>/\\%V")         -- Search visual selection
+keymap("x", "/", "<Esc>/\\%V") -- Search visual selection
 keymap("n", "<Esc>", ":noh<CR>", opts) -- Search highlight hide
 keymap({ "n", "v" }, ",", "n", { noremap = true, desc = "Next search match" })
 keymap({ "n", "v" }, ";", "N", { noremap = true, desc = "Previous search match" })
@@ -83,15 +83,15 @@ keymap("n", "<A-w>", "<Cmd>q<CR>", opts)
 
 -- Move windows around
 if pcall(require, "winshift") then
-  keymap("n", "<A-S-h>", "<Cmd>WinShift left<CR>", opts)
-  keymap("n", "<A-S-j>", "<Cmd>WinShift down<CR>", opts)
-  keymap("n", "<A-S-k>", "<Cmd>WinShift up<CR>", opts)
-  keymap("n", "<A-S-l>", "<Cmd>WinShift right<CR>", opts)
+	keymap("n", "<A-S-h>", "<Cmd>WinShift left<CR>", opts)
+	keymap("n", "<A-S-j>", "<Cmd>WinShift down<CR>", opts)
+	keymap("n", "<A-S-k>", "<Cmd>WinShift up<CR>", opts)
+	keymap("n", "<A-S-l>", "<Cmd>WinShift right<CR>", opts)
 else
-  keymap("n", "<A-S-h>", "<Cmd>wincmd H<CR>", opts)
-  keymap("n", "<A-S-j>", "<Cmd>wincmd J<CR>", opts)
-  keymap("n", "<A-S-k>", "<Cmd>wincmd K<CR>", opts)
-  keymap("n", "<A-S-l>", "<Cmd>wincmd L<CR>", opts)
+	keymap("n", "<A-S-h>", "<Cmd>wincmd H<CR>", opts)
+	keymap("n", "<A-S-j>", "<Cmd>wincmd J<CR>", opts)
+	keymap("n", "<A-S-k>", "<Cmd>wincmd K<CR>", opts)
+	keymap("n", "<A-S-l>", "<Cmd>wincmd L<CR>", opts)
 end
 
 -- Resize windows
@@ -124,23 +124,34 @@ keymap("i", "<C-BS>", "<C-W>", opts)
 
 -- messages
 local function messages_close()
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local name = vim.api.nvim_buf_get_name(buf)
-    if name == "" and vim.api.nvim_buf_get_option(buf, "buftype") == "nofile" then
-      vim.api.nvim_win_close(win, true)
-      return
-    end
-  end
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		local buf = vim.api.nvim_win_get_buf(win)
+		local name = vim.api.nvim_buf_get_name(buf)
+		if name == "" and vim.api.nvim_buf_get_option(buf, "buftype") == "nofile" then
+			vim.api.nvim_win_close(win, true)
+			return
+		end
+	end
 end
 
 keymap("n", "<leader>m", "<Nop>", { silent = true, noremap = true, desc = "Messages" })
 keymap("n", "<leader>mm", "<Cmd>messages<CR>", { silent = true, noremap = true, desc = "Open messages" })
 keymap("n", "<leader>md", "<Cmd>messages clear<CR>", { silent = true, noremap = true, desc = "Delete messages" })
 keymap("n", "<leader>mc", messages_close, { silent = true, noremap = true, desc = "Close messages" })
-keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>",
-  { silent = true, noremap = true, desc = "Yank messages" })
+keymap(
+	"n",
+	"<leader>my",
+	"<Cmd>let @+ = execute('messages')<CR>",
+	{ silent = true, noremap = true, desc = "Yank messages" }
+)
 
-keymap("n", "yae", "<Cmd>%y<Cr>", { silent = true, noremap = true, desc = "Yank entire file" })
-keymap("n", "dae", "<Cmd>%d<Cr>", { silent = true, noremap = true, desc = "Delete entire file" })
+keymap("n", "yae", "ggVGy<C-o>", { silent = true, noremap = true, desc = "Yank entire file" })
+keymap("n", "dae", 'ggVG"0d', { silent = true, noremap = true, desc = "Delete entire file" })
 keymap("n", "vae", "ggVG", { silent = true, noremap = true, desc = "Select entire file" })
+
+keymap(
+	"n",
+	"<leader>d",
+	"<Cmd>lua vim.diagnostic.open_float()<CR>",
+	{ silent = true, noremap = true, desc = "Show diagnostics" }
+)

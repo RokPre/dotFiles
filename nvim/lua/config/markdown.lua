@@ -173,6 +173,7 @@ ls.add_snippets("markdown", {
 	s({ trig = "Lr", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Leftarrow")),
 	s({ trig = "lr", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Leftarrow")),
 	s({ trig = "tedaj", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Leftrightarrow")),
+	s({ trig = "...", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\dots")),
 })
 
 -- Checkboxes

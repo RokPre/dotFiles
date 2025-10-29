@@ -1,11 +1,11 @@
-vim.cmd("set clipboard=unnamedplus")
-vim.cmd("set shiftwidth=2")
-vim.cmd("set autoindent")
-vim.cmd("set tabstop=2")
-vim.cmd("set expandtab")
-vim.cmd("set relativenumber")
-vim.cmd("set number")
-vim.cmd("set nowrap")
+vim.opt.clipboard = "unnamedplus"
+vim.opt.shiftwidth = 2
+vim.opt.autoindent = true
+vim.opt.tabstop = 2
+vim.opt.expandtab = true
+vim.opt.relativenumber = true
+vim.opt.number = true
+vim.opt.wrap = false
 
 os.setlocale("en_US.UTF-8", "time")
 
@@ -17,3 +17,7 @@ vim.opt.smartcase = true
 vim.opt.swapfile = false
 vim.opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undo"
 vim.opt.undofile = true
+
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0

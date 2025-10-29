@@ -46,3 +46,20 @@ fi
 if command -v rsync &> /dev/null; then
   alias cp='rsync -avh --progress --partial --append-verify'
 fi
+
+# Eza (better ls)
+if command -v eza &> /dev/null; then
+  alias ls='eza'
+fi
+
+# Zoxide
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init bash)"
+  alias cd="z"
+fi
+
+# Xclip
+if command -v xclip &> /dev/null; then
+  alias xc="xclip -selection clipboard"
+fi
+

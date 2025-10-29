@@ -61,6 +61,7 @@ fi
 # else
 # 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 # fi
+
 if [ "$color_prompt" = yes ]; then
   PS1='\[\033[1;34m\]\u > \[\033[1;32m\]\w $([[ $? -eq 0 ]] && echo "\[\033[1;34m\]> " || echo "\[\033[1;31m\]> ")\[\033[0m\]'
 else
@@ -98,7 +99,7 @@ alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+# alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -121,12 +122,6 @@ if ! shopt -oq posix; then
 fi
 
 source ~/sync/dotFiles/nnn/nnn.sh
-
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # Ros
 # export IP=192.168.9.115
@@ -175,32 +170,19 @@ if [ -d /opt/zotero ]; then
 fi
 
 if [ -d "$HOME/sync/bashUtils" ]; then
-  export PATH="$HOME/sync/bashUtils:$PATH"
+  PATH="$HOME/sync/bashUtils:$PATH"
+fi
+
+if [ -d "$HOME/.cargo/env" ]; then
+  PATH="$PATH:$HOME/.cargo/env"
 fi
 
 export NVM_DIR="$HOME/.config/nvm"
+
 if [ -d $NVM_DIR ]; then
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 
-
-# echo 🕐 "" $(date +"%Y-%m-%d %H:%M")
-# echo 🔋 "" $(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage)
-#
-# weather=$(timeout 0.5 curl -s wttr.in?format=1)
-
-# if [ -n "$weather" ]; then
-#   echo "$weather"
-#   echo 📡 "" $(hostname -I)
-# fi
-
 if [ ! -f "$HOME/sync/vault/Dnevnik/$(date +"%Y - %j").md" ]; then
   echo ⚠️ " " "Write in your daily note!"
 fi
-
-# if [ -n "$weather" ] && gcalcli --version >/dev/null 2>&1 && [ -f "$HOME/sync/gcal/gcal.sh" ]; then
-#   echo 📅 ""
-#   bash $HOME/sync/gcal/gcal.sh
-# fi
-
-PATH="$PATH:$HOME/.cargo/env"
