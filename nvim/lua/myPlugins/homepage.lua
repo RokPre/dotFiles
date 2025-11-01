@@ -1,5 +1,6 @@
 -- TODO: https://chatgpt.com/g/g-p-68f6214d376c8191bab3c705a7729b6f-dotfiles/shared/c/69051466-f370-8328-b194-330e80e68d28?owner_user_id=user-zAOyDfoGfoo7lCKjae2iBIwx
 -- TODO: When seting the opts for the homepage window and buffer, get the current user config, and the when unseting them revert tot he original user config.
+-- TODO: Use global homepage win in all functions
 local M = {}
 
 M.home_buf = vim.api.nvim_create_buf(false, true)
@@ -211,6 +212,11 @@ local function unset_options()
 end
 
 function M.open()
+	-- If buffer was closed, create a new onw
+	if M.home_buf == nil then
+		M.home_buf = vim.api.nvim_create_buf(false, true)
+	end
+
 	-- Focus one the homepage window/buffer
 	for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
 		if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == M.home_buf then
@@ -221,17 +227,6 @@ function M.open()
 
 	-- Get current buffer
 	M.Current_buf = vim.api.nvim_get_current_buf()
-
-	-- Unlist buffers
-	local buffers = vim.api.nvim_list_bufs()
-	local filtered_buffers = {}
-
-	-- for _, buf in ipairs(buffers) do
-	-- 	if buf ~= M.home_buf and vim.api.nvim_get_option_value("buflisted", { buf = buf }) then
-	-- 		table.insert(filtered_buffers, buf)
-	-- 		vim.api.nvim_set_option_value("buflisted", false, { buf = buf })
-	-- 	end
-	-- end
 
 	-- Set options for the homepage
 	local homepage_win = vim.api.nvim_get_current_win()
