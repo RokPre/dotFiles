@@ -1,184 +1,17 @@
+-- TODO: https://chatgpt.com/g/g-p-68f6214d376c8191bab3c705a7729b6f-dotfiles/shared/c/69051466-f370-8328-b194-330e80e68d28?owner_user_id=user-zAOyDfoGfoo7lCKjae2iBIwx
+-- TODO: When seting the opts for the homepage window and buffer, get the current user config, and the when unseting them revert tot he original user config.
 local M = {}
 
-local lines_raw = {}
-local header_lines = {}
-local callbacks = {}
+M.home_buf = vim.api.nvim_create_buf(false, true)
+M.home_win = nil
 
-function M.set_header(lines)
-	if type(lines) == "string" then
-		header_lines = vim.split(lines, "\n", { plain = true })
-	elseif type(lines) == "table" then
-		header_lines = lines
-	else
-		error("Header must be string or list of strings")
-	end
-end
+M.opts = {}
 
-function M.add_line(icon, text, key, fn)
-	table.insert(lines_raw, { icon = icon, text = text, key = key })
-	callbacks[key] = fn
-end
+M.opts.top_padding = "auto"
+M.opts.mid_padding = "auto"
+M.opts.actions_header_aligh = true
 
-function M.set_keys(key_table)
-	for _, entry in ipairs(key_table) do
-		local icon = entry.icon or "󰈚"
-		local desc = entry.desc or "Missing desc"
-		local key = entry.key or "?"
-		local action = entry.action
-
-		local callback
-		if type(action) == "function" then
-			callback = action
-		elseif type(action) == "string" then
-			callback = function()
-				vim.cmd(action)
-			end
-		else
-			error("Action for key '" .. key .. "' must be a string or function")
-		end
-
-		M.add_line(icon, desc, key, callback)
-	end
-end
-
-local function format_homepage()
-	-- Measure widths for alignment
-	local max_icon_len = 0
-	local max_text_len = 0
-	for _, item in ipairs(lines_raw) do
-		local icon_width = vim.fn.strwidth(item.icon)
-		local text_width = vim.fn.strwidth(item.text)
-
-		if icon_width > max_icon_len then
-			max_icon_len = icon_width
-		end
-		if text_width > max_text_len then
-			max_text_len = text_width
-		end
-	end
-	-- Format aligned shortcut lines
-	local formatted_shortcuts = {}
-	local total_line_width = 0
-
-	for _, item in ipairs(lines_raw) do
-		local icon_pad = string.rep(" ", max_icon_len - vim.fn.strwidth(item.icon))
-		local text_pad = string.rep(" ", max_text_len - vim.fn.strwidth(item.text))
-		local line = string.format("%s%s   %s%s   [%s]", icon_pad, item.icon, item.text, text_pad, item.key)
-		table.insert(formatted_shortcuts, { line = line, key = item.key, callback = callbacks[item.key] })
-		if #line > total_line_width then
-			total_line_width = #line
-		end
-	end
-	-- Format header lines
-	local formatted_headers = {}
-	local max_header_len = 0
-	for _, line in ipairs(header_lines) do
-		table.insert(formatted_headers, line)
-		if #line > max_header_len then
-			max_header_len = #line
-		end
-	end
-
-	local win_height = vim.api.nvim_win_get_height(0)
-	local win_width = vim.api.nvim_win_get_width(0)
-	local line_count = #formatted_headers + #formatted_shortcuts + 1
-	local vertical_padding = math.floor((win_height - line_count) / 2)
-	local lines_to_display = {}
-
-	for _ = 1, vertical_padding do
-		table.insert(lines_to_display, "")
-	end
-
-	-- Align headers as a block
-	local header_margin = math.floor((win_width - max_header_len) / 2)
-	for _, line in ipairs(formatted_headers) do
-		local pad = math.floor((max_header_len - #line) / 2)
-		table.insert(lines_to_display, string.rep(" ", math.max(header_margin + pad, 0)) .. line)
-	end
-
-	table.insert(lines_to_display, "")
-
-	-- Align shortcuts as a block
-	local shortcut_margin = math.floor((win_width - total_line_width) / 2)
-	for _, item in ipairs(formatted_shortcuts) do
-		table.insert(lines_to_display, string.rep(" ", math.max(shortcut_margin, 0)) .. item.line)
-	end
-	return lines_to_display, formatted_shortcuts
-end
-
-function M.open()
-	local homepage_buf = vim.api.nvim_create_buf(false, true)
-
-	-- Set the homepage as the current buffer
-	vim.api.nvim_set_current_buf(homepage_buf)
-
-	-- Delete the initial buffer that is shown when nvim is launched without a file
-	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if
-			vim.api.nvim_buf_is_valid(buf)
-			and vim.api.nvim_buf_get_name(buf) == ""
-			and vim.api.nvim_buf_get_option(buf, "modifiable")
-			and #vim.api.nvim_buf_get_lines(buf, 0, -1, false) == 1
-			and vim.api.nvim_buf_get_lines(buf, 0, -1, false)[1] == ""
-			and buf ~= homepage_buf
-		then
-			vim.api.nvim_buf_delete(buf, { force = true })
-			-- vim.notify("Deleted initial [No Name] buffer", vim.log.levels.INFO)
-		end
-	end
-
-	-- Set the options of the homepage window
-	local homepage_win = vim.api.nvim_get_current_win()
-	vim.api.nvim_set_option_value("wrap", false, { win = homepage_win })
-	vim.api.nvim_set_option_value("number", false, { win = homepage_win })
-	vim.api.nvim_set_option_value("relativenumber", false, { win = homepage_win })
-	vim.api.nvim_set_option_value("cursorline", true, { win = homepage_win })
-
-	local lines_to_display, formatted_shortcuts = format_homepage()
-	vim.api.nvim_buf_set_lines(homepage_buf, 0, -1, false, lines_to_display)
-
-	for _, item in ipairs(formatted_shortcuts) do
-		vim.keymap.set("n", item.key, item.callback, {
-			buffer = homepage_buf,
-			nowait = true,
-			noremap = true,
-			silent = true,
-		})
-	end
-
-	-- Set the options of the homepage buffer
-	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = homepage_buf })
-	vim.api.nvim_set_option_value("modifiable", false, { buf = homepage_buf })
-
-	vim.api.nvim_create_autocmd("BufEnter", {
-		callback = function()
-			if
-				homepage_win
-				and vim.api.nvim_win_is_valid(homepage_win)
-				and vim.api.nvim_win_get_buf(homepage_win) ~= homepage_buf
-			then
-				vim.api.nvim_set_option_value("wrap", true, { win = homepage_win })
-				vim.api.nvim_set_option_value("number", true, { win = homepage_win })
-				vim.api.nvim_set_option_value("relativenumber", true, { win = homepage_win })
-				vim.api.nvim_set_option_value("cursorline", false, { win = homepage_win })
-			end
-		end,
-	})
-
-	vim.api.nvim_create_autocmd("WinResized", {
-		buffer = homepage_buf,
-		callback = function()
-			lines_to_display, _ = format_homepage()
-			vim.api.nvim_set_option_value("modifiable", true, { buf = homepage_buf })
-			vim.api.nvim_buf_set_lines(homepage_buf, 0, -1, false, lines_to_display)
-			vim.api.nvim_set_option_value("modifiable", false, { buf = homepage_buf })
-		end,
-	})
-end
-
-local builtin = require("telescope.builtin")
-
-local header = [[
+M.opts.header = [[
     _   __            _    __ _          
    / | / /___   ____ | |  / /(_)____ ___ 
   /  |/ // _ \ / __ \| | / // // __ `__ \
@@ -186,18 +19,25 @@ local header = [[
 /_/ |_/ \___/ \____/ |___//_//_/ /_/ /_/ 
 ]]
 
-M.set_header(header)
+local builtin = require("telescope.builtin")
 
-M.set_keys({
+M.opts.actions = {
 	{ icon = " ", key = "f", desc = "Find File", action = builtin.find_files },
 	{ icon = " ", key = "r", desc = "Recent Files", action = builtin.oldfiles },
-	{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+	{
+		icon = " ",
+		key = "n",
+		desc = "New File",
+		action = function()
+			vim.cmd(":ene | startinsert")
+		end,
+	},
 	{
 		icon = "󰊔 ",
 		key = "h",
 		desc = "Close",
 		action = function()
-			vim.cmd(":try | b# | catch | ;")
+			vim.api.nvim_set_current_buf(M.Current_buf)
 		end,
 	},
 	{ icon = " ", key = "g", desc = "Find Text", action = builtin.live_grep },
@@ -225,13 +65,231 @@ M.set_keys({
 			vim.cmd("LastSession")
 		end,
 	},
-	{ icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
-	{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
-})
+	{
+		icon = "󰒲 ",
+		key = "l",
+		desc = "Lazy",
+		action = function()
+			vim.cmd(":Lazy")
+		end,
+	},
+	{
+		icon = " ",
+		key = "q",
+		desc = "Quit",
+		action = function()
+			vim.cmd(":qa")
+		end,
+	},
+}
 
-vim.api.nvim_create_user_command("Homepage", function()
-	M.open()
-end, {})
+local function format_homepage()
+	-- Find the window with the buffer M.home_buf
+	local wins = vim.api.nvim_tabpage_list_wins(0)
+	local homepage_win = nil
+
+	for _, win in ipairs(wins) do
+		local buf = vim.api.nvim_win_get_buf(win)
+		if buf == M.home_buf and vim.api.nvim_win_is_valid(win) then
+			homepage_win = win
+		end
+	end
+
+	if homepage_win == nil then
+		return
+	end
+
+	-- Convert header from string to list of llines [string]
+	local header_lines = vim.split(M.opts.header, "\n", { plain = true })
+
+	-- Get height of the window
+	local win_height = vim.api.nvim_win_get_height(homepage_win)
+	local win_width = vim.api.nvim_win_get_width(homepage_win)
+
+	-- If the user does not specify the padding, calculate it
+	if M.opts.mid_padding == nil or M.opts.mid_padding == "auto" then
+		M.opts.mid_padding = math.floor((#header_lines + #M.opts.actions) / 10)
+	end
+
+	if M.opts.top_padding == nil or M.opts.top_padding == "auto" then
+		local line_count = #header_lines + #M.opts.actions + M.opts.mid_padding
+		M.opts.top_padding = math.floor((win_height - line_count) / 2)
+	end
+
+	-- Element vertical ranges
+	local top_padding_range = { 0, M.opts.top_padding }
+	local header_range = { top_padding_range[2] + 1, top_padding_range[2] + #header_lines }
+	local middle_padding_range = { header_range[2] + 1, header_range[2] + M.opts.mid_padding }
+	local keys_range = { middle_padding_range[2] + 1, middle_padding_range[2] + #M.opts.actions }
+
+	-- Create the lines that will be displayed
+	local homepage_lines = {}
+	local line = ""
+
+	for _ = top_padding_range[1], top_padding_range[2] do
+		table.insert(homepage_lines, "")
+	end
+
+	-- Find the max width of the header lines
+	local max_header_len = 0
+	for _, header_line in ipairs(header_lines) do
+		if #header_line > max_header_len then
+			max_header_len = #header_line
+		end
+	end
+
+	local left_padding = math.floor((win_width - max_header_len) / 2)
+
+	for index = 1, header_range[2] - header_range[1] do
+		line = string.rep(" ", left_padding) .. header_lines[index]
+		table.insert(homepage_lines, line)
+	end
+
+	for _ = middle_padding_range[1], middle_padding_range[2] do
+		table.insert(homepage_lines, "")
+	end
+
+	-- Find the max width of the actions
+	local max_action_len = 0
+	if M.opts.actions_header_aligh then
+		max_action_len = max_header_len -- Make actions the same width as header
+	else
+		for _, action in ipairs(M.opts.actions) do
+			if #action.key + #action.desc > max_action_len then
+				max_action_len = #action.key + #action.desc
+			end
+		end
+	end
+
+	left_padding = math.floor((win_width - max_action_len) / 2)
+
+	for index = 1, keys_range[2] - keys_range[1] do
+		local key_spacing = max_action_len - 1 - 1 - #M.opts.actions[index].desc - #" [" - #M.opts.actions[index].key - #"]"
+		line = string.rep(" ", left_padding) .. M.opts.actions[index].icon .. M.opts.actions[index].desc .. string.rep(" ", key_spacing) .. " [" .. M.opts.actions[index].key .. "]"
+		table.insert(homepage_lines, line)
+	end
+
+	vim.api.nvim_set_option_value("modifiable", true, { buf = M.home_buf })
+	vim.api.nvim_buf_set_lines(M.home_buf, 0, -1, false, homepage_lines)
+	vim.api.nvim_set_option_value("modifiable", false, { buf = M.home_buf })
+end
+
+local function add_actions()
+	for _, action in ipairs(M.opts.actions) do
+		vim.keymap.set("n", action.key, function()
+			action.action()
+		end, { noremap = true, silent = true, buffer = M.home_buf })
+	end
+end
+
+local function set_options()
+	-- Find the window with the homepage buffer
+	local wins = vim.api.nvim_tabpage_list_wins(0)
+	local homepage_win = nil
+
+	for _, win in ipairs(wins) do
+		if vim.api.nvim_win_is_valid(win) then
+			local buf = vim.api.nvim_win_get_buf(win)
+			if buf == M.home_buf then
+				M.home_win = win
+			end
+		end
+	end
+
+	if M.home_win ~= nil then
+		vim.api.nvim_set_option_value("relativenumber", false, { win = M.home_win })
+		vim.api.nvim_set_option_value("number", false, { win = M.home_win })
+	end
+end
+
+local function unset_options()
+	-- If found a window with the homepage buffer set the options
+	if M.home_win ~= nil and M.home_buf ~= vim.api.nvim_win_get_buf(M.home_win) then
+		vim.api.nvim_set_option_value("relativenumber", true, { win = M.home_win })
+		vim.api.nvim_set_option_value("number", true, { win = M.home_win })
+	end
+end
+
+function M.open()
+	-- Focus one the homepage window/buffer
+	for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+		if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == M.home_buf then
+			vim.api.nvim_set_current_win(win)
+			return -- stop here; we already focused the homepage
+		end
+	end
+
+	-- Get current buffer
+	M.Current_buf = vim.api.nvim_get_current_buf()
+
+	-- Unlist buffers
+	local buffers = vim.api.nvim_list_bufs()
+	local filtered_buffers = {}
+
+	-- for _, buf in ipairs(buffers) do
+	-- 	if buf ~= M.home_buf and vim.api.nvim_get_option_value("buflisted", { buf = buf }) then
+	-- 		table.insert(filtered_buffers, buf)
+	-- 		vim.api.nvim_set_option_value("buflisted", false, { buf = buf })
+	-- 	end
+	-- end
+
+	-- Set options for the homepage
+	local homepage_win = vim.api.nvim_get_current_win()
+
+	vim.api.nvim_create_autocmd({ "BufLeave", "SessionLoadPost", "BufEnter" }, {
+		callback = function()
+			unset_options()
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("WinNew", {
+		desc = "Ensure homepage buffer is only visible in one window",
+		callback = function()
+			if not (M.home_buf and vim.api.nvim_buf_is_valid(M.home_buf)) then
+				return
+			end
+
+			-- Schedule to avoid interfering with window creation
+			vim.schedule(function()
+				local wins = vim.api.nvim_tabpage_list_wins(0)
+				local homepage_wins = {}
+
+				-- Find all windows showing the homepage buffer
+				for _, win in ipairs(wins) do
+					local buf = vim.api.nvim_win_get_buf(win)
+					if buf == M.home_buf and vim.api.nvim_win_is_valid(win) then
+						table.insert(homepage_wins, win)
+					end
+				end
+
+				-- Keep the original, close any extras
+				for _, win in ipairs(homepage_wins) do
+					if win ~= homepage_win then
+						pcall(vim.api.nvim_win_close, win, true)
+					end
+				end
+			end)
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("WinResized", {
+		callback = function()
+			format_homepage()
+		end,
+	})
+
+	vim.api.nvim_set_current_buf(M.home_buf)
+	M.home_win = vim.api.nvim_get_current_win()
+
+	-- Set options for the homepage
+	set_options()
+
+	-- Set actions for the homepage buffer
+	add_actions()
+
+	-- Format the homepage to look nice
+	format_homepage()
+end
 
 vim.keymap.set("n", "<Leader>h", function()
 	M.open()
@@ -239,9 +297,19 @@ end, { noremap = true, silent = true })
 
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
-		-- M.open()
 		vim.schedule(function()
 			if #vim.fn.argv() == 0 then
+				-- Unlist buffers
+				local buffers = vim.api.nvim_list_bufs()
+				local filtered_buffers = {}
+
+				for _, buf in ipairs(buffers) do
+					if buf ~= M.home_buf and vim.api.nvim_get_option_value("buflisted", { buf = buf }) then
+						table.insert(filtered_buffers, buf)
+						vim.api.nvim_set_option_value("buflisted", false, { buf = buf })
+					end
+				end
+
 				M.open()
 			end
 		end)

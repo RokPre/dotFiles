@@ -43,7 +43,7 @@ return {
 				lsp_format = "fallback",
 			},
 
-			log_level = vim.log.levels.ERROR,
+			log_level = vim.log.levels.DEBUG,
 			notify_on_error = true,
 			notify_no_formatters = true,
 		})

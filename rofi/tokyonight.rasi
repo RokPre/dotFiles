@@ -1,4 +1,5 @@
 * {
+    font: "Cousine Nerd Font Mono 14";
     active-background: @background;
     active-foreground: @foreground;
     normal-background: @background;
@@ -57,8 +58,8 @@
 
 #textbox-prompt-colon {
     expand: false;
-    str: " >";
-    margin: 0px 0.3em 0em 0em;
+    str: " > ";
+    margin: 0;
     text-color: #7aa2f7;
 }
 

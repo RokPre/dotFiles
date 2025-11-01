@@ -113,6 +113,8 @@ exec_always --no-startup-id /usr/bin/numlockx on
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%-
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+
+bindsym F2 exec --no-startup-id exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym F3 exec --no-startup-id exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
 
 # Brightness control
 bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness.sh up
@@ -164,6 +166,8 @@ assign [class="st-256color"] $ws3
 assign [class="Zotero"] $ws4
 assign [class="Zathura"] $ws4
 assign [class=".*"] $ws0
+
+for_window [class="st-256color" instance="qutebrowser"] move to workspace $ws2
 
 exec_always --no-startup-id i3-msg '[class="neovide"] move to workspace $ws1'
 exec_always --no-startup-id i3-msg '[class="qutebrowser"] move to workspace $ws2'
