@@ -63,7 +63,10 @@ M.opts.actions = {
 		key = "s",
 		desc = "Restore Session",
 		action = function()
-			vim.cmd("LastSession")
+			local ok, sessionManager = pcall(require, "myPlugins.sessionManager")
+			if ok and sessionManager.loadLastSession then
+				sessionManager.loadLastSession()
+			end
 		end,
 	},
 	{
