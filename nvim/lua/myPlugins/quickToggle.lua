@@ -6,8 +6,14 @@ local quickToggle = function()
     ["False"] = "True",
     ["true"] = "false",
     ["false"] = "true",
-    ["min"] = "max",
-    ["max"] = "min",
+    ["up"] = "down",
+    ["down"] = "up",
+    ["left"] = "right",
+    ["right"] = "left",
+    ["Up"] = "Down",
+    ["Down"] = "Up",
+    ["Right"] = "Left",
+    ["Left"] = "Right",
   }
 
   if word_map[word] then

@@ -9,9 +9,10 @@ local opts = { silent = true, noremap = true }
 -- keymap("o", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
 
 -- Scroll
--- Vertical scroll is handled by neoscroll plugin
-keymap({ "n", "i", "v", "t" }, "<A-s>", "<Cmd>5z<Left><CR>", opts)
-keymap({ "n", "i", "v", "t" }, "<A-g>", "<Cmd>5z<Right><CR>", opts)
+-- Vertical scroll is handled by neoscroll pluginkey
+-- move view left/right 5 columns
+vim.keymap.set({ "n", "i", "v", "t" }, "<A-s>", "<Esc>:normal! 5zh<CR>", opts)
+vim.keymap.set({ "n", "i", "v", "t" }, "<A-g>", "<Esc>:normal! 5zl<CR>", opts)
 
 -- Move highlighted text between lines
 keymap("n", "<C-j>", ":m .+1<CR>==", opts) -- move line up
@@ -37,7 +38,7 @@ keymap("n", "<C-f>", "*", opts)
 keymap("v", "<C-f>", '"zy/<C-R>z<CR>', opts)
 keymap("n", "f", "/", opts)
 keymap("v", "f", "/", opts)
-keymap("x", "/", "<Esc>/\\%V") -- Search visual selection
+keymap("x", "f", "<Esc>/\\%V") -- Search visual selection
 keymap("n", "<Esc>", ":noh<CR>", opts) -- Search highlight hide
 keymap({ "n", "v" }, ",", "n", { noremap = true, desc = "Next search match" })
 keymap({ "n", "v" }, ";", "N", { noremap = true, desc = "Previous search match" })
@@ -138,20 +139,15 @@ keymap("n", "<leader>m", "<Nop>", { silent = true, noremap = true, desc = "Messa
 keymap("n", "<leader>mm", "<Cmd>messages<CR>", { silent = true, noremap = true, desc = "Open messages" })
 keymap("n", "<leader>md", "<Cmd>messages clear<CR>", { silent = true, noremap = true, desc = "Delete messages" })
 keymap("n", "<leader>mc", messages_close, { silent = true, noremap = true, desc = "Close messages" })
-keymap(
-	"n",
-	"<leader>my",
-	"<Cmd>let @+ = execute('messages')<CR>",
-	{ silent = true, noremap = true, desc = "Yank messages" }
-)
+keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>", { silent = true, noremap = true, desc = "Yank messages" })
 
 keymap("n", "yae", "ggVGy<C-o>", { silent = true, noremap = true, desc = "Yank entire file" })
 keymap("n", "dae", 'ggVG"0d', { silent = true, noremap = true, desc = "Delete entire file" })
 keymap("n", "vae", "ggVG", { silent = true, noremap = true, desc = "Select entire file" })
 
-keymap(
-	"n",
-	"<leader>d",
-	"<Cmd>lua vim.diagnostic.open_float()<CR>",
-	{ silent = true, noremap = true, desc = "Show diagnostics" }
-)
+keymap("n", "<leader>d", "<Cmd>lua vim.diagnostic.open_float()<CR>", { silent = true, noremap = true, desc = "Show diagnostics" })
+
+-- Find and replace
+keymap("n", "<C-r>", "#*zz:s//", { silent = true, noremap = true, desc = "Replace" })
+keymap("n", "<C-S-r>", "&", { silent = true, noremap = true, desc = "Repeat replace" })
+keymap("v", "<C-r>", [[:<C-u>'<,'>s///gc<Left><Left><Left>]], { noremap = true, desc = "Replace in selection" })

@@ -15,13 +15,7 @@ local function paste_absolute_path()
 		vim.notify("No file path to paste")
 		return
 	end
-	vim.api.nvim_buf_set_lines(
-		vim.api.nvim_get_current_buf(),
-		vim.api.nvim_win_get_cursor(0)[1] - 1,
-		vim.api.nvim_win_get_cursor(0)[1],
-		false,
-		file_path_to_paste
-	)
+	vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, file_path_to_paste)
 end
 
 local function paste_markdown_link(embed)
@@ -105,13 +99,7 @@ local function paste_markdown_link(embed)
 					link = "!" .. link
 				end
 
-				vim.api.nvim_buf_set_lines(
-					vim.api.nvim_get_current_buf(),
-					vim.api.nvim_win_get_cursor(0)[1] - 1,
-					vim.api.nvim_win_get_cursor(0)[1],
-					false,
-					{ link }
-				)
+				vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, { link })
 			end
 		end)
 	else
@@ -131,13 +119,7 @@ local function paste_markdown_link(embed)
 			link = "!" .. link
 		end
 
-		vim.api.nvim_buf_set_lines(
-			vim.api.nvim_get_current_buf(),
-			vim.api.nvim_win_get_cursor(0)[1] - 1,
-			vim.api.nvim_win_get_cursor(0)[1],
-			false,
-			{ link }
-		)
+		vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, { link })
 	end
 end
 
@@ -175,23 +157,61 @@ local function paste_relative_path()
 	else
 		vim.notify("No common parent folder found")
 		-- Fallback to absolute path
-		vim.api.nvim_buf_set_lines(
-			vim.api.nvim_get_current_buf(),
-			vim.api.nvim_win_get_cursor(0)[1] - 1,
-			vim.api.nvim_win_get_cursor(0)[1],
-			false,
-			{ abs_file_path_to_paste }
-		)
+		vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, { abs_file_path_to_paste })
 		return
 	end
 
-	vim.api.nvim_buf_set_lines(
-		vim.api.nvim_get_current_buf(),
-		vim.api.nvim_win_get_cursor(0)[1] - 1,
-		vim.api.nvim_win_get_cursor(0)[1],
-		false,
-		{ link }
-	)
+	vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, { link })
+end
+
+local builtin = require("telescope.builtin")
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
+
+-- Import your utils module
+local utils = require("myPlugins.utils")
+
+
+
+local function find_file_and_link()
+  local current_file_path = vim.api.nvim_buf_get_name(0)
+
+  local function select_file(prompt_bufnr, map)
+    local function on_select()
+      local entry = action_state.get_selected_entry()
+      actions.close(prompt_bufnr)
+
+      if not entry or not entry.path then
+        vim.notify("No file selected", vim.log.levels.WARN)
+        return
+      end
+
+      -- ✅ Compute relative path using your utils function
+      local rel_path = utils.calculate_relative_path(
+        current_file_path,
+        entry.path,
+        { root_folder = "~" }
+      )
+
+      if not rel_path then
+        vim.notify("Could not calculate relative path", vim.log.levels.ERROR)
+        return
+      end
+
+      -- ✅ Insert the markdown-style link at cursor
+      vim.api.nvim_put({ rel_path }, "c", true, true)
+    end
+
+    map("i", "<CR>", on_select)
+    map("n", "<CR>", on_select)
+    return true
+  end
+
+  builtin.find_files({
+    cwd = notes_folder,
+    prompt_title = "Link note",
+    attach_mappings = select_file,
+  })
 end
 
 keymap("n", "<leader>l", "<Nop>", { desc = "Links" })
@@ -206,3 +226,4 @@ end, { desc = "Embed markdown link" })
 -- keymap("n", "<leader>lo", embed_obsidian_link, { desc = "Embed obsidian link" })
 keymap("n", "<leader>lr", paste_relative_path, { desc = "Paste relative path" })
 keymap("n", "<leader>ly", copy_file_path, { desc = "Copy file path" })
+keymap("n", "<leader>lf", find_file_and_link, { desc = "Find file" })

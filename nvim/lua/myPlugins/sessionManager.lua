@@ -7,12 +7,15 @@ local home_path = tostring(os.getenv("HOME"))
 local M = {}
 
 function M.saveSession(cwd)
+	-- Check if session folder exists, if not create it
 	if vim.fn.isdirectory(session_folder) == 0 then
 		vim.fn.mkdir(session_folder, "p")
 	end
 
+	-- Check if cwd was given, else use the current working directory
 	if cwd == nil then
 		cwd = vim.fn.getcwd()
+		vim.print("cwd is nil, new cwd", cwd)
 	end
 
 	local session_name = cwd:gsub(home_path, "~"):gsub("[/\\]", "%%") -- sanitize path
@@ -23,7 +26,11 @@ function M.saveSession(cwd)
 end
 
 function M.sourceSession(cwd)
-	M.saveSession(cwd)
+	local current_cwd = vim.fn.getcwd()
+	-- Do not overwrite the session that the user want to source
+	if current_cwd ~= cwd then
+		M.saveSession(current_cwd)
+	end
 
 	local session_name = cwd:gsub(home_path, "~"):gsub("[/\\]", "%%") -- sanitize path
 	local session_path = session_folder .. session_name .. ".vim"

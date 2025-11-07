@@ -183,6 +183,10 @@ if [ -d $NVM_DIR ]; then
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 
-if [ ! -f "$HOME/sync/vault/Dnevnik/$(date +"%Y - %j").md" ]; then
+if [ ! -f "$HOME/sync/knowledgeVault/Dnevnik/$(date +"%Y - %j").md" ]; then
   echo ⚠️ " " "Write in your daily note!"
+fi
+
+if [ -d /opt/nvim-linux-x86_64 ]; then
+	PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 fi

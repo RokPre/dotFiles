@@ -54,26 +54,32 @@ local function make_matrix(rows, cols)
 	local matrix_input = {}
 	local trigger = "m" .. rows .. "x" .. cols
 	local index = 1
-	for _ = 1, rows do
-		for _ = 1, cols do
-			matrix_text = matrix_text .. "{} & "
+	for r = 1, rows do
+		for c = 1, cols do
+			if c == cols then
+				matrix_text = matrix_text .. "{}"
+			else
+				matrix_text = matrix_text .. "{} & "
+			end
+
 			table.insert(matrix_input, i(index))
 			index = index + 1
 		end
-		matrix_text = matrix_text .. "\\\\\n"
+		if r == rows then
+			matrix_text = matrix_text .. "\n"
+		else
+			matrix_text = matrix_text .. "\\\\\n"
+		end
 	end
 
 	matrix_text = matrix_text .. "\\end{{bmatrix}}"
 
-	s(
-		{ trig = trigger, wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt(matrix_text, matrix_input)
-	)
+	return s({ trig = trigger, wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt(matrix_text, matrix_input))
 end
 
 for r = 1, 10, 1 do
 	for c = 1, 10, 1 do
-		make_matrix(r, c)
+		ls.add_snippets("markdown", { make_matrix(r, c) })
 	end
 end
 
@@ -102,45 +108,30 @@ ls.add_snippets("markdown", {
 	s({ trig = "jutri", snippetType = "autosnippet", wordTrig = true }, { f(jutri) }),
 
 	-- Latex math
-	s(
-		{ trig = "fr", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt("\\frac{{{}}}{{{}}}", { i(1), i(2) })
-	),
-	s(
-		{ trig = "sq", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt("\\sqrt{{{}}}", { i(1) })
-	),
-	s({ trig = "_", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("_{{{}}}", { i(1) })),
-	s({ trig = "pow", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("^{{{}}}", { i(1) })),
+	s({ trig = "fr", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\frac{{{}}}{{{}}}", { i(1), i(2) })),
+	s({ trig = "sq", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\sqrt{{{}}}", { i(1) })),
+	s({ trig = "sr", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, t("^{2}")),
 	s({ trig = "inv", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, t("^{-1}")),
-	s(
-		{ trig = "log", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt("\\log{{{}}}", { i(1) })
-	),
-	s(
-		{ trig = "text", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt("\\text{{{}}}", { i(1) })
-	),
+	s({ trig = "pow", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("^{{{}}}", { i(1) })),
+	s({ trig = "na", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("^{{{}}}", { i(1) })),
+	s({ trig = "_", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("_{{{}}}", { i(1) })),
+	s({ trig = "log", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\log{{{}}}", { i(1) })),
+	s({ trig = "text", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\text{{{}}}", { i(1) })),
 	s({ trig = "od", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("({})", { i(1) })),
-	s(
-		{ trig = "fancy", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt("\\mathcal{{{}}}", { i(1) })
-	),
+	s({ trig = "fancy", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\mathcal{{{}}}", { i(1) })),
 	s({ trig = "abs", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("|{}|", { i(1) })),
-	s(
-		{ trig = "lim", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt("\\lim_{{{}}}", { i(1) })
-	),
-	s(
-		{ trig = "sum", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt("\\sum_{{{}}}^{{{}}}", { i(1), i(2) })
-	),
-	s(
-		{ trig = "int", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		fmt("\\int_{{{}}}^{{{}}}", { i(1), i(2) })
-	),
+	s({ trig = "lim", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\lim_{{{}}}", { i(1) })),
+	s({ trig = "res", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\underset{{{}}}{{\\operatorname{{Res}}}}", { i(1) })),
+	s({ trig = "Res", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\underset{{{}}}{{\\operatorname{{Res}}}}", { i(1) })),
+
+	s({ trig = "sum", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\sum_{{{}}}^{{{}}}", { i(1), i(2) })),
+	s({ trig = "int", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\int_{{{}}}^{{{}}}", { i(1), i(2) })),
+	s({ trig = "oint", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\oint_{{{}}}^{{{}}}", { i(1), i(2) })),
+
 	s({ trig = "sin", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\sin")),
 	s({ trig = "cos", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\cos")),
+	s({ trig = "tan", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\tan")),
+
 	s({ trig = "nic", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("0")),
 	s({ trig = "ena", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("1")),
 	s({ trig = "dva", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("2")),
@@ -151,18 +142,21 @@ ls.add_snippets("markdown", {
 	s({ trig = "sedem", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("7")),
 	s({ trig = "osem", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("8")),
 	s({ trig = "devet", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("9")),
+
 	s({ trig = "inf", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\infty")),
-	s({ trig = "al", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\alpha")),
-	s({ trig = "be", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\beta")),
-	s({ trig = "la", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\lambda")),
+	s({ trig = "alpha", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\alpha")),
+	s({ trig = "beta", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\beta")),
+	s({ trig = "lambda", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\lambda")),
 	s({ trig = "tau", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\tau")),
 	s({ trig = "pi", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\pi")),
-	s({ trig = "om", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\omega")),
+	s({ trig = "omega", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\omega")),
+	s({ trig = "delta", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\delt")),
+	s({ trig = "gamma", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\gamma")),
+
 	s({ trig = "plus", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("+")),
 	s({ trig = "minus", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("-")),
 	s({ trig = "je", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("=")),
 	s({ trig = "cd", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\cdot")),
-	s({ trig = "nic", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("0")),
 	s({ trig = "ne", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\ne")),
 	s({ trig = "vec", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\gt")),
 	s({ trig = "manj", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\ls")),
@@ -174,6 +168,13 @@ ls.add_snippets("markdown", {
 	s({ trig = "lr", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Leftarrow")),
 	s({ trig = "tedaj", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\Leftrightarrow")),
 	s({ trig = "...", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\dots")),
+
+	-- Begins
+	s({ trig = "cases", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("\\begin{{cases}}\n{}\n\\end{{cases}}", { i(1) })),
+	s({ trig = "align", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("\\begin{{align}}\n{}\n\\end{{align}}", { i(1) })),
+	s({ trig = "eq", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("\\begin{{equation}}\n{}\n\\end{{equation}}", { i(1) })),
+	s({ trig = "gather", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("\\begin{{gather}}\n{}\n\\end{{gather}}", { i(1) })),
+	s({ trig = "split", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("\\begin{{split}}\n{}\n\\end{{split}}", { i(1) })),
 })
 
 -- Checkboxes
@@ -360,11 +361,6 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.wrap = true
 		vim.opt_local.linebreak = true
 		vim.opt_local.spell = false
-		vim.keymap.set(
-			"n",
-			"<Leader>of",
-			footnotes,
-			{ silent = true, noremap = true, buffer = true, desc = "Footnotes" }
-		)
+		vim.keymap.set("n", "<Leader>of", footnotes, { silent = true, noremap = true, buffer = true, desc = "Footnotes" })
 	end,
 })
