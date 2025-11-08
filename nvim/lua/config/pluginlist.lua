@@ -1,5 +1,4 @@
 return {
-	-- TODO: Rewrite config for cmp and lsp. Right now im pretty sure its a mess.
 	-- { import = "plugins.biscuits" }, -- Better debugging
 	-- { import = "plugins.dap" },        -- Better debugging
 	-- { import = "plugins.dapMason" },
@@ -7,12 +6,16 @@ return {
 	-- { import = "plugins.entireFile" }, -- For selecting entire file
 	-- { import = "plugins.lazyGit" }, -- Lazy git
 	-- { import = "plugins.livePreview" },
+	-- { import = "plugins.mdPdf" },                 -- Browser like buffers
 	-- { import = "plugins.mdmath" }, -- Math rendering
 	-- { import = "plugins.netrw" }, -- For scmooth scrolling
 	-- { import = "plugins.noice" },
 	-- { import = "plugins.notify" },
+	-- { import = "plugins.obsidian" },              -- Obsidian.md support
 	-- { import = "plugins.persistence" },
 	-- { import = "plugins.playground" },
+	-- { import = "plugins.precognition" }, -- Show keymaps in buffer for easy navigation
+	-- { import = "plugins.pywal16" },               -- Colorscheme
 	-- { import = "plugins.remote" }, -- ssh remote
 	-- { import = "plugins.renderMarkdown" },
 	-- { import = "plugins.snacks" },      -- Many small plugins
@@ -25,9 +28,6 @@ return {
 	-- { import = "plugins.w3m" }, -- Web browser
 	-- { import = "plugins.winShift" }, -- Window management
 	-- { import = "plugins.zen" }, -- Zen mode
-	-- { import = "plugins.obsidian" },              -- Obsidian.md support
-	-- { import = "plugins.pywal16" },               -- Colorscheme
-	-- { import = "plugins.mdPdf" },                 -- Browser like buffers
 	{ import = "plugins.aerial" }, -- Keymaps menu
 	{ import = "plugins.betterGoToFile" }, -- Browser like buffers
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
@@ -47,13 +47,13 @@ return {
 	{ import = "plugins.neoScroll" }, -- For scmooth scrolling
 	{ import = "plugins.obsidianNew" }, -- Obsidian.md support
 	{ import = "plugins.oil" }, -- File explorer
-	-- { import = "plugins.precognition" }, -- Show keymaps in buffer for easy navigation
 	{ import = "plugins.rainbowDelimiters" }, -- Rainbow delimiters
 	{ import = "plugins.superMaven" }, -- AI code completion
 	{ import = "plugins.telescope" }, -- Fuzzy finder
 	{ import = "plugins.theme" }, -- Theme
 	{ import = "plugins.treeSitter" }, -- Code parser
 	{ import = "plugins.treeSitterTextObjects" }, -- Code parser
+	{ import = "plugins.treesj" }, -- Keymaps menu
 	{ import = "plugins.ufo" }, -- Code folding
 	{ import = "plugins.vimTex" }, -- Tex support
 	{ import = "plugins.webDevIcons" }, -- Web icons

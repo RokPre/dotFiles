@@ -42,6 +42,14 @@ if ok_telescope then
 		desc = "Recent Files",
 		action = builtin.oldfiles,
 	})
+	table.insert(M.opts.actions, {
+		icon = " ",
+		key = "c",
+		desc = "Config",
+		action = function()
+			builtin.find_files({ cwd = vim.fn.stdpath("config") })
+		end,
+	})
 end
 
 local ok_pm, projectManager = pcall(require, "myPlugins.projectManager")

@@ -1,4 +1,3 @@
--- TODO: Make this compatible with folders as well.
 local keymap = vim.keymap.set
 
 local file_path_to_paste = nil
@@ -12,10 +11,10 @@ end
 
 local function paste_absolute_path()
 	if not file_path_to_paste or file_path_to_paste == "" then
-		vim.notify("No file path to paste")
+		vim.notify("No file path to paste", vim.log.levels.WARN)
 		return
 	end
-	vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, file_path_to_paste)
+	vim.api.nvim_put({ file_path_to_paste }, "c", true, true)
 end
 
 local function paste_markdown_link(embed)
@@ -99,7 +98,7 @@ local function paste_markdown_link(embed)
 					link = "!" .. link
 				end
 
-				vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, { link })
+			vim.api.nvim_put({ link }, "c", true, true)
 			end
 		end)
 	else
@@ -119,7 +118,7 @@ local function paste_markdown_link(embed)
 			link = "!" .. link
 		end
 
-		vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, { link })
+			vim.api.nvim_put({ link }, "c", true, true)
 	end
 end
 
@@ -157,11 +156,11 @@ local function paste_relative_path()
 	else
 		vim.notify("No common parent folder found")
 		-- Fallback to absolute path
-		vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, { abs_file_path_to_paste })
+    vim.api.nvim_put({ abs_file_path_to_paste }, "c", true, true)
 		return
 	end
 
-	vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), vim.api.nvim_win_get_cursor(0)[1] - 1, vim.api.nvim_win_get_cursor(0)[1], false, { link })
+  vim.api.nvim_put({ link }, "c", true, true)
 end
 
 local builtin = require("telescope.builtin")
@@ -171,47 +170,41 @@ local action_state = require("telescope.actions.state")
 -- Import your utils module
 local utils = require("myPlugins.utils")
 
-
-
 local function find_file_and_link()
-  local current_file_path = vim.api.nvim_buf_get_name(0)
+	local current_file_path = vim.api.nvim_buf_get_name(0)
 
-  local function select_file(prompt_bufnr, map)
-    local function on_select()
-      local entry = action_state.get_selected_entry()
-      actions.close(prompt_bufnr)
+	local function select_file(prompt_bufnr, map)
+		local function on_select()
+			local entry = action_state.get_selected_entry()
+			actions.close(prompt_bufnr)
 
-      if not entry or not entry.path then
-        vim.notify("No file selected", vim.log.levels.WARN)
-        return
-      end
+			if not entry or not entry.path then
+				vim.notify("No file selected", vim.log.levels.WARN)
+				return
+			end
 
-      -- ✅ Compute relative path using your utils function
-      local rel_path = utils.calculate_relative_path(
-        current_file_path,
-        entry.path,
-        { root_folder = "~" }
-      )
+			-- ✅ Compute relative path using your utils function
+			local rel_path = utils.calculate_relative_path(current_file_path, entry.path, { root_folder = "~" })
 
-      if not rel_path then
-        vim.notify("Could not calculate relative path", vim.log.levels.ERROR)
-        return
-      end
+			if not rel_path then
+				vim.notify("Could not calculate relative path", vim.log.levels.ERROR)
+				return
+			end
 
-      -- ✅ Insert the markdown-style link at cursor
-      vim.api.nvim_put({ rel_path }, "c", true, true)
-    end
+			-- ✅ Insert the markdown-style link at cursor
+			vim.api.nvim_put({ rel_path }, "c", true, true)
+		end
 
-    map("i", "<CR>", on_select)
-    map("n", "<CR>", on_select)
-    return true
-  end
+		map("i", "<CR>", on_select)
+		map("n", "<CR>", on_select)
+		return true
+	end
 
-  builtin.find_files({
-    cwd = notes_folder,
-    prompt_title = "Link note",
-    attach_mappings = select_file,
-  })
+	builtin.find_files({
+		cwd = notes_folder,
+		prompt_title = "Link note",
+		attach_mappings = select_file,
+	})
 end
 
 keymap("n", "<leader>l", "<Nop>", { desc = "Links" })

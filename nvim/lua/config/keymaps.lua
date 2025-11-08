@@ -58,7 +58,11 @@ keymap({ "n", "v" }, "p", '"0p', opts)
 keymap({ "n", "v" }, "P", '"0P', opts)
 
 -- Close buffer
--- This has been moved to: ../myPlugins/bufferClosing.lua
+-- Check out: ../myPlugins/bufferClosing.lua
+keymap("n", "<C-w>", "<Cmd>bdelete<CR>", opts)
+keymap("n", "<C-S-w>", "<Cmd>bdelete!<CR>", opts)
+pcall(vim.api.nvim_del_keymap, "n", "<C-W><C-d>")
+pcall(vim.api.nvim_del_keymap, "n", "<C-W>d")
 
 -- Open buffer
 keymap("n", "<C-t>", "<Cmd>:ene | startinsert<CR>", opts)

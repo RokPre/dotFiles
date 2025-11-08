@@ -192,6 +192,11 @@ function M.write_table_to_file(tbl, file_path)
 		return nil
 	end
 
+	if type(tbl) ~= "table" then
+		vim.notify("Table must be a table", vim.log.levels.ERROR)
+		return nil
+	end
+
 	file_path = vim.fn.expand(file_path)
 
 	local f, err = io.open(file_path, "w")
@@ -202,6 +207,74 @@ function M.write_table_to_file(tbl, file_path)
 
 	f:write(table.concat(tbl, "\n"))
 	f:close()
+end
+
+function M.write_dict_to_file(dict, file_path)
+	if file_path == nil then
+		vim.notify("No file path provided", vim.log.levels.ERROR)
+		return nil
+	end
+
+	if type(file_path) ~= "string" then
+		vim.notify("File path must be a string", vim.log.levels.ERROR)
+		return nil
+	end
+
+	file_path = vim.fn.expand(file_path)
+
+	if type(dict) ~= "table" then
+		vim.notify("Argument 'dict' must be a table", vim.log.levels.ERROR)
+		return nil
+	end
+
+	local f, err = io.open(file_path, "w")
+	if not f then
+		vim.notify("Error opening file for writing: " .. (err or file_path), vim.log.levels.ERROR)
+		return nil
+	end
+
+	f:write("return {\n")
+	for key, value in pairs(dict) do
+		f:write(string.format("  [%q] = %s,\n", key, vim.inspect(value)))
+	end
+	f:write("}\n")
+	f:close()
+
+	return true
+end
+
+function M.read_dict_from_file(file_path)
+	if file_path == nil then
+		vim.notify("No file path provided", vim.log.levels.ERROR)
+		return nil
+	end
+
+	if type(file_path) ~= "string" then
+		vim.notify("File path must be a string", vim.log.levels.ERROR)
+		return nil
+	end
+
+	file_path = vim.fn.expand(file_path)
+
+	local f = io.open(file_path, "r")
+	if not f then
+		vim.notify("File not found: " .. file_path, vim.log.levels.WARN)
+		return nil
+	end
+	f:close()
+
+	local ok, data = pcall(dofile, file_path)
+	if not ok then
+		vim.notify("Error reading file: " .. tostring(data), vim.log.levels.ERROR)
+		return nil
+	end
+
+	if type(data) ~= "table" then
+		vim.notify("File did not return a table: " .. file_path, vim.log.levels.ERROR)
+		return nil
+	end
+
+	return data
 end
 
 return M

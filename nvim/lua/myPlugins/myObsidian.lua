@@ -6,6 +6,7 @@
 -- TODO: Obsidian daily note
 -- TODO: Tags
 -- TODO: Add notes to cmp, and their aliases
+-- TODO: Floating diary
 
 local notes_folder = "~/sync/knowledgeVault/"
 
