@@ -106,6 +106,7 @@ exec_always --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "li
 exec_always --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1
 exec_always --no-startup-id xinput disable "ELAN06FA:00 04F3:327E Touchpad"
 bindsym $mod+Shift+m exec --no-startup-id xinput enable "ELAN06FA:00 04F3:327E Touchpad"
+bindsym $mod+Ctrl+m exec --no-startup-id xinput enable "ELAN06FA:00 04F3:327E Touchpad"
 
 # CapsLock
 exec_always --no-startup-id ~/.config/i3/scripts/capsLock.sh
