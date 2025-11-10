@@ -1,8 +1,8 @@
 # Look at scripts/params.sh
 exec_always --no-startup-id ~/.config/i3/scripts/params.sh
 
-set $nvim_bin /usr/bin/nvim
-set $browser_cmd /usr/bin/qutebrowser
+set $nvim_bin /opt/nvim-linux-x86_64/bin/nvim
+set $browser_cmd /usr/bin/vivaldi
 
-bindsym $mod+Ctrl+n exec --no-startup-id /usr/bin/neovide --neovim-bin /usr/bin/nvim; workspace $ws1
-bindsym $mod+Ctrl+i exec --no-startup-id sh -c '/usr/bin/qutebrowser'; workspace $ws2
+bindsym $mod+Ctrl+n exec --no-startup-id /usr/bin/neovide --neovim-bin /opt/nvim-linux-x86_64/bin/nvim; workspace $ws1
+bindsym $mod+Ctrl+i exec --no-startup-id sh -c '/usr/bin/vivaldi'; workspace $ws2

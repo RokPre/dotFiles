@@ -81,8 +81,18 @@ function M.show_projects()
 		end,
 	}, function(selected)
 		if selected then
-			local selected_path = selected:gsub("/.git", "")
-			sessions.sourceSession(selected_path)
+      local selected_path = selected:gsub("/.git", "")
+      selected_path = vim.fn.fnameescape(selected_path)
+
+      local sok = sessions.sourceSession(selected_path)
+
+      if not sok then
+        vim.cmd("e " .. selected_path)
+      end
+
+      -- Seting cwd has to be done after opening the session
+      vim.cmd("cd " .. selected_path)
+
 		end
 	end)
 end

@@ -15,30 +15,30 @@ function M.saveSession(cwd)
 	-- Check if cwd was given, else use the current working directory
 	if cwd == nil then
 		cwd = vim.fn.getcwd()
-		vim.print("cwd is nil, new cwd", cwd)
+		vim.notify("Cwd was not provided, getting current cwd:", cwd)
 	end
 
 	local session_name = cwd:gsub(home_path, "~"):gsub("[/\\]", "%%") -- sanitize path
 	local session_path = session_folder .. session_name .. ".vim"
 
 	vim.cmd("mksession! " .. vim.fn.fnameescape(session_path))
-	vim.print("Session saved to " .. vim.fn.fnameescape(session_path))
+	vim.notify("Session saved to " .. vim.fn.fnameescape(session_path), vim.log.levels.INFO)
 end
 
 function M.sourceSession(cwd)
-	local current_cwd = vim.fn.getcwd()
-	-- Do not overwrite the session that the user want to source
-	if current_cwd ~= cwd then
-		M.saveSession(current_cwd)
-	end
-
 	local session_name = cwd:gsub(home_path, "~"):gsub("[/\\]", "%%") -- sanitize path
 	local session_path = session_folder .. session_name .. ".vim"
 
 	if vim.fn.filereadable(session_path) == 0 then
-		vim.notify("Session file not found", vim.log.levels.INFO)
-		vim.cmd("edit " .. vim.fn.fnameescape(cwd))
-		return
+		vim.notify("Session file not found", vim.log.levels.WARN)
+		return false
+	end
+
+	local current_cwd = vim.fn.getcwd()
+
+	-- Do not overwrite the session that the user want to source
+	if current_cwd ~= cwd then
+		M.saveSession(current_cwd)
 	end
 
 	-- STEP 1: write modified buffers
@@ -52,13 +52,14 @@ function M.sourceSession(cwd)
 	-- STEP 3: now load the session
 	vim.notify("Loading session: " .. session_path, vim.log.levels.INFO)
 	vim.cmd("silent! source " .. vim.fn.fnameescape(session_path))
+  return true
 end
 
 function M.loadLastSession()
 	local sessions = vim.fn.readdir(session_folder)
 	if #sessions == 0 then
 		vim.notify("No sessions found", vim.log.levels.INFO)
-		return
+		return false
 	end
 	-- Sort sessions by last modified time
 	table.sort(sessions, function(a, b)
@@ -71,7 +72,10 @@ function M.loadLastSession()
 		return
 	end
 	local expanded_last_session = last_session:gsub("~", home_path):gsub("%%", "/"):gsub(".vim", "") -- sanitize path
-	M.sourceSession(expanded_last_session)
+	local sok = M.sourceSession(expanded_last_session)
+  if sok then
+    return true
+  end
 end
 
 vim.api.nvim_create_autocmd("VimLeavePre", {
