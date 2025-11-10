@@ -82,7 +82,6 @@ function M.show_projects()
 	}, function(selected)
 		if selected then
 			local selected_path = selected:gsub("/.git", "")
-			vim.cmd("cd " .. vim.fn.fnameescape(selected_path))
 			sessions.sourceSession(selected_path)
 		end
 	end)

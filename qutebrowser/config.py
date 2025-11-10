@@ -2743,10 +2743,22 @@ config.bind("<Ctrl-shift-l>", "tab-move +")
 config.bind("<Ctrl-shift-h>", "tab-move -")
 # config.bind("<Ctrl-shift-i>", "view-source")
 config.bind("i", "mode-enter insert")
+
 config.bind("h", "scroll left")
 config.bind("j", "scroll down")
 config.bind("k", "scroll up")
 config.bind("l", "scroll right")
+
+config.bind("<Alt-s>", "scroll-page 0.05 0", mode="normal")
+config.bind("<Alt-f>", "scroll-page 0 0.05", mode="normal")
+config.bind("<Alt-d>", "scroll-page 0 -0.05", mode="normal")
+config.bind("<Alt-g>", "scroll-page -0.05 0", mode="normal")
+
+config.bind("<Alt-Shift-s>", "scroll-page 0.25 0", mode="normal")
+config.bind("<Alt-Shift-f>", "scroll-page 0 0.25", mode="normal")
+config.bind("<Alt-Shift-d>", "scroll-page 0 -0.25", mode="normal")
+config.bind("<Alt-Shift-g>", "scroll-page -0.25 0", mode="normal")
+
 config.bind("g", "scroll top")
 config.bind("G", "scroll bottom")
 config.bind("qs", "quickmark-save")
