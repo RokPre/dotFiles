@@ -928,7 +928,12 @@ c.content.javascript.clipboard = "access-paste"
 ## qutebrowser's stylesheet handling are excluded, as those errors are to
 ## be expected and can't be easily handled by the underlying code.
 ## Type: Dict
-# c.content.javascript.log_message.excludes = {'userscript:_qute_stylesheet': ['*Refused to apply inline style because it violates the following Content Security Policy directive: *']}
+c.content.javascript.log_message.excludes = {
+    "userscript:_qute_stylesheet": [
+        "*Refused to apply inline style because it violates the following Content Security Policy directive: *",
+    ],
+    "userscript:_qute_js": ["*TrustedHTML*"],
+}
 
 ## Javascript message sources/levels to show in the qutebrowser UI. When
 ## a JavaScript message is logged from a location matching the glob
@@ -2772,6 +2777,7 @@ config.bind("yy", "yank selection")
 config.bind("<Ctrl-c>", "yank selection")
 config.bind("ye", "yank pretty-url")
 config.bind("yd", "yank domain")
+config.bind("<Escape>", "clear-keychain ;; search ;; mode-enter normal ;; mode-enter caret ;; mode-enter normal", mode="normal")
 
 # Command mode
 config.bind("<Tab>", "completion-item-focus next", mode="command")

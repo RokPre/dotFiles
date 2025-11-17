@@ -9,7 +9,7 @@ return {
 				require("codex").toggle()
 			end,
 			desc = "Toggle Codex popup",
-			mode = { "n", "t" },
+			mode = { "n" },
 		},
 	},
 	opts = {
