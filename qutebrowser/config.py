@@ -1771,7 +1771,7 @@ c.hints.border = "1px solid #ffffff"
 ## Enable smooth scrolling for web pages. Note smooth scrolling does not
 ## work with the `:scroll-px` command.
 ## Type: Bool
-c.scrolling.smooth = True
+c.scrolling.smooth = False
 
 ## When to find text on a page case-insensitively.
 ## Type: IgnoreCase
@@ -2709,8 +2709,10 @@ c.url.searchengines = {
 # My config
 c.bindings.default = {}
 config.bind(":", "cmd-set-text :")
-config.bind("<Escape>", "mode-leave", mode="caret")
 config.bind("<Ctrl-e>", "cmd-set-text -s :open -t ")
+
+config.bind("<Ctrl-p>", "cmd-set-text -s :open -t g filetype:pdf ")
+
 config.bind("+", "zoom-in")
 config.bind("-", "zoom-out")
 config.bind("<Ctrl-f>", "cmd-set-text /")
@@ -2805,3 +2807,36 @@ config.bind("y", "prompt-accept yes", mode="yesno")
 # Hint mode
 config.bind("f", "hint")
 config.bind("<Escape>", "mode-leave", mode="hint")
+
+
+# Caret mode
+config.bind("v", "mode-enter caret")
+config.bind("gl", "move-to-end-of-line", mode="caret")
+config.bind("gh", "move-to-start-of-line", mode="caret")
+config.bind("<Ctrl-Space>", "selection-drop", mode="caret")
+config.bind("<Escape>", "mode-leave", mode="caret")
+config.bind("<Return>", "yank selection", mode="caret")
+config.bind("<Space>", "selection-toggle", mode="caret")
+config.bind("G", "move-to-end-of-document", mode="caret")
+config.bind("H", "scroll left", mode="caret")
+config.bind("J", "scroll down", mode="caret")
+config.bind("K", "scroll up", mode="caret")
+config.bind("L", "scroll right", mode="caret")
+config.bind("V", "selection-toggle --line", mode="caret")
+config.bind("Y", "yank selection -s", mode="caret")
+config.bind("[", "move-to-start-of-prev-block", mode="caret")
+config.bind("]", "move-to-start-of-next-block", mode="caret")
+config.bind("b", "move-to-prev-word", mode="caret")
+config.bind("c", "mode-enter normal", mode="caret")
+config.bind("e", "move-to-end-of-word", mode="caret")
+config.bind("gg", "move-to-start-of-document", mode="caret")
+config.bind("h", "move-to-prev-char", mode="caret")
+config.bind("j", "move-to-next-line", mode="caret")
+config.bind("k", "move-to-prev-line", mode="caret")
+config.bind("l", "move-to-next-char", mode="caret")
+config.bind("o", "selection-reverse", mode="caret")
+config.bind("v", "selection-toggle", mode="caret")
+config.bind("w", "move-to-next-word", mode="caret")
+config.bind("y", "yank selection", mode="caret")
+config.bind("{", "move-to-end-of-prev-block", mode="caret")
+config.bind("}", "move-to-end-of-next-block", mode="caret")

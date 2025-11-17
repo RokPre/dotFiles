@@ -113,7 +113,7 @@ ls.add_snippets("markdown", {
 	s({ trig = "sr", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, t("^{2}")),
 	s({ trig = "inv", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, t("^{-1}")),
 	s({ trig = "pow", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("^{{{}}}", { i(1) })),
-	s({ trig = "na", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("^{{{}}}", { i(1) })),
+	-- s({ trig = "na", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("^{{{}}}", { i(1) })),
 	s({ trig = "_", wordTrig = false, condition = in_math, snippetType = "autosnippet" }, fmt("_{{{}}}", { i(1) })),
 	s({ trig = "log", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\log{{{}}}", { i(1) })),
 	s({ trig = "text", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt("\\text{{{}}}", { i(1) })),

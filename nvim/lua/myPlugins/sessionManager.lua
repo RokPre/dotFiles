@@ -41,11 +41,10 @@ function M.sourceSession(cwd)
 		M.saveSession(current_cwd)
 	end
 
-	-- STEP 1: write modified buffers
+	-- Write modified buffers
 	vim.cmd("wall")
 
-	-- STEP 2: close all tabs/windows safely
-	-- (use `:tabonly` to keep one tab, then `:bufdo bwipeout`)
+	-- close all tabs/windows safely. Use `:tabonly` to keep one tab, then `:bufdo bwipeout`
 	pcall(vim.cmd, "tabonly")
 	pcall(vim.cmd, "silent! bufdo bwipeout")
 

@@ -12,6 +12,7 @@ return {
 	-- { import = "plugins.noice" },
 	-- { import = "plugins.notify" },
 	-- { import = "plugins.obsidian" },              -- Obsidian.md support
+	-- { import = "plugins.obsidianNew" }, -- Obsidian.md support
 	-- { import = "plugins.persistence" },
 	-- { import = "plugins.playground" },
 	-- { import = "plugins.precognition" }, -- Show keymaps in buffer for easy navigation
@@ -40,12 +41,11 @@ return {
 	{ import = "plugins.luaLine" }, -- Status line
 	{ import = "plugins.luasnip" }, -- Snippets
 	{ import = "plugins.markdownPreview" }, -- Markdown redenring
-	{ import = "plugins.markdownTable" }, -- Markdown table formatter
+	-- { import = "plugins.markdownTable" }, -- Markdown table formatter
 	{ import = "plugins.marks" }, -- Marks
 	{ import = "plugins.mason" }, -- install lsp
 	{ import = "plugins.mini" }, -- A collection of mini plugins
 	{ import = "plugins.neoScroll" }, -- For scmooth scrolling
-	{ import = "plugins.obsidianNew" }, -- Obsidian.md support
 	{ import = "plugins.oil" }, -- File explorer
 	{ import = "plugins.rainbowDelimiters" }, -- Rainbow delimiters
 	{ import = "plugins.superMaven" }, -- AI code completion
@@ -58,4 +58,5 @@ return {
 	{ import = "plugins.vimTex" }, -- Tex support
 	{ import = "plugins.webDevIcons" }, -- Web icons
 	{ import = "plugins.whichKey" }, -- Keymaps menu
+	{ import = "plugins.codex" }, -- Codex
 }

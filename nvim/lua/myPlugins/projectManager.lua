@@ -87,6 +87,14 @@ function M.show_projects()
       local sok = sessions.sourceSession(selected_path)
 
       if not sok then
+        -- Write modified buffers
+        vim.cmd("wall")
+
+        -- close all tabs/windows safely. Use `:tabonly` to keep one tab, then `:bufdo bwipeout`
+        pcall(vim.cmd, "tabonly")
+        pcall(vim.cmd, "silent! bufdo bwipeout")
+
+        -- Edit the directory of the selected project
         vim.cmd("e " .. selected_path)
       end
 
@@ -105,6 +113,10 @@ function M.open_readme()
 		vim.schedule(function()
 			local readme_list = vim.split(obj.stdout, "\n")
 
+      readme_list = vim.tbl_filter(function(s)
+        return s ~= ""
+      end, readme_list)
+
 			if readme_list == nil or #readme_list == 0 then
 				vim.notify("No README.md file found", vim.log.levels.WARN)
 				return
@@ -116,9 +128,6 @@ function M.open_readme()
 			end
 
 			if #readme_list > 1 then
-				readme_list = vim.tbl_filter(function(s)
-					return s ~= ""
-				end, readme_list)
 				table.sort(readme_list, function(a, b)
 					return select(2, a:gsub("/", "")) < select(2, b:gsub("/", ""))
 				end)

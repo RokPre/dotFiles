@@ -104,6 +104,7 @@ client.focused_inactive #ffffff #ffffff #ffffff #ffffff #7aa2f7
 # Scrolling direction / natural scrolling
 exec_always --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1
 exec_always --no-startup-id xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1
+exec_always --no-startup-id xdotool mousemove 0 0
 exec_always --no-startup-id xinput disable "ELAN06FA:00 04F3:327E Touchpad"
 bindsym $mod+Shift+m exec --no-startup-id xinput enable "ELAN06FA:00 04F3:327E Touchpad"
 bindsym $mod+Ctrl+m exec --no-startup-id xinput enable "ELAN06FA:00 04F3:327E Touchpad"
@@ -146,6 +147,7 @@ exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 4 "
 
 # Automatically connect to bluetooth headphones
 # exec_always --no-startup-id bluetoothctl connect 50:5E:5C:03:EC:63
+# exec_always --no-startup-id bluetoothctl connect AC:97:38:B9:F6:B5
 
 # Open programs for specific workspace
 set $ws0 "0. All other"

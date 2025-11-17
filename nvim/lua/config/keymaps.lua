@@ -34,10 +34,9 @@ keymap("i", "<C-s>", "<Esc><Cmd>w<CR>", opts)
 keymap("n", "<C-s>", "<Cmd>w<CR>", opts)
 
 -- search
-keymap("n", "<C-f>", "*", opts)
-keymap("v", "<C-f>", '"zy/<C-R>z<CR>', opts)
-keymap("n", "f", "/", opts)
-keymap("v", "f", "/", opts)
+keymap("n", "f", "*", opts)
+keymap("v", "f", '"zy/<C-R>z<CR>', opts)
+keymap({ "n", "v" }, "<C-f>", "/", opts)
 keymap("x", "f", "<Esc>/\\%V") -- Search visual selection
 keymap("n", "<Esc>", ":noh<CR>", opts) -- Search highlight hide
 keymap({ "n", "v" }, ",", "n", { noremap = true, desc = "Next search match" })
