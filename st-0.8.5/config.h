@@ -7,7 +7,9 @@
  */
 static char *font = "Cousine Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:autohint=true";
 static char *font2[] = {
-  "Cousine Nerd Font Mono:h16:antialias=true:autohint=true"
+  "Cousine Nerd Font Mono:h16:antialias=true:autohint=true",
+  // "Symbola:pixlesize=16:antialias=true:autohint=true",
+  // "Noto Sans:pixlesize=16:antialias=true:autohint=true",
   /*TODO: Add font for special characters*/
 };
 static int borderpx = 2;

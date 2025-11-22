@@ -13,38 +13,43 @@ return {
 			view_options = {
 				show_hidden = false,
 			},
+			buf_options = {
+				buflisted = true,
+				bufhidden = "wipe",
+			},
+			delete_to_trash = true,
+			use_default_keymaps = false,
 			keymaps = {
-				["<leader>h"] = "actions.show_help",
+				["gh"] = "actions.show_help",
 				["l"] = "actions.select",
-				["<leader>v"] = {
+				["gv"] = {
 					"actions.select",
 					opts = { vertical = true },
 					desc = "Open the entry in a vertical split",
 				},
-				["<leader>b"] = {
+				["gb"] = {
 					"actions.select",
 					opts = { horizontal = true },
 					desc = "Open the entry in a horizontal split",
 				},
-				["<leader>t"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
-				["<C-p>"] = {
+				["gt"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
+				["gp"] = {
 					callback = function()
 						local oil = require("oil")
 						oil.open_preview({ vertical = true, split = "botright" }, function(err) end)
 					end,
 				},
 				["q"] = "actions.close",
-				["<leader>r"] = "actions.refresh",
+				["gr"] = "actions.refresh",
 				["h"] = "actions.parent",
-				["<leader>c"] = "actions.open_cwd",
-				["<leader>d"] = "actions.cd",
-				["<Leader>cwd"] = { "actions.cd", opts = { scope = "tab" }, desc = ":tcd to the current oil directory" },
-				["<leader>s"] = "actions.change_sort",
-				["<leader>x"] = "actions.open_external",
-				["<leader>."] = "actions.toggle_hidden",
-				["<leader>/"] = "actions.toggle_trash",
-				["<leader>y"] = "actions.yank_entry",
-				["<leader>S"] = {
+				["gc"] = "actions.open_cwd",
+				["gd"] = "actions.cd",
+				["gs"] = "actions.change_sort",
+				["gx"] = "actions.open_external",
+				["g."] = "actions.toggle_hidden",
+				["gy"] = "actions.copy_to_system_clipboard",
+				["gp"] = "actions.paste_from_system_clipboard",
+				["gS"] = {
 					callback = function()
 						local connections = {
 							{ name = "turtlebot3", uri = "ubuntu@192.168.9.111" },

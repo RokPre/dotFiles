@@ -6,6 +6,7 @@
 -- TODO: Add notes to cmp, and their aliases
 -- TODO: Floating diary
 -- TODO: Add a function that convert obsidian style links to my new specaial type of links.
+-- TODO: Auto format tables. Tab should move to the next column.
 
 M = {}
 M.opts = {

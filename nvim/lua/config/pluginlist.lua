@@ -41,7 +41,7 @@ return {
 	{ import = "plugins.luaLine" }, -- Status line
 	{ import = "plugins.luasnip" }, -- Snippets
 	{ import = "plugins.markdownPreview" }, -- Markdown redenring
-	-- { import = "plugins.markdownTable" }, -- Markdown table formatter
+	{ import = "plugins.markdownTable" }, -- Markdown table formatter
 	{ import = "plugins.marks" }, -- Marks
 	{ import = "plugins.mason" }, -- install lsp
 	{ import = "plugins.mini" }, -- A collection of mini plugins

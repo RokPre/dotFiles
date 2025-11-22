@@ -27,8 +27,8 @@ return {
 				end,
 			},
 			mapping = cmp.mapping.preset.insert({
-				["<C-n>"] = cmp.mapping.select_next_item(),
-				["<C-m>"] = cmp.mapping.select_prev_item(),
+				["<C-,>"] = cmp.mapping.select_next_item(),
+				["<C-;>"] = cmp.mapping.select_prev_item(),
 				["<C-c>"] = cmp.mapping.abort(),
 				["<CR>"] = cmp.mapping.confirm({ select = false }),
 			}),

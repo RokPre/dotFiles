@@ -283,11 +283,11 @@ local function new_footnote()
 	local footnote = "[^" .. name .. "]"
 	vim.api.nvim_paste(footnote, false, -1)
 	if not prexisting_footnote then
-		local bottom_footnote = footnote .. ":  "
+		local bottom_footnote = footnote .. ": "
 		vim.api.nvim_buf_set_lines(vim.api.nvim_get_current_buf(), -1, -1, false, { bottom_footnote })
 		vim.api.nvim_win_set_cursor(0, { vim.api.nvim_buf_line_count(0), #bottom_footnote })
 		vim.cmd("normal! zz")
-		vim.cmd("startinsert")
+		vim.cmd("startinsert!") -- ! mean end of line
 	end
 end
 

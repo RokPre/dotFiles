@@ -1,11 +1,5 @@
-# Diploma
-shopt -s cdable_vars
-export diploma="$HOME/sync/faks3/2. Diplomsko delo"
-alias diplomaPython="cd ~/sync/faks3/2.\ Diplomsko\ delo/python"
-alias diplomaMatlab="cd ~/sync/faks3/2.\ Diplomsko\ delo/matlab"
-
 # Nvim
-alias nvimClearConfig="rm -rf ~/.local/share/nvim ~/.local/share/nvim ~/.cache/nvim"
+alias nvimDeleteLocal="rm -rf ~/.local/share/nvim ~/.local/share/nvim ~/.cache/nvim"
 alias nvimClean="nvim --clean"
 alias v="nvim"
 
@@ -22,6 +16,8 @@ alias saveMap="rosrun map_server map_saver -f ~/sync/2.\ Diplomsko\ delo/ros/map
 alias rosKill="rosnode kill -a && killall -9 rosmaster rosout roslaunch gzserver gzclient"
 alias tfTreeView="rosrun tf view_frames && zathura frames.pdf"
 
+alias cm='cd ~/catkin_ws && catkin_make'
+
 # Main server
 alias mainserver-suspend="ssh mainservercontroller@100.64.70.128 'mainserver-suspend'"
 alias mainserver-wake="ssh mainservercontroller@100.64.70.128 'mainserver-wake'"
@@ -34,32 +30,31 @@ alias mainserver-rsync=""
 # Terminal
 alias c="clear"
 
-# Pametna tovarna
-export pametnaTovarna="$HOME/catkin_ws/src/pametna_tovarna_pc/"
-
-# Trash
+# Trash-put - rm to trash
 if command -v trash-put &> /dev/null; then
-    alias rm='trash-put'
+  alias rm='trash-put'
+  alias rip="rm -rf" # explicit force delete
+else
+  echo "Trash not found"
 fi
 
-# Copy
+# Rsync - better copy
 if command -v rsync &> /dev/null; then
   alias cp='rsync -avh --progress --partial --append-verify'
+else
+  echo "Rsync not found"
 fi
 
-# Eza (better ls)
+# Eza - better ls
 if command -v eza &> /dev/null; then
   alias ls='eza'
+else
+  echo "Eza not found"
 fi
 
-# Zoxide
-if command -v zoxide &> /dev/null; then
-  eval "$(zoxide init bash)"
-  alias cd="z"
-fi
-
-# Xclip
+# Xclip - coppy to clipboard
 if command -v xclip &> /dev/null; then
   alias xc="xclip -selection clipboard"
+else
+  echo "Xclip not found"
 fi
-

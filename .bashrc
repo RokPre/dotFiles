@@ -121,8 +121,6 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-source ~/sync/dotFiles/nnn/nnn.sh
-
 # Ros
 # export IP=192.168.9.115
 # export ROS_MASTER=$IP
@@ -133,8 +131,6 @@ export ROS_IP=192.168.221.214
 export ROS_MASTER_URI=http://192.168.221.214:11311
 export TURTLEBOT3_MODEL="waffle_pi"
 
-alias sb='source ~/.bashrc'
-alias cm='cd ~/catkin_ws && catkin_make'
 
 if [ -f /opt/ros/noetic/setup.bash ]; then
   source /opt/ros/noetic/setup.bash
@@ -144,49 +140,54 @@ if [ -d "$HOME/catkin_ws/src/pametna_tovarna_pc/objects" ]; then
   export GAZEBO_MODEL_PATH="$HOME/catkin_ws/src/pametna_tovarna_pc/objects:$GAZEBO_MODEL_PATH"
 fi
 
-
 if [ -f ~/catkin_ws/devel/setup.bash ]; then
   source ~/catkin_ws/devel/setup.bash
 fi
-
-if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
-  PATH="${PATH:+${PATH}:}/home/lasim/.fzf/bin"
-fi
-
-if [[ ! "$PATH" == *$HOME/offline/bin* ]]; then
-  PATH="${PATH:+${PATH}:}$HOME/offline/bin"
-fi
-
-#nvm in custom location
-export NVM_DIR="$HOME/sync/dotFiles/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"   # loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-
-# ensure current Node's bin is on PATH (belt-and-suspenders)
-export PATH="$NVM_DIR/versions/node/$(nvm version)/bin:$PATH"
 
 if [ -d /opt/zotero ]; then
   PATH="$PATH:/opt/zotero"
 fi
 
+# My utils
 if [ -d "$HOME/sync/bashUtils" ]; then
-  PATH="$HOME/sync/bashUtils:$PATH"
+  PATH="$PATH:$HOME/sync/bashUtils"
 fi
 
-if [ -d "$HOME/.cargo/env" ]; then
-  PATH="$PATH:$HOME/.cargo/env"
+# Tmux - terminal multiplexer
+if [[ $- == *i* ]]; then
+  if [[ -z "$TMUX" ]]; then
+    tmux
+  fi
+  if command -v tmux >/dev/null 2>&1; then
+    tmux source-file "$HOME/sync/dotFiles/tmux/tmux.conf"
+  else
+    echo "Tmux not found"
+  fi
 fi
 
-export NVM_DIR="$HOME/.config/nvm"
+# Zoxide - smarter cd
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init bash)"
+  alias cd="z"
+else
+  echo "Zoxide not found"
+fi
 
-if [ -d $NVM_DIR ]; then
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# Atuin - better bash history
+if [[ $- == *i* ]]; then
+    # Add Atuin's install location to PATH
+    if [ -d "$HOME/.atuin/bin" ]; then
+        PATH="$HOME/.atuin/bin:$PATH"
+    fi
+
+    # Initialize only if Atuin is found
+    if command -v atuin >/dev/null 2>&1; then
+        # load bash-preexec only if required
+        [ -f "$HOME/.bash-preexec.sh" ] && source "$HOME/.bash-preexec.sh"
+        eval "$(atuin init bash)"
+    fi
 fi
 
 if [ ! -f "$HOME/sync/knowledgeVault/Dnevnik/$(date +"%Y - %j").md" ]; then
-  echo ⚠️ " " "Write in your daily note!"
-fi
-
-if [ -d /opt/nvim-linux-x86_64 ]; then
-	PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+  echo "⚠️ Write in your daily note!"
 fi

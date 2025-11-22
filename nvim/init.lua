@@ -16,6 +16,7 @@ require("config.keymaps")
 require("config.latex")
 require("config.markdown")
 require("config.other")
+require("config.python")
 require("config.snippets")
 require("config.terminal")
 

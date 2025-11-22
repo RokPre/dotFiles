@@ -51,7 +51,7 @@ function M.sourceSession(cwd)
 	-- STEP 3: now load the session
 	vim.notify("Loading session: " .. session_path, vim.log.levels.INFO)
 	vim.cmd("silent! source " .. vim.fn.fnameescape(session_path))
-  return true
+	return true
 end
 
 function M.loadLastSession()
@@ -72,9 +72,9 @@ function M.loadLastSession()
 	end
 	local expanded_last_session = last_session:gsub("~", home_path):gsub("%%", "/"):gsub(".vim", "") -- sanitize path
 	local sok = M.sourceSession(expanded_last_session)
-  if sok then
-    return true
-  end
+	if sok then
+		return true
+	end
 end
 
 vim.api.nvim_create_autocmd("VimLeavePre", {
@@ -82,5 +82,13 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 		M.saveSession()
 	end,
 })
+
+vim.api.nvim_create_user_command("SessionSourceCwd", function()
+	M.sourceSession(vim.fn.getcwd())
+end, { desc = "Source session" })
+
+vim.api.nvim_create_user_command("SessionLoadLast", function()
+	M.loadLastSession()
+end, { desc = "Load last session" })
 
 return M

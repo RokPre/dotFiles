@@ -103,7 +103,7 @@ client.focused_inactive #ffffff #ffffff #ffffff #ffffff #7aa2f7
 
 # Scrolling direction / natural scrolling
 # Neets to sleep so device is created and ready after reload.
-exec_always --no-startup-id sh -c 'sleep 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
+exec_always --no-startup-id sh -c 'sleep 5 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
 exec_always --no-startup-id xdotool mousemove 0 0
 exec_always --no-startup-id xinput disable "ELAN06FA:00 04F3:327E Touchpad"
 bindsym $mod+Shift+m exec --no-startup-id xinput enable "ELAN06FA:00 04F3:327E Touchpad"
@@ -128,7 +128,7 @@ bindsym $mod+Right exec --no-startup-id ~/.config/i3/scripts/brightness.sh up
 bindsym $mod+Left exec --no-startup-id ~/.config/i3/scripts/brightness.sh down
 
 # Screenshot tool
-bindsym Print exec --no-startup-id flameshot gui
+bindsym Print exec --no-startup-id flameshot screen
 bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui
 
 # Set background
