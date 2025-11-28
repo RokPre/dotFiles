@@ -59,4 +59,5 @@ return {
 	{ import = "plugins.webDevIcons" }, -- Web icons
 	{ import = "plugins.whichKey" }, -- Keymaps menu
 	{ import = "plugins.codex" }, -- Codex
+	{ import = "plugins.venn" }, -- Codex
 }
