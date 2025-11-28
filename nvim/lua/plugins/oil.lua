@@ -47,8 +47,8 @@ return {
 				["gs"] = "actions.change_sort",
 				["gx"] = "actions.open_external",
 				["g."] = "actions.toggle_hidden",
-				["gy"] = "actions.copy_to_system_clipboard",
-				["gp"] = "actions.paste_from_system_clipboard",
+				["gY"] = "actions.copy_to_system_clipboard",
+				["gP"] = "actions.paste_from_system_clipboard",
 				["gS"] = {
 					callback = function()
 						local connections = {

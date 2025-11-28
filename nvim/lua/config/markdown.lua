@@ -150,7 +150,7 @@ ls.add_snippets("markdown", {
 	s({ trig = "tau", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\tau")),
 	s({ trig = "pi", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\pi")),
 	s({ trig = "omega", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\omega")),
-	s({ trig = "delta", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\delt")),
+	s({ trig = "delta", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\delta")),
 	s({ trig = "gamma", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("\\gamma")),
 
 	s({ trig = "plus", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, t("+")),

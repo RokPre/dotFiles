@@ -21,6 +21,10 @@ main[data-theme="dark"]{
     padding: 1em;
   }
 
+  .hljs{
+    background-color: #282a2b;
+  }
+
   h1 { font-size: 1.92em; }
   h2 { font-size: 1.75em; }
   h3 { font-size: 1.59em; }

@@ -21,14 +21,15 @@ alias cm='cd ~/catkin_ws && catkin_make'
 # Main server
 alias mainserver-suspend="ssh mainservercontroller@100.64.70.128 'mainserver-suspend'"
 alias mainserver-wake="ssh mainservercontroller@100.64.70.128 'mainserver-wake'"
-alias mainserver-mount="sudo mount -t cifs //100.127.238.46/Cloud ~/cloud/ -o credentials=/home/$USER/offline/credentials/mainServerSmb,uid=1000,gid=1000,iocharset=utf8,vers=3.0"
-alias mainserver-unmount='sudo umount ~/cloud || sudo umount -l ~/cloud'
-alias mainserver-ssh="ssh roksmainserver@100.127.238.46 -L 18384:localhost:8384"
-# rsync -avh --progress --partial --append-verify /home/rok/offline/downloads/takeout-20250922T193838Z-1-001.zip ~/cloud/
-alias mainserver-rsync=""
+alias mainserver-ssh="ssh roksmainserver@193.77.150.218"
 
 # Terminal
 alias c="clear"
+if [[ -f ~/sync/dotFiles/.bashrc ]]; then
+  alias sb='source ~/sync/dotFiles/.bashrc'
+else
+  alias sb='source ~/.bashrc'
+fi
 
 # Trash-put - rm to trash
 if command -v trash-put &> /dev/null; then

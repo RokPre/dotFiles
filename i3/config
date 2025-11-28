@@ -129,7 +129,8 @@ bindsym $mod+Left exec --no-startup-id ~/.config/i3/scripts/brightness.sh down
 
 # Screenshot tool
 bindsym Print exec --no-startup-id flameshot screen
-bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui
+# bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui
+bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui -r | xclip -selection clipboard -t image/png
 
 # Set background
 # exec_always --no-startup-id sh -c 'feh --bg-fill $HOME/sync/rice/wallpapers/getherCrop.jpg'
@@ -193,3 +194,5 @@ include ~/.config/i3/params
 # bindsym $mod+Ctrl+i exec --no-startup-id $qute_command; workspace $ws2
 bindsym $mod+Ctrl+t exec --no-startup-id st; workspace $ws3
 bindsym $mod+Ctrl+x exec --no-startup-id st tmux; workspace $ws3
+
+exec_always --no-startup-id sh -c 'mountpoint -q ~/cloud || sshfs roksmainserver@193.77.150.218:/mnt/sdb/cloud ~/cloud -o IdentityFile=/home/rok/.ssh/id_ed25519,Port=22,reconnect'
