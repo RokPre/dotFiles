@@ -24,7 +24,12 @@ alias mainserver-wake="ssh mainservercontroller@100.64.70.128 'mainserver-wake'"
 alias mainserver-ssh="ssh roksmainserver@193.77.150.218"
 
 # Terminal
-alias c="clear"
+if command -v tmux >/dev/null 2>&1; then
+  alias c="clear && tmux clear-history"
+else
+  alias c="clear"
+fi
+
 if [[ -f ~/sync/dotFiles/.bashrc ]]; then
   alias sb='source ~/sync/dotFiles/.bashrc'
 else
