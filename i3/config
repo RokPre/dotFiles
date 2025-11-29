@@ -103,6 +103,10 @@ client.focused_inactive #ffffff #ffffff #ffffff #ffffff #7aa2f7
 
 # Scrolling direction / natural scrolling
 # Neets to sleep so device is created and ready after reload.
+exec_always --no-startup-id sh -c 'sleep 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
+exec_always --no-startup-id sh -c 'sleep 2 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
+exec_always --no-startup-id sh -c 'sleep 3 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
+exec_always --no-startup-id sh -c 'sleep 4 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
 exec_always --no-startup-id sh -c 'sleep 5 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
 exec_always --no-startup-id xdotool mousemove 0 0
 exec_always --no-startup-id xinput disable "ELAN06FA:00 04F3:327E Touchpad"
@@ -195,4 +199,5 @@ include ~/.config/i3/params
 bindsym $mod+Ctrl+t exec --no-startup-id st; workspace $ws3
 bindsym $mod+Ctrl+x exec --no-startup-id st tmux; workspace $ws3
 
-exec_always --no-startup-id sh -c 'mountpoint -q ~/cloud || sshfs roksmainserver@193.77.150.218:/mnt/sdb/cloud ~/cloud -o IdentityFile=/home/rok/.ssh/id_ed25519,Port=22,reconnect'
+# Mount server, should be last for timout reasons.
+exec_always --no-startup-id ~/.config/i3/scripts/serverMount.sh
