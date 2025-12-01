@@ -47,6 +47,40 @@ local function in_math_latex()
 	return false
 end
 
+local function make_matrix(rows, cols)
+	local matrix_text = "\\begin{{bmatrix}}\n"
+	local matrix_input = {}
+	local trigger = "m" .. rows .. "x" .. cols
+	local index = 1
+	for r = 1, rows do
+		for c = 1, cols do
+			if c == cols then
+				matrix_text = matrix_text .. "{}"
+			else
+				matrix_text = matrix_text .. "{} & "
+			end
+
+			table.insert(matrix_input, i(index))
+			index = index + 1
+		end
+		if r == rows then
+			matrix_text = matrix_text .. "\n"
+		else
+			matrix_text = matrix_text .. "\\\\\n"
+		end
+	end
+
+	matrix_text = matrix_text .. "\\end{{bmatrix}}"
+
+	return s({ trig = trigger, wordTrig = true, condition = in_math_latex, snippetType = "autosnippet" }, fmt(matrix_text, matrix_input))
+end
+
+for r = 1, 10, 1 do
+	for c = 1, 10, 1 do
+		ls.add_snippets("markdown", { make_matrix(r, c) })
+	end
+end
+
 ls.add_snippets("tex", {
 	-- Inline math
 	s({ trig = "mk", snippetType = "autosnippet", wordTrig = true }, { t("$"), i(1), t("$") }),
