@@ -2714,7 +2714,8 @@ c.url.searchengines = {
 # My config
 c.bindings.default = {}
 config.bind(":", "cmd-set-text :")
-config.bind("<Ctrl-e>", "cmd-set-text -s :open -t ")
+config.bind("<Ctrl-e>", "cmd-set-text -s :open ")
+config.bind("<Ctrl-T>", "cmd-set-text -s :open -t ")
 
 config.bind("<Ctrl-p>", "cmd-set-text -s :open -t g filetype:pdf ")
 
@@ -2734,7 +2735,6 @@ config.bind("<Ctrl-l>", "tab-next")
 config.bind("<Ctrl-h>", "tab-prev")
 config.bind("<Ctrl-space>", "cmd-set-text -s :tab-focus ")
 config.bind("<Ctrl-Shift-T>", "undo")
-config.bind("<Ctrl-T>", "open -t")
 config.bind("<Ctrl-w>", "tab-close")
 config.bind("<Ctrl-r>", "reload")
 config.bind("<Return>", "selection-follow")
