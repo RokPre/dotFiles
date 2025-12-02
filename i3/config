@@ -108,10 +108,9 @@ exec_always --no-startup-id sh -c 'sleep 2 && xinput set-prop "ELAN06FA:00 04F3:
 exec_always --no-startup-id sh -c 'sleep 3 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
 exec_always --no-startup-id sh -c 'sleep 4 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
 exec_always --no-startup-id sh -c 'sleep 5 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
-exec_always --no-startup-id xdotool mousemove 0 0
-exec_always --no-startup-id xinput disable "ELAN06FA:00 04F3:327E Touchpad"
-bindsym $mod+Shift+m exec --no-startup-id xinput enable "ELAN06FA:00 04F3:327E Touchpad"
-bindsym $mod+Ctrl+m exec --no-startup-id xinput enable "ELAN06FA:00 04F3:327E Touchpad"
+exec --no-startup-id xdotool mousemove 0 0
+exec --no-startup-id xinput disable "ELAN06FA:00 04F3:327E Touchpad"
+bindsym $mod+Ctrl+m exec --no-startup-id ~/.config/i3/scripts/toggle_mouse.sh
 
 # CapsLock
 exec_always --no-startup-id ~/.config/i3/scripts/capsLock.sh

@@ -77,7 +77,7 @@ end
 
 for r = 1, 10, 1 do
 	for c = 1, 10, 1 do
-		ls.add_snippets("markdown", { make_matrix(r, c) })
+		ls.add_snippets("tex", { make_matrix(r, c) })
 	end
 end
 
