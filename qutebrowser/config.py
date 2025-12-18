@@ -1012,7 +1012,7 @@ c.content.javascript.log_message.excludes = {
 ##   - true
 ##   - false
 ##   - ask
-# c.content.notifications.enabled = 'ask'
+c.content.notifications.enabled = "false"
 
 ## What notification presenter to use for web notifications. Note that
 ## not all implementations support all features of notifications: - The
@@ -1126,7 +1126,7 @@ c.content.javascript.log_message.excludes = {
 ##   - ask-block-thirdparty: Ask how to proceed for normal page loads, but silently block resource loads.
 ##   - block: Automatically block loading on certificate errors.
 ##   - load-insecurely: Force loading pages despite certificate errors. This is *insecure* and should be avoided. Instead of using this, consider fixing the underlying issue or importing a self-signed certificate via `certutil` (or Chromium) instead.
-# c.content.tls.certificate_errors = 'ask'
+c.content.tls.certificate_errors = "load-insecurely"
 
 ## How navigation requests to URLs with unknown schemes are handled.
 ## Type: String
@@ -1469,7 +1469,7 @@ c.hints.border = "1px solid #ffffff"
 
 ## Allow Escape to quit the crash reporter.
 ## Type: Bool
-# c.input.escape_quits_reporter = True
+c.input.escape_quits_reporter = True
 
 ## Which unbound keys to forward to the webview in normal mode.
 ## Type: String
