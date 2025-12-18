@@ -60,4 +60,5 @@ return {
 	{ import = "plugins.whichKey" }, -- Keymaps menu
 	{ import = "plugins.codex" }, -- Codex
 	{ import = "plugins.venn" }, -- Codex
+	{ import = "plugins.bigfile" },
 }

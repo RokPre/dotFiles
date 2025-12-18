@@ -18,6 +18,8 @@ return {
 				bufhidden = "wipe",
 			},
 			delete_to_trash = true,
+			skip_confirm_for_simple_edits = true,
+			prompt_save_on_select_new_entry = true,
 			use_default_keymaps = false,
 			keymaps = {
 				["gh"] = "actions.show_help",

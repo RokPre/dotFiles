@@ -56,6 +56,7 @@ return {
         local col = vim.api.nvim_win_get_cursor(0)[2]
         local indent = vim.fn.indent(".")
         if col > indent then
+          vim.cmd("normal! m'")
           vim.api.nvim_feedkeys("^", "n", false)
         else
           local ufo = require("ufo")
@@ -157,6 +158,7 @@ return {
         if vim.fn.foldclosed(lnum) ~= -1 then
           vim.cmd("silent! foldopen!")
         else
+          vim.cmd("normal! m'")
           vim.api.nvim_feedkeys("$", "n", false)
         end
       end

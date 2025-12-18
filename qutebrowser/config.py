@@ -2712,10 +2712,12 @@ c.url.searchengines = {
 # config.bind('y', 'prompt-accept yes', mode='yesno')
 
 # My config
+## Normal mode
 c.bindings.default = {}
 config.bind(":", "cmd-set-text :")
+
 config.bind("<Ctrl-e>", "cmd-set-text -s :open ")
-config.bind("<Ctrl-T>", "cmd-set-text -s :open -t ")
+config.bind("<Ctrl-t>", "cmd-set-text -s :open -t ")
 
 config.bind("<Ctrl-p>", "cmd-set-text -s :open -t g filetype:pdf ")
 
@@ -2787,18 +2789,27 @@ config.bind("<Shift-k>", "completion-item-focus prev", mode="command")
 config.bind("<Escape>", "mode-leave", mode="command")
 config.bind("<Return>", "command-accept", mode="command")
 
+config.bind("<Ctrl-e>", "cmd-set-text -s :open ", mode="command")
+config.bind("<Ctrl-t>", "cmd-set-text -s :open -t ", mode="command")
+config.bind("<Ctrl-w>", "tab-close", mode="command")
+
 # Prompt mode
 config.bind("<Escape>", "mode-leave", mode="prompt")
 config.bind("<Return>", "prompt-accept", mode="prompt")
 config.bind("<Tab>", "prompt-item-focus next", mode="prompt")
 config.bind("<Shift-Tab>", "prompt-item-focus prev", mode="prompt")
-config.bind("<Shift-j>", "completion-item-focus next", mode="command")
-config.bind("<Shift-k>", "completion-item-focus prev", mode="command")
+
+config.bind("<Shift-j>", "completion-item-focus next", mode="prompt")
+config.bind("<Shift-k>", "completion-item-focus prev", mode="prompt")
+config.bind("<Ctrl-w>", "tab-close", mode="prompt")
 
 # Insert mode
-# config.bind("<Ctrl-e>", "edit-text", mode="insert")
 config.bind("<Escape>", "mode-leave", mode="insert")
 config.bind("<Shift-Escape>", "fake-key <Escape>", mode="insert")
+
+config.bind("<Ctrl-e>", "cmd-set-text -s :open ", mode="insert")
+config.bind("<Ctrl-t>", "cmd-set-text -s :open -t ", mode="insert")
+config.bind("<Ctrl-w>", "tab-close", mode="insert")
 
 # Yes no mode (default)
 config.bind("<Alt-Shift-Y>", "prompt-yank --sel", mode="yesno")

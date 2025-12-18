@@ -1,0 +1,76 @@
+-- local group = vim.api.nvim_create_augroup("Jumplist", { clear = true })
+--
+-- -- Track last recorded cursor line
+-- local last_line = nil
+--
+-- vim.api.nvim_create_autocmd("CursorHold", {
+--   group = group,
+--   callback = function()
+--     local pos = vim.api.nvim_win_get_cursor(0)
+--     local line = pos[1]
+--
+--     vim.print("line: " .. line)
+--
+--     -- Only record a jump if cursor *moved* to another line
+--     if line ~= last_line then
+--       vim.print("saved jump")
+--       vim.cmd("normal! m'")
+--       last_line = line
+--     end
+--   end,
+-- })
+
+
+-- override <C-o> so it doesn't skip same-line jumps
+-- local function smart_jump_back()
+--   vim.print("=== smart_jump_back() called ===")
+--
+--   -- read jumplist + index
+--   local jumplist, idx = unpack(vim.fn.getjumplist())
+--   vim.print("Raw jumplist:", jumplist)
+--   vim.print("Current index:", idx)
+--
+--   -- current cursor pos
+--   local pos = vim.api.nvim_win_get_cursor(0)
+--   local curline = pos[1]
+--   vim.print("Current cursor line:", curline)
+--
+--   -- the index returned by getjumplist() is 1-based already in Lua
+--   local target = idx
+--   vim.print("Calculated target index:", target)
+--
+--   local entry = jumplist[target]
+--   if not entry then
+--     vim.print("No jump entry at target index — falling back to <C-o>")
+--     return vim.api.nvim_feedkeys(
+--       vim.api.nvim_replace_termcodes("<C-o>", true, false, true),
+--       "n",
+--       false
+--     )
+--   end
+--
+--   vim.print("Target entry:", entry)
+--   local target_line = entry.lnum
+--   vim.print("Target jump line:", target_line)
+--
+--   -- If jump would be skipped (same line), move off the line
+--   if target_line == curline then
+--     vim.print("Same-line jump would be skipped — adjusting cursor first")
+--
+--     local new_line = math.max(1, curline - 1)
+--     vim.print("Moving cursor temporarily to line:", new_line)
+--
+--     vim.api.nvim_win_set_cursor(0, { new_line, 0 })
+--   end
+--
+--   vim.print("Executing actual <C-o> jump now")
+--   vim.api.nvim_feedkeys(
+--     vim.api.nvim_replace_termcodes("<C-o>", true, false, true),
+--     "n",
+--     false
+--   )
+--
+--   vim.print("=== smart_jump_back() finished ===")
+-- end
+--
+-- vim.keymap.set("n", "<C-o>", smart_jump_back, { noremap = true })
