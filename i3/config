@@ -1,14 +1,19 @@
+# Set the super/windows key for the mod key.
 set $mod Mod4
+
 # exit i3
 bindsym $mod+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # reload the configuration file
 bindsym $mod+Ctrl+r restart
 
+# Automatically change the display layout based on current connected monitors.
 exec --no-startup-id autorandr --change
 
+# Set the font
 font pango:Cousine Nerd Font Mono 16
 
+# Launch a program
 bindsym Mod1+space exec --no-startup-id rofi -show drun
 bindsym $mod+space exec --no-startup-id rofi -show window
 
@@ -28,10 +33,10 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # move workspace to display
-# bindsym $mod+shift+l move workspace to output right
-# bindsym $mod+shift+j move workspace to output up
-# bindsym $mod+shift+k move workspace to output down
-# bindsym $mod+shift+h move workspace to output left
+bindsym $mod+Mod5+l move workspace to output right
+bindsym $mod+Mod5+j move workspace to output up
+bindsym $mod+Mod5+k move workspace to output down
+bindsym $mod+Mod5+h move workspace to output left
 
 # split in horizontal and vertical orientation
 bindsym $mod+b split v
@@ -85,6 +90,7 @@ bindsym $mod+Ctrl+j resize grow height 10 px or 10 ppt
 bindsym $mod+Ctrl+k resize shrink height 10 px or 10 ppt
 bindsym $mod+Ctrl+l resize grow width 10 px or 10 ppt
 
+# Lock the screen
 bindsym $mod+Delete exec i3lock -c 1a1b26
 
 # Borders
@@ -105,24 +111,24 @@ client.focused_inactive #ffffff #ffffff #ffffff #ffffff #7aa2f7
 # Neets to sleep so device is created and ready after reload.
 # Moved to /etc/X11/xorg.conf.d/10-libinput-touchpad.conf
 # exec_always --no-startup-id sh -c 'sleep 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
-bindsym $mod+Ctrl+m exec --no-startup-id ~/.config/i3/scripts/toggle_mouse.sh
+bindsym $mod+Ctrl+m exec --no-startup-id ~/.config/i3/scripts/toggleMouse.sh
 
 # CapsLock
 exec_always --no-startup-id ~/.config/i3/scripts/capsLock.sh
 exec_always --no-startup-id /usr/bin/numlockx on
 
 # Volumen control
-bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5%-
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5%+
-bindsym $mod+Down exec --no-startup-id amixer set Master 5%-
-bindsym $mod+Up   exec --no-startup-id amixer set Master 5%+
+bindsym XF86AudioMute exec --no-startup-id /usr/bin/amixer set Master toggle
+bindsym XF86AudioLowerVolume exec --no-startup-id /usr/bin/amixer set Master 5%-
+bindsym XF86AudioRaiseVolume exec --no-startup-id /usr/bin/amixer set Master 5%+
+bindsym $mod+Down exec --no-startup-id /usr/bin/amixer set Master 5%-
+bindsym $mod+Up   exec --no-startup-id /usr/bin/amixer set Master 5%+
 
 # Brightness control
-bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness.sh up
-bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness.sh down
-bindsym $mod+Right exec --no-startup-id ~/.config/i3/scripts/brightness.sh up
-bindsym $mod+Left exec --no-startup-id ~/.config/i3/scripts/brightness.sh down
+bindsym XF86MonBrightnessUp exec --no-startup-id /usr/bin/brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec --no-startup-id /usr/bin/brightnessctl set 5%-
+bindsym $mod+Right exec --no-startup-id /usr/bin/brightnessctl set +5%
+bindsym $mod+Left exec --no-startup-id /usr/bin/brightnessctl set 5%-
 
 # Screenshot tool
 bindsym Print exec --no-startup-id flameshot screen
@@ -142,10 +148,6 @@ exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 1 "
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 2 "e"
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 3 "q"
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pad pad" Button 4 "key Delete"
-
-# Automatically connect to bluetooth headphones
-# exec_always --no-startup-id bluetoothctl connect 50:5E:5C:03:EC:63
-# exec_always --no-startup-id bluetoothctl connect AC:97:38:B9:F6:B5
 
 # Open programs for specific workspace
 set $ws0 "0. All other"
