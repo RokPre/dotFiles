@@ -103,19 +103,13 @@ client.focused_inactive #ffffff #ffffff #ffffff #ffffff #7aa2f7
 
 # Scrolling direction / natural scrolling
 # Neets to sleep so device is created and ready after reload.
-exec_always --no-startup-id sh -c 'sleep 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
-exec_always --no-startup-id sh -c 'sleep 2 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
-exec_always --no-startup-id sh -c 'sleep 3 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
-exec_always --no-startup-id sh -c 'sleep 4 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
-exec_always --no-startup-id sh -c 'sleep 5 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
-exec --no-startup-id xdotool mousemove 0 0
-exec --no-startup-id xinput disable "ELAN06FA:00 04F3:327E Touchpad"
+# Moved to /etc/X11/xorg.conf.d/10-libinput-touchpad.conf
+# exec_always --no-startup-id sh -c 'sleep 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Natural Scrolling Enabled" 1 && xinput set-prop "ELAN06FA:00 04F3:327E Touchpad" "libinput Tapping Enabled" 1'
 bindsym $mod+Ctrl+m exec --no-startup-id ~/.config/i3/scripts/toggle_mouse.sh
 
 # CapsLock
 exec_always --no-startup-id ~/.config/i3/scripts/capsLock.sh
 exec_always --no-startup-id /usr/bin/numlockx on
-exec_always --no-startup-id sh -c 'xset -q | grep -q "Caps Lock:   on" && xdotool key Caps_Lock'
 
 # Volumen control
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle

@@ -17,3 +17,6 @@ slovar https://www.termania.net/
 termania https://www.termania.net/
 tailscale https://login.tailscale.com/admin/machines
 jellyfin https://193.77.150.218:8920/web/#/home
+sonarr http://localhost:8989/
+radarr http://localhost:7878/
+qbittorrent http://localhost:8080/

@@ -1012,7 +1012,7 @@ c.content.javascript.log_message.excludes = {
 ##   - true
 ##   - false
 ##   - ask
-c.content.notifications.enabled = "false"
+c.content.notifications.enabled = False
 
 ## What notification presenter to use for web notifications. Note that
 ## not all implementations support all features of notifications: - The
