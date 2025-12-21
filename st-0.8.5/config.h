@@ -463,6 +463,10 @@ static Key key[] = {
 	{ XK_F33,           XK_NO_MOD,      "\033[20;5~",    0,    0},
 	{ XK_F34,           XK_NO_MOD,      "\033[21;5~",    0,    0},
 	{ XK_F35,           XK_NO_MOD,      "\033[23;5~",    0,    0},
+	{ XK_H,           ShiftMask|Mod1Mask,      "\033H",    0,    0},
+	{ XK_J,           ShiftMask|Mod1Mask,      "\033J",    0,    0},
+	{ XK_K,           ShiftMask|Mod1Mask,      "\033K",    0,    0},
+	{ XK_L,           ShiftMask|Mod1Mask,      "\033L",    0,    0},
 };
 
 /*

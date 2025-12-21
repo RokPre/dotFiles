@@ -2810,6 +2810,7 @@ config.bind("<Shift-Escape>", "fake-key <Escape>", mode="insert")
 config.bind("<Ctrl-e>", "cmd-set-text -s :open ", mode="insert")
 config.bind("<Ctrl-t>", "cmd-set-text -s :open -t ", mode="insert")
 config.bind("<Ctrl-w>", "tab-close", mode="insert")
+config.bind("<Ctrl-r>", "reload", mode="insert")
 
 # Yes no mode (default)
 config.bind("<Alt-Shift-Y>", "prompt-yank --sel", mode="yesno")
