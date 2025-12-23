@@ -315,14 +315,12 @@ end, { noremap = true, silent = true })
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
 		vim.schedule(function()
-			if #vim.fn.argv() == 0 then
+			if #vim.fn.argv() == 0 and vim.bo.filetype ~= "lazy" then
 				-- Unlist buffers
 				local buffers = vim.api.nvim_list_bufs()
-				local filtered_buffers = {}
 
 				for _, buf in ipairs(buffers) do
 					if buf ~= M.home_buf and vim.api.nvim_get_option_value("buflisted", { buf = buf }) then
-						table.insert(filtered_buffers, buf)
 						vim.api.nvim_set_option_value("buflisted", false, { buf = buf })
 					end
 				end
