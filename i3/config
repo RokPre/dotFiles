@@ -33,10 +33,10 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # move workspace to display
-bindsym $mod+Mod5+l move workspace to output right
-bindsym $mod+Mod5+j move workspace to output up
-bindsym $mod+Mod5+k move workspace to output down
-bindsym $mod+Mod5+h move workspace to output left
+bindsym $mod+Mod1+l move workspace to output right
+bindsym $mod+Mod1+j move workspace to output up
+bindsym $mod+Mod1+k move workspace to output down
+bindsym $mod+Mod1+h move workspace to output left
 
 # split in horizontal and vertical orientation
 bindsym $mod+b split v
