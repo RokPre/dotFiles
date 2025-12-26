@@ -2788,10 +2788,11 @@ config.bind("<Shift-j>", "completion-item-focus next", mode="command")
 config.bind("<Shift-k>", "completion-item-focus prev", mode="command")
 config.bind("<Escape>", "mode-leave", mode="command")
 config.bind("<Return>", "command-accept", mode="command")
-
 config.bind("<Ctrl-e>", "cmd-set-text -s :open ", mode="command")
 config.bind("<Ctrl-t>", "cmd-set-text -s :open -t ", mode="command")
 config.bind("<Ctrl-w>", "tab-close", mode="command")
+config.bind("<Alt-Ctrl-h>", "back", mode="command")
+config.bind("<Alt-Ctrl-l>", "forward", mode="command")
 
 # Prompt mode
 config.bind("<Escape>", "mode-leave", mode="prompt")
@@ -2858,3 +2859,100 @@ config.bind("w", "move-to-next-word", mode="caret")
 config.bind("y", "yank selection", mode="caret")
 config.bind("{", "move-to-end-of-prev-block", mode="caret")
 config.bind("}", "move-to-end-of-next-block", mode="caret")
+
+# --- TokyoNight-like color scheme ---
+
+bg = "#1a1b26"
+bg_dark = "#16161e"
+bg_highlight = "#292e42"
+
+fg = "#c0caf5"
+fg_dark = "#a9b1d6"
+fg_gutter = "#3b4261"
+
+blue = "#7aa2f7"
+cyan = "#7dcfff"
+green = "#9ece6a"
+yellow = "#e0af68"
+orange = "#ff9e64"
+red = "#f7768e"
+magenta = "#bb9af7"
+purple = "#9d7cd8"
+comment = "#565f89"
+
+# Completion menu
+c.colors.completion.fg = fg
+c.colors.completion.odd.bg = bg
+c.colors.completion.even.bg = bg_dark
+c.colors.completion.category.fg = blue
+c.colors.completion.category.bg = bg_dark
+c.colors.completion.category.border.top = bg_highlight
+c.colors.completion.category.border.bottom = bg_highlight
+c.colors.completion.item.selected.fg = fg
+c.colors.completion.item.selected.bg = bg_highlight
+c.colors.completion.item.selected.border.top = bg_highlight
+c.colors.completion.item.selected.border.bottom = bg_highlight
+c.colors.completion.match.fg = cyan
+
+# Status bar
+c.colors.statusbar.normal.fg = fg
+c.colors.statusbar.normal.bg = bg
+
+c.colors.statusbar.insert.fg = bg
+c.colors.statusbar.insert.bg = green
+
+c.colors.statusbar.command.fg = fg
+c.colors.statusbar.command.bg = bg_dark
+
+c.colors.statusbar.caret.fg = bg
+c.colors.statusbar.caret.bg = magenta
+
+c.colors.statusbar.passthrough.fg = bg
+c.colors.statusbar.passthrough.bg = orange
+
+c.colors.statusbar.progress.bg = blue
+
+c.colors.statusbar.url.fg = fg_dark
+c.colors.statusbar.url.hover.fg = cyan
+c.colors.statusbar.url.success.http.fg = green
+c.colors.statusbar.url.success.https.fg = green
+c.colors.statusbar.url.warn.fg = yellow
+c.colors.statusbar.url.error.fg = red
+
+# Tabs
+c.colors.tabs.bar.bg = bg_dark
+c.colors.tabs.odd.fg = fg_dark
+c.colors.tabs.odd.bg = bg
+c.colors.tabs.even.fg = fg_dark
+c.colors.tabs.even.bg = bg
+c.colors.tabs.selected.odd.fg = fg
+c.colors.tabs.selected.odd.bg = bg_highlight
+c.colors.tabs.selected.even.fg = fg
+c.colors.tabs.selected.even.bg = bg_highlight
+
+# Downloads
+c.colors.downloads.bar.bg = bg
+c.colors.downloads.start.fg = bg
+c.colors.downloads.start.bg = blue
+c.colors.downloads.stop.fg = bg
+c.colors.downloads.stop.bg = green
+c.colors.downloads.error.fg = bg
+c.colors.downloads.error.bg = red
+
+# Messages
+c.colors.messages.error.fg = bg
+c.colors.messages.error.bg = red
+c.colors.messages.warning.fg = bg
+c.colors.messages.warning.bg = yellow
+c.colors.messages.info.fg = fg
+c.colors.messages.info.bg = bg
+
+# Hints
+c.colors.hints.fg = bg
+c.colors.hints.bg = yellow
+c.colors.hints.match.fg = red
+
+# Key hints
+c.colors.keyhint.fg = fg
+c.colors.keyhint.bg = bg
+c.colors.keyhint.suffix.fg = magenta

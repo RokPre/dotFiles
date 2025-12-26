@@ -27,6 +27,7 @@ Note taking: [obsidian](https://obsidian.md)
 - [ ] TODO: Make your own jump list that supports jumping on the same line. (normal jump list does not allow this)
 - [ ] TODO: Fix oil not allowing to move files between folders. Need to save before going to new folder breaks move.
 - [ ] TODO: Rewrite UFO folding. Looks like a mess. Should be relatively simple.
+- [ ] TODO: Nvim: Fix yank around everything, sometimes goes to antoher buffer.
 
 
 
