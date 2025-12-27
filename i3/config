@@ -94,18 +94,26 @@ bindsym $mod+Ctrl+l resize grow width 10 px or 10 ppt
 bindsym $mod+Delete exec i3lock -c 1a1b26
 
 # Borders
-default_border pixel 2
-for_window [class="^.*"] border pixel 2
+default_border pixel 4
 hide_edge_borders both
 
+# Gaps
+gaps inner 10
+gaps horizontal -10
+gaps vertical -10
+smart_gaps on
+
 # Focused window (active)
-client.focused #ffffff #ffffff #ffffff #ffffff #7aa2f7
+client.focused #ffffff #ffffff #ffffff #ffffff #9ece6a
 
 #Unfocused window (inactive)
-client.unfocused #ffffff #ffffff #ffffff #ffffff #7aa2f7
+client.unfocused #ffffff #ffffff #ffffff #ffffff #565f89
 
 # Focused inactive window (another window in the same workspace)
 client.focused_inactive #ffffff #ffffff #ffffff #ffffff #7aa2f7
+
+# Picom (gray out unfocused)
+exec --no-startup-id ~/.config/i3/scripts/picom.sh
 
 # Scrolling direction / natural scrolling
 # Neets to sleep so device is created and ready after reload.
