@@ -2925,9 +2925,9 @@ c.colors.tabs.odd.fg = fg_dark
 c.colors.tabs.odd.bg = bg
 c.colors.tabs.even.fg = fg_dark
 c.colors.tabs.even.bg = bg
-c.colors.tabs.selected.odd.fg = fg
+c.colors.tabs.selected.odd.fg = orange
 c.colors.tabs.selected.odd.bg = bg_highlight
-c.colors.tabs.selected.even.fg = fg
+c.colors.tabs.selected.even.fg = orange
 c.colors.tabs.selected.even.bg = bg_highlight
 
 # Downloads
