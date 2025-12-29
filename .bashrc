@@ -165,13 +165,6 @@ if [[ $- == *i* ]]; then
   fi
 fi
 
-# Zoxide - smarter cd
-if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init bash)"
-  alias cd="z"
-else
-  echo "Zoxide not found"
-fi
 
 # Atuin - better bash history
 if [[ $- == *i* ]]; then

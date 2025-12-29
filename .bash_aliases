@@ -23,7 +23,7 @@ alias mainserver-suspend="ssh mainservercontroller@100.64.70.128 'mainserver-sus
 alias mainserver-wake="ssh mainservercontroller@100.64.70.128 'mainserver-wake'"
 alias mainserver-ssh="ssh roksmainserver@193.77.150.218 -L 8080:localhost:8080 -L 7878:localhost:7878 -L 9696:localhost:9696 -L 8686:localhost:8686 -L 8989:localhost:8989"
 
-# Terminal
+# Tmux
 if command -v tmux >/dev/null 2>&1; then
   alias c="clear && tmux clear-history"
 else
@@ -34,6 +34,14 @@ if [[ -f ~/sync/dotFiles/.bashrc ]]; then
   alias sb='source ~/sync/dotFiles/.bashrc'
 else
   alias sb='source ~/.bashrc'
+fi
+
+# Zoxide - smarter cd
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init bash)"
+  alias cd="z"
+else
+  echo "Zoxide not found"
 fi
 
 # Trash-put - rm to trash
