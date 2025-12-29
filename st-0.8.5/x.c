@@ -1884,10 +1884,16 @@ kmap(KeySym k, uint state)
 		if (mappedkeys[i] == k)
 			break;
 	}
-	if (i == LEN(mappedkeys)) {
-		if ((k & 0xFFFF) < 0xFD00)
-			return NULL;
-	}
+
+  /* This block of code interferes with Ctrl+shift+<Key> combination. */
+  /* The terminal does not have a special string for the Ctrl+shift+<Key> combination. */
+  /* So if i want to make it work, i have to modify the code in config.h key[] array. */
+  /* I have XK_H and XK_L with the Ctrl Shift masks. And the output ħ and ł. */
+  /* This way i can use this keys in tmux. */
+	/* if (i == LEN(mappedkeys)) { */
+	/* 	if ((k & 0xFFFF) < 0xFD00) */
+	/* 		return NULL; */
+	/* } */
 
 	for (kp = key; kp < key + LEN(key); kp++) {
 		if (kp->k != k)
