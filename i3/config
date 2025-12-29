@@ -104,13 +104,14 @@ gaps vertical -10
 smart_gaps on
 
 # Focused window (active)
-client.focused #ffffff #ffffff #ffffff #ffffff #9ece6a
+# client.focused #9ece6a #9ece6a #9ece6a #9ece6a #9ece6a
+client.focused #ff9e64 #ff9e64 #ff9e64 #ff9e64 #ff9e64
 
 #Unfocused window (inactive)
-client.unfocused #ffffff #ffffff #ffffff #ffffff #565f89
+client.unfocused #565f89 #565f89 #565f89 #565f89 #565f89
 
 # Focused inactive window (another window in the same workspace)
-client.focused_inactive #ffffff #ffffff #ffffff #ffffff #7aa2f7
+client.focused_inactive #7aa2f7 #7aa2f7 #7aa2f7 #7aa2f7 #7aa2f7
 
 # Picom (gray out unfocused)
 exec --no-startup-id ~/.config/i3/scripts/picom.sh
@@ -145,7 +146,8 @@ bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui -r | xclip -selection cli
 
 # Set background
 # exec_always --no-startup-id sh -c 'feh --bg-fill $HOME/sync/rice/wallpapers/getherCrop.jpg'
-exec_always --no-startup-id sh -c 'feh --bg-fill "$(find ~/sync/rice/wallpapers/chromebookWallpapers -type f | shuf -n1)"'
+# exec_always --no-startup-id sh -c 'feh --bg-fill "$(find ~/sync/rice/wallpapers/chromebookWallpapers -type f | shuf -n1)"'
+exec_always --no-startup-id feh --bg-fill ~/sync/rice/wallpapers/tokyoNightCowboyBipBop.png
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1

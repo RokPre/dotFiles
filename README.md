@@ -2,8 +2,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [My dot files](#My dot files0)
-- [TODO](#TODO0)
+- [My dot files](#my-dot-files)
+- [Colorsheme](#colorsheme)
+  - [Tab bar](#tab-bar)
+- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -15,6 +17,34 @@ Tiling window management: [i3](https://i3wm.org)
 Text editor: [nvim](https://github.com/neovim/neovim)
 File explorer: [oil.nvim](https://github.com/stevearc/oil.nvim)
 Note taking: [obsidian](https://obsidian.md)
+
+
+# Colorsheme
+bg = "#1a1b26"
+bg_dark = "#16161e"
+bg_highlight = "#292e42"
+
+fg = "#c0caf5"
+fg_dark = "#a9b1d6"
+fg_gutter = "#3b4261"
+
+blue = "#7aa2f7"
+cyan = "#7dcfff"
+green = "#9ece6a"
+yellow = "#e0af68"
+orange = "#ff9e64"
+red = "#f7768e"
+magenta = "#bb9af7"
+purple = "#9d7cd8"
+comment = "#565f89"
+
+## Tab bar
+Tab bar bg: bg_dark
+Tab bar fg: fg_dark
+Unfocused tab fg: fg_dark
+Unfocused tab bg: bg_dark
+Focused tab fg: orange
+Focused tab bg: bg
 
 # TODO
 - [ ] TODO: Image to latex

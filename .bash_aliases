@@ -54,8 +54,10 @@ fi
 # Eza - better ls
 if command -v eza &> /dev/null; then
   alias ls='eza'
+elif command -v lsd &> /dev/null; then
+  alias ls='lsd'
 else
-  echo "Eza not found"
+  echo "Eza or lsd not found"
 fi
 
 # Xclip - coppy to clipboard

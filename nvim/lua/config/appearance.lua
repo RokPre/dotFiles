@@ -8,12 +8,7 @@ local function adjust_oklch(hex, opts)
 		return tonumber(h:sub(1, 2), 16) / 255, tonumber(h:sub(3, 4), 16) / 255, tonumber(h:sub(5, 6), 16) / 255
 	end
 	local function rgb_to_hex(r, g, b)
-		return string.format(
-			"#%02x%02x%02x",
-			math.floor(math.max(0, math.min(1, r)) * 255 + 0.5),
-			math.floor(math.max(0, math.min(1, g)) * 255 + 0.5),
-			math.floor(math.max(0, math.min(1, b)) * 255 + 0.5)
-		)
+		return string.format("#%02x%02x%02x", math.floor(math.max(0, math.min(1, r)) * 255 + 0.5), math.floor(math.max(0, math.min(1, g)) * 255 + 0.5), math.floor(math.max(0, math.min(1, b)) * 255 + 0.5))
 	end
 
 	local r, g, b = hex_to_rgb(hex)
@@ -65,41 +60,43 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 				bg = adjust_oklch(normal_dark.bg, { dL = -0.08 }),
 			}
 
-			local highlight = "#ff966c"
-			local highlight_dim = "#a66f59"
+			local bg = "#1a1b26"
+			local bg_dark = "#16161e"
+
+			local fg = "#c0caf5"
+			local fg_dark = "#a9b1d6"
+
+			local orange = "#ff9e64"
+			local orange_dim = "#a66f59"
 			local selection = "#283457"
 
+			local red = "#ff0000"
+			local yellow = "#ffff00"
+
 			-- Small changes
-			vim.api.nvim_set_hl(0, "LineNr", { fg = highlight })
-			vim.api.nvim_set_hl(0, "CursorLineNr", { fg = highlight })
-			vim.api.nvim_set_hl(0, "LineNrAbove", { fg = highlight_dim })
-			vim.api.nvim_set_hl(0, "LineNrBelow", { fg = highlight_dim })
+			-- Use :hi command to view the color goups.
+			vim.api.nvim_set_hl(0, "LineNr", { fg = orange })
+			vim.api.nvim_set_hl(0, "CursorLineNr", { fg = oragne })
+			vim.api.nvim_set_hl(0, "LineNrAbove", { fg = orange_dim })
+			vim.api.nvim_set_hl(0, "LineNrBelow", { fg = orange_dim })
 
 			vim.api.nvim_set_hl(0, "UfoFoldedBg", { bg = selection })
 			vim.api.nvim_set_hl(0, "Folded", { bg = selection })
 
 			local ok, bufferline = pcall(require, "bufferline")
 			if ok then
-				vim.api.nvim_set_hl(0, "BufferLineFill", { bg = normal_dark_dark.bg })
-				vim.api.nvim_set_hl(0, "BufferLineBackground", { fg = normal.fg, bg = normal_dark.bg })
-				vim.api.nvim_set_hl(0, "BufferLineBufferSelected", { fg = highlight, bg = normal.bg })
+				vim.api.nvim_set_hl(0, "BufferLineFill", { bg = bg_dark })
+				vim.api.nvim_set_hl(0, "BufferLineBackground", { fg = fg_dark, bg = bg_dark })
+				vim.api.nvim_set_hl(0, "BufferLineBufferSelected", { fg = orange, bg = bg })
+				vim.api.nvim_set_hl(0, "BufferLineBufferVisible", { fg = fg, bg = bg })
 
-				vim.api.nvim_set_hl(0, "BufferLineDevIconDefault", { fg = normal.fg, bg = normal_dark.bg })
-				vim.api.nvim_set_hl(0, "BufferLineDevIconLua", { fg = normal.fg, bg = normal_dark.bg })
-				vim.api.nvim_set_hl(0, "BufferLineDevIconMd", { fg = normal.fg, bg = normal_dark.bg })
-				vim.api.nvim_set_hl(0, "BufferLineDevIconLuaSelected", { fg = highlight, bg = normal.bg })
+				vim.api.nvim_set_hl(0, "BufferLineSeparator", { fg = bg_dark, bg = bg_dark })
+				vim.api.nvim_set_hl(0, "BufferLineSeparatorSelected", { fg = bg_dark, bg = bg })
+				vim.api.nvim_set_hl(0, "BufferLineSeparatorVisible", { fg = bg_dark, bg = bg })
 
-				vim.api.nvim_set_hl(0, "BufferLineSeparator", { fg = normal_dark_dark.bg, bg = normal_dark.bg })
-				vim.api.nvim_set_hl(0, "BufferLineSeparatorSelected", { fg = normal_dark_dark.bg, bg = normal.bg })
-
-				vim.api.nvim_set_hl(0, "BufferLineDuplicate", { fg = normal.fg, bg = normal.bg })
-				vim.api.nvim_set_hl(0, "BufferLineDuplicateSelected", { fg = normal.fg, bg = normal.bg })
-				vim.api.nvim_set_hl(0, "BufferLineDuplicateVisible", { fg = normal.fg, bg = normal.bg })
-
-				vim.api.nvim_set_hl(0, "BufferLineTab", { fg = normal.fg, bg = normal_dark.bg })
-				vim.api.nvim_set_hl(0, "BufferLineTabSelected", { fg = highlight, bg = normal.bg })
-				vim.api.nvim_set_hl(0, "BufferLineTabSeparator", { fg = normal_dark_dark.bg, bg = normal_dark.bg })
-				vim.api.nvim_set_hl(0, "BufferLineTabSeparatorSelected", { fg = normal_dark_dark.bg, bg = normal.bg })
+				vim.api.nvim_set_hl(0, "BufferLineDuplicate", { fg = fg, bg = bg })
+				vim.api.nvim_set_hl(0, "BufferLineDuplicateSelected", { fg = orange, bg = bg })
+				vim.api.nvim_set_hl(0, "BufferLineDuplicateVisible", { fg = fg, bg = bg })
 			end
 		end)
 	end,
