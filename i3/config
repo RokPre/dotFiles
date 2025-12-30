@@ -114,7 +114,7 @@ client.unfocused #565f89 #565f89 #565f89 #565f89 #565f89
 client.focused_inactive #7aa2f7 #7aa2f7 #7aa2f7 #7aa2f7 #7aa2f7
 
 # Picom (gray out unfocused)
-exec --no-startup-id ~/.config/i3/scripts/picom.sh
+# exec --no-startup-id ~/.config/i3/scripts/picom.sh
 
 # Scrolling direction / natural scrolling
 # Neets to sleep so device is created and ready after reload.

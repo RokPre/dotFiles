@@ -3,7 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [My dot files](#my-dot-files)
-- [Colorsheme](#colorsheme)
+- [Colorsheme tokyo-night](#colorsheme-tokyo-night)
+  - [My custom colors](#my-custom-colors)
   - [Tab bar](#tab-bar)
 - [TODO](#todo)
 
