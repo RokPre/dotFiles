@@ -98,7 +98,7 @@ local function paste_markdown_link(embed)
 					link = "!" .. link
 				end
 
-			vim.api.nvim_put({ link }, "c", true, true)
+				vim.api.nvim_put({ link }, "c", true, true)
 			end
 		end)
 	else
@@ -118,7 +118,7 @@ local function paste_markdown_link(embed)
 			link = "!" .. link
 		end
 
-			vim.api.nvim_put({ link }, "c", true, true)
+		vim.api.nvim_put({ link }, "c", true, true)
 	end
 end
 
@@ -156,11 +156,11 @@ local function paste_relative_path()
 	else
 		vim.notify("No common parent folder found")
 		-- Fallback to absolute path
-    vim.api.nvim_put({ abs_file_path_to_paste }, "c", true, true)
+		vim.api.nvim_put({ abs_file_path_to_paste }, "c", true, true)
 		return
 	end
 
-  vim.api.nvim_put({ link }, "c", true, true)
+	vim.api.nvim_put({ link }, "c", true, true)
 end
 
 local builtin = require("telescope.builtin")
@@ -215,8 +215,6 @@ end, { desc = "Paste markdown link" })
 keymap("n", "<leader>lM", function()
 	paste_markdown_link(true)
 end, { desc = "Embed markdown link" })
--- keymap("n", "<leader>lo", paste_obsidian_link, { desc = "Paste obsidian link" })
--- keymap("n", "<leader>lo", embed_obsidian_link, { desc = "Embed obsidian link" })
 keymap("n", "<leader>lr", paste_relative_path, { desc = "Paste relative path" })
 keymap("n", "<leader>ly", copy_file_path, { desc = "Copy file path" })
-keymap("n", "<leader>lf", find_file_and_link, { desc = "Find file" })
+keymap("n", "<leader>ll", find_file_and_link, { desc = "Find file" })
