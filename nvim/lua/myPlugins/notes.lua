@@ -1,5 +1,4 @@
 -- TODO: Paste image
--- TODO: Templates
 -- TODO: Embed excalidraw
 -- TODO: Obsidian daily note
 -- TODO: Tags
@@ -7,11 +6,12 @@
 -- TODO: Floating diary
 -- TODO: Add a function that convert obsidian style links to my new specaial type of links.
 -- TODO: Auto format tables. Tab should move to the next column.
+-- TODO: Templates
 
 M = {}
 M.opts = {
 	-- notes_folder = vim.fn.expand("~/sync/knowledgeVault/"),
-	notes_folder = vim.fn.expand("~/offline/notesTest"),
+	notes_folder = vim.fn.expand("~/sync/knowledgeVault"),
 }
 
 -- Check if the laod the required modules
@@ -255,10 +255,10 @@ local function rename_file()
 		return
 	end
 
-	-- if vim.fn.filereadable(new_file_name .. ".md") then
-	-- 	vim.notify("File already exists", vim.log.levels.ERROR)
-	-- 	return
-	-- end
+	if vim.fn.filereadable(new_file_name .. ".md") then
+		vim.notify("File already exists", vim.log.levels.ERROR)
+		return
+	end
 
 	if new_file_name:find("[%z\r\n]") or new_file_name:find("[%z\r\n]") then
 		vim.notify("File name contains invalid characters", vim.log.levels.ERROR)
@@ -461,6 +461,11 @@ local function move_note()
 end
 
 local function show_backlinks()
+	if vim.bo.filetype ~= "markdown" then
+		vim.notify("Not a markdown file", vim.log.levels.WARN)
+		return
+	end
+
 	local backlinks = find_true_backlinks()
 
 	if backlinks == nil or vim.tbl_isempty(backlinks) then
@@ -504,6 +509,80 @@ end
 if utils_ok and actions_ok and action_state_ok then
 	vim.keymap.set("n", "<leader>nl", link_notes, { desc = "Link note" })
 end
+
+-- CMP
+local source = {}
+
+---Return whether this source is available in the current context or not (optional).
+---@return boolean
+function source:is_available()
+	return true
+end
+
+---Return the debug name of this source (optional).
+---@return string
+function source:get_debug_name()
+	return "notes"
+end
+
+---Invoke completion (required).
+---@param params cmp.SourceCompletionApiParams
+---@param callback fun(response: lsp.CompletionResponse|nil)
+function source:complete(params, callback)
+	local folder = vim.fn.expand(M.opts.notes_folder)
+	local files = vim.fs.find(function()
+		return true
+	end, {
+		path = folder,
+		type = "file",
+		limit = math.huge,
+	})
+
+	local items = {}
+
+	local entry = {}
+	for _, filePath in ipairs(files) do
+		local fileName = vim.fn.fnamemodify(filePath, ":t")
+		entry = { label = fileName, insertText = filePath }
+		table.insert(items, entry)
+	end
+	-- callback({ { label = "January" } })
+	callback(items)
+end
+
+---Resolve completion item (optional). This is called right before the completion is about to be displayed.
+---Useful for setting the text shown in the documentation window (`completion_item.documentation`).
+---@param completion_item lsp.CompletionItem
+---@param callback fun(completion_item: lsp.CompletionItem|nil)
+function source:resolve(completion_item, callback)
+	-- Callculate the relative path and create the link
+
+	local current_file_path = vim.api.nvim_buf_get_name(0)
+	local relative_file_path = utils.calculate_relative_path(current_file_path, completion_item.insertText, { root_folder = M.opts.notes_folder })
+
+	local link = "[" .. completion_item.label .. "](" .. relative_file_path .. ")"
+
+	callback({ label = relative_file_path, insertText = link })
+end
+
+---Executed after the item was selected.
+---@param completion_item lsp.CompletionItem
+---@param callback fun(completion_item: lsp.CompletionItem|nil)
+function source:execute(completion_item, callback)
+	-- TODO: Update the internal database of links.
+	callback(completion_item)
+end
+
+---Register your source to nvim-cmp.
+require("cmp").register_source("month", source)
+
+local cmp = require("cmp")
+
+cmp.setup({
+	sources = {
+		{ name = "month" },
+	},
+})
 
 vim.keymap.set("n", "<leader>nr", rename_file, { desc = "Rename file" })
 vim.keymap.set("n", "<leader>nm", move_note, { desc = "Move file" })
