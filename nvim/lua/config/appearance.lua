@@ -67,7 +67,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 			local fg_dark = "#a9b1d6"
 
 			local orange = "#ff9e64"
-			local orange_dim = "#a66f59"
+			local orange_dim = "#d8a78b"
 			local selection = "#283457"
 
 			local red = "#ff0000"
@@ -88,7 +88,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 				vim.api.nvim_set_hl(0, "BufferLineFill", { bg = bg_dark })
 				vim.api.nvim_set_hl(0, "BufferLineBackground", { fg = fg_dark, bg = bg_dark })
 				vim.api.nvim_set_hl(0, "BufferLineBufferSelected", { fg = orange, bg = bg })
-				vim.api.nvim_set_hl(0, "BufferLineBufferVisible", { fg = fg, bg = bg })
+				vim.api.nvim_set_hl(0, "BufferLineBufferVisible", { fg = orange_dim, bg = bg })
 
 				vim.api.nvim_set_hl(0, "BufferLineSeparator", { fg = bg_dark, bg = bg_dark })
 				vim.api.nvim_set_hl(0, "BufferLineSeparatorSelected", { fg = bg_dark, bg = bg })
