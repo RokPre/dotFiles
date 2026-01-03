@@ -12,6 +12,9 @@ M = {}
 M.opts = {
 	-- notes_folder = vim.fn.expand("~/sync/knowledgeVault/"),
 	notes_folder = vim.fn.expand("~/sync/knowledgeVault"),
+	notes_folder_name = "Notes",
+	cmp_ignore_patterns = { ".trash", ".git", ".obsidian", ".pandoc", ".smart-env" },
+	search_ignore_patterns = { ".trash", ".git", ".obsidian", ".pandoc", ".smart-env" },
 }
 
 -- Check if the laod the required modules
@@ -20,6 +23,15 @@ local actions_ok, actions = pcall(require, "telescope.actions")
 local action_state_ok, action_state = pcall(require, "telescope.actions.state")
 local utils_ok, utils = pcall(require, "myPlugins.utils")
 local scan_ok, scan = pcall(require, "plenary.scandir")
+
+local function contains_any(str, tbl)
+	for _, value in ipairs(tbl) do
+		if str:find(value) then
+			return true
+		end
+	end
+	return false
+end
 
 local function get_properties(note_path)
 	-- note_path has to be relative path relative to notes_folder.
@@ -317,13 +329,6 @@ end
 local function move_note()
 	-- Move current file
 	-- Chnage all the link to this file.
-
-	-- TODO: Find all the occurances of backlinks.
-	-- TODO: Show all the possible folders where the note can be moved. Let the user choose.
-	-- TODO: Recompute the backlinks.
-	-- TODO: Updat the backlinks in other notes
-	-- TODO: Update the forward links in the moved file.
-
 	local backlinks = find_true_backlinks()
 	local forwardlinks = find_forward_links()
 
@@ -333,8 +338,14 @@ local function move_note()
 	local current_file_exension = vim.fn.fnamemodify(current_file_path, ":e")
 
 	local function tel_move_note(prompt_bufnr, map)
-		local function move_note_2()
+		local function tel_move_note_2()
 			local entry = action_state.get_selected_entry()
+
+			if entry == nil then
+				vim.notify("No folder selected", vim.log.levels.ERROR)
+				return
+			end
+
 			local path = entry.path or entry.filename
 
 			-- Close the telescope window
@@ -442,22 +453,46 @@ local function move_note()
 			end
 		end
 
-		map("i", "<CR>", move_note_2)
-		map("n", "<CR>", move_note_2)
+		map("i", "<CR>", tel_move_note_2)
+		map("n", "<CR>", tel_move_note_2)
 		return true
 	end
 
+	local find_command = { "find", M.opts.notes_folder, "-type", "d" }
+
+	for _, pattern in ipairs(M.opts.search_ignore_patterns) do
+		table.insert(find_command, "-not")
+		table.insert(find_command, "-name")
+		table.insert(find_command, pattern)
+	end
+
+	-- vim.print(find_command)
+
+	-- Chose a folder
 	builtin.find_files({
 		prompt_title = "Find Folder",
-		find_command = {
-			"sh",
-			"-c",
-			'printf "%s\n" "$1"; fd . "$1" --type d -H',
-			"_", -- $0 (ignored placeholder)
-			M.opts.notes_folder, -- $1 → your root, e.g. ~/offline/notesTest
-		},
+		find_command = find_command,
 		attach_mappings = tel_move_note,
+		path_display = function(_, path)
+			if path == M.opts.notes_folder then
+				return M.opts.notes_folder_name
+			else
+				return path:gsub(vim.pesc(M.opts.notes_folder) .. "/", "")
+			end
+		end,
 	})
+
+	-- builtin.find_files({
+	-- 	prompt_title = "Find Folder",
+	-- 	find_command = {
+	-- 		"sh",
+	-- 		"-c",
+	-- 		'printf "%s\n" "$1"; fd . "$1" --type d -H',
+	-- 		"_", -- $0 (ignored placeholder)
+	-- 		M.opts.notes_folder, -- $1 → your root, e.g. ~/offline/notesTest
+	-- 	},
+	-- 	attach_mappings = tel_move_note,
+	-- })
 end
 
 local function show_backlinks()
@@ -491,23 +526,76 @@ local function show_backlinks()
 	end)
 end
 
-vim.keymap.set("n", "<leader>n", "<Nop>", { desc = "Notes" })
+local function new_note()
+	-- Create a new note with a specific name in a specific folder.
 
-if builtin_ok then
-	-- Searching for notes
-	vim.keymap.set("n", "<leader>ns", function()
-		builtin.find_files({ cwd = M.opts.notes_folder })
-	end, { desc = "Search notes" })
+	local function new_note_2(prompt_bufnr, map)
+		local function select_folder()
+			local entry = action_state.get_selected_entry()
+			if entry == nil then
+				vim.notify("No folder selected", vim.log.levels.ERROR)
+				return
+			end
 
-	-- Live grep through notes
-	vim.keymap.set("n", "<leader>ng", function()
-		builtin.live_grep({ cwd = M.opts.notes_folder })
-	end, { desc = "Grep notes" })
-end
+			local path = entry.path or entry.filename
 
--- Check if the required modules were loaded successfully
-if utils_ok and actions_ok and action_state_ok then
-	vim.keymap.set("n", "<leader>nl", link_notes, { desc = "Link note" })
+			actions.close(prompt_bufnr)
+
+			local filename = vim.fn.input("Enter the name of the new note: ")
+
+			if filename == nil or filename == "" then
+				vim.notify("No file name provided", vim.log.levels.ERROR)
+				return
+			end
+
+			if filename:find("[%z\r\n]") or filename:find("[%z\r\n]") then
+				vim.notify("File name contains invalid characters", vim.log.levels.ERROR)
+				return
+			end
+
+			if not vim.endswith(filename, ".md") then
+				filename = filename .. ".md"
+			end
+
+			if not vim.endswith(path, "/") then
+				path = path .. "/"
+			end
+
+			vim.print(tostring(path))
+			vim.print(tostring(filename))
+
+			vim.cmd("e " .. path .. filename)
+		end
+		map("i", "<CR>", select_folder)
+		map("n", "<CR>", select_folder)
+		return true
+	end
+
+	-- local find_command = { "sh", "-c", 'printf "%s\n" "$1"; fd . "$1" --type d -H', "_", M.opts.notes_folder }
+	-- local find_command = { "fd", ".", M.opts.notes_folder, "--type", "d", "-H", "-a" }
+	local find_command = { "find", M.opts.notes_folder, "-type", "d" }
+
+	for _, pattern in ipairs(M.opts.search_ignore_patterns) do
+		table.insert(find_command, "-not")
+		table.insert(find_command, "-name")
+		table.insert(find_command, pattern)
+	end
+
+	-- vim.print(find_command)
+
+	-- Chose a folder
+	builtin.find_files({
+		prompt_title = "Find Folder",
+		find_command = find_command,
+		attach_mappings = new_note_2,
+		path_display = function(_, path)
+			if path == M.opts.notes_folder then
+				return M.opts.notes_folder_name
+			else
+				return path:gsub(vim.pesc(M.opts.notes_folder) .. "/", "")
+			end
+		end,
+	})
 end
 
 -- CMP
@@ -530,8 +618,8 @@ end
 ---@param callback fun(response: lsp.CompletionResponse|nil)
 function source:complete(params, callback)
 	local folder = vim.fn.expand(M.opts.notes_folder)
-	local files = vim.fs.find(function()
-		return true
+	local files = vim.fs.find(function(name, full_path)
+		return vim.endswith(name, ".md") and not contains_any(full_path, M.opts.cmp_ignore_patterns)
 	end, {
 		path = folder,
 		type = "file",
@@ -560,9 +648,13 @@ function source:resolve(completion_item, callback)
 	local current_file_path = vim.api.nvim_buf_get_name(0)
 	local relative_file_path = utils.calculate_relative_path(current_file_path, completion_item.insertText, { root_folder = M.opts.notes_folder })
 
-	local link = "[" .. completion_item.label .. "](" .. relative_file_path .. ")"
-
-	callback({ label = relative_file_path, insertText = link })
+	if relative_file_path == nil then
+		local link = "[" .. completion_item.label .. "](" .. completion_item.insertText .. ")"
+		callback({ label = completion_item.label, insertText = link })
+	else
+		local link = "[" .. completion_item.label .. "](" .. relative_file_path .. ")"
+		callback({ label = relative_file_path, insertText = link })
+	end
 end
 
 ---Executed after the item was selected.
@@ -574,21 +666,40 @@ function source:execute(completion_item, callback)
 end
 
 ---Register your source to nvim-cmp.
-require("cmp").register_source("month", source)
-
 local cmp = require("cmp")
+cmp.register_source("notes", source)
 
-cmp.setup({
-	sources = {
-		{ name = "month" },
-	},
-})
+-- Ativate the source
+local sources_to_activate = {}
+for _, s in ipairs(cmp.get_registered_sources()) do
+	table.insert(sources_to_activate, { name = s.name })
+end
 
+cmp.setup({ sources = cmp.config.sources(sources_to_activate) })
+
+-- Keymaps
+vim.keymap.set("n", "<leader>n", "<Nop>", { desc = "Notes" })
+vim.keymap.set("n", "<leader>nn", new_note, { desc = "New note" })
 vim.keymap.set("n", "<leader>nr", rename_file, { desc = "Rename file" })
 vim.keymap.set("n", "<leader>nm", move_note, { desc = "Move file" })
-
 vim.keymap.set("n", "<leader>nf", find_forward_links, { desc = "Find forward links" })
 
 if scan_ok and utils_ok then
 	vim.keymap.set("n", "<leader>nb", show_backlinks, { desc = "Find true backlinks" })
+end
+
+if utils_ok and actions_ok and action_state_ok then
+	vim.keymap.set("n", "<leader>nl", link_notes, { desc = "Link note" })
+end
+
+if builtin_ok then
+	-- Searching for notes
+	vim.keymap.set("n", "<leader>ns", function()
+		builtin.find_files({ cwd = M.opts.notes_folder })
+	end, { desc = "Search notes" })
+
+	-- Live grep through notes
+	vim.keymap.set("n", "<leader>ng", function()
+		builtin.live_grep({ cwd = M.opts.notes_folder })
+	end, { desc = "Grep notes" })
 end
