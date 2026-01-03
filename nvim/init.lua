@@ -10,6 +10,7 @@ require("myPlugins.quickToggle") -- ✅
 require("myPlugins.reopenBuffer") -- ✅
 require("myPlugins.sessionManager") -- ✅
 require("myPlugins.todoList") -- ❌
+require("myPlugins.precognitionTreesitter") -- ✅
 
 -- Config
 require("config.appearance")
