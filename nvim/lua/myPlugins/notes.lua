@@ -679,6 +679,73 @@ local function delete_note()
 	end)
 end
 
+local function floating_diary()
+	local total_height = vim.o.lines
+	local total_width = vim.o.columns
+
+	local height = math.floor(total_height * 0.8)
+	local ideal_width = 80
+	local width = total_width >= ideal_width and ideal_width or math.floor(total_width * 0.8)
+
+	local row = math.floor((total_height - height) / 2)
+	local col = math.floor((total_width - width) / 2)
+
+	-- create buffer and window
+	local diary_buf = vim.api.nvim_create_buf(false, true)
+	local diary_win = vim.api.nvim_open_win(diary_buf, true, {
+		relative = "editor",
+		width = width,
+		height = height,
+		row = row,
+		col = col,
+		style = "minimal",
+		border = "rounded",
+	})
+
+	-- buffer options
+	vim.bo[diary_buf].bufhidden = "wipe"
+	vim.bo[diary_buf].buftype = ""
+	vim.bo[diary_buf].swapfile = false
+
+	-- diary path
+	local date = os.date("%Y - %j")
+	local path = vim.fn.expand("~/sync/knowledgeVault/" .. date .. ".md")
+
+	-- load file if it exists
+	if vim.fn.filereadable(path) == 1 then
+		vim.api.nvim_buf_set_lines(diary_buf, 0, -1, false, vim.fn.readfile(path))
+	end
+
+	-- header
+	local header = os.date("%Y - %j")
+	vim.api.nvim_buf_set_lines(diary_buf, 0, 0, false, { "# " .. header, "" })
+
+	-- set filetype after content is loaded
+	vim.bo[diary_buf].filetype = "markdown"
+
+	-- write back on save
+	vim.api.nvim_create_autocmd("BufWriteCmd", {
+		buffer = diary_buf,
+		callback = function()
+			vim.fn.writefile(vim.api.nvim_buf_get_lines(diary_buf, 0, -1, false), path)
+			vim.bo[diary_buf].modified = false
+		end,
+	})
+
+	-- keymaps
+	vim.keymap.set("n", "q", function()
+		if vim.api.nvim_win_is_valid(diary_win) then
+			vim.api.nvim_win_close(diary_win, true)
+		end
+	end, { buffer = diary_buf, nowait = true, silent = true })
+
+	vim.keymap.set("n", "<Esc>", function()
+		if vim.api.nvim_win_is_valid(diary_win) then
+			vim.api.nvim_win_close(diary_win, true)
+		end
+	end, { buffer = diary_buf, nowait = true, silent = true })
+end
+
 -- CMP
 local source = {}
 
@@ -765,6 +832,7 @@ vim.keymap.set("n", "<leader>nr", rename_file, { desc = "Rename file" })
 vim.keymap.set("n", "<leader>nm", move_note, { desc = "Move file" })
 vim.keymap.set("n", "<leader>nf", find_forward_links, { desc = "Find forward links" })
 vim.keymap.set("n", "<leader>nd", delete_note, { desc = "Delete note" })
+vim.keymap.set("n", "<C-d>", floating_diary, { desc = "Floating diary" })
 
 if scan_ok and utils_ok then
 	vim.keymap.set("n", "<leader>nb", show_backlinks, { desc = "Find true backlinks" })
