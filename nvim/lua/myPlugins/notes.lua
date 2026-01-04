@@ -15,6 +15,10 @@ M.opts = {
 	notes_folder_name = "Notes",
 	cmp_ignore_patterns = { ".trash", ".git", ".obsidian", ".pandoc", ".smart-env" },
 	search_ignore_patterns = { ".trash", ".git", ".obsidian", ".pandoc", ".smart-env" },
+	trash = {
+		confirm_delete = true,
+		trash_folder = vim.fn.expand("~/sync/knowledgeVault/.trash"),
+	},
 }
 
 -- Check if the laod the required modules
@@ -598,6 +602,83 @@ local function new_note()
 	})
 end
 
+local function delete_note()
+	local backlinks = find_true_backlinks()
+	local file_path = vim.api.nvim_buf_get_name(0)
+
+	-- If no backlinks are found, there should be no problem deleting the file.
+	if not backlinks or vim.tbl_isempty(backlinks) then
+		-- Do not ask for confirmation if the user has set the trash.confirm_delete option to false.
+		if not M.opts.trash.confirm_delete then
+			vim.fn.delete(file_path, "rf")
+			return
+		end
+
+		-- If the user has conformation enabled.
+		vim.ui.select({ { action = "delete" }, { action = "cancel" } }, {
+			prompt = "Delete this file?",
+			format_item = function(item)
+				return item.action == "delete" and "Delete" or "Cancel"
+			end,
+		}, function(item)
+			if not item then
+				return
+			end
+			if item.action == "delete" then
+				vim.fn.delete(file_path, "rf")
+			else
+				vim.notify("Cancelled", vim.log.levels.INFO)
+			end
+		end)
+		return
+	end
+
+	-- If backlinks are found.
+	local items = {
+		{ action = "delete" },
+		{ action = "cancel" },
+	}
+
+	-- Add backlinks to the list of items to display.
+	for path in pairs(backlinks) do
+		table.insert(items, {
+			action = "open",
+			path = path,
+		})
+	end
+
+	vim.ui.select(items, {
+		prompt = "Backlinks exist. Choose an action.",
+		format_item = function(item)
+			if item.action == "delete" then
+				return "Delete anyway"
+			end
+			if item.action == "cancel" then
+				return "Cancel"
+			end
+			return vim.fn.fnamemodify(item.path, ":t")
+		end,
+	}, function(item)
+		if not item then
+			return
+		end
+
+		if item.action == "delete" then
+			vim.fn.delete(file_path, "rf")
+			return
+		end
+
+		if item.action == "cancel" then
+			vim.notify("Cancelled", vim.log.levels.INFO)
+			return
+		end
+
+		if item.action == "open" then
+			vim.cmd.edit(item.path)
+		end
+	end)
+end
+
 -- CMP
 local source = {}
 
@@ -683,6 +764,7 @@ vim.keymap.set("n", "<leader>nn", new_note, { desc = "New note" })
 vim.keymap.set("n", "<leader>nr", rename_file, { desc = "Rename file" })
 vim.keymap.set("n", "<leader>nm", move_note, { desc = "Move file" })
 vim.keymap.set("n", "<leader>nf", find_forward_links, { desc = "Find forward links" })
+vim.keymap.set("n", "<leader>nd", delete_note, { desc = "Delete note" })
 
 if scan_ok and utils_ok then
 	vim.keymap.set("n", "<leader>nb", show_backlinks, { desc = "Find true backlinks" })
