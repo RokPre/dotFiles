@@ -5,7 +5,7 @@ return {
 			-- Map of filetype to formatters
 			formatters_by_ft = {
 				lua = { "stylua" },
-				python = { "black" },
+				python = { "ruff", "black" },
 				xml = { "xmlformatter" },
 				markdown = { "doctoc" },
 				["_"] = { "trim_whitespace" },

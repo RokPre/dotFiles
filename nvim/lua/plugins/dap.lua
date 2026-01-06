@@ -1,16 +1,13 @@
 return {
-  "mfussenegger/nvim-dap",
-  recommended = true,
-  desc = "Debugging support. Requires language specific adapters to be configured. (see lang extras)",
+	"mfussenegger/nvim-dap",
+	recommended = true,
+	desc = "Debugging support. Requires language specific adapters to be configured. (see lang extras)",
 
-  dependencies = {
-    "rcarriga/nvim-dap-ui",
-    {
-      "theHamsta/nvim-dap-virtual-text",
-      opts = {},
-    },
-    { "jay-babu/mason-nvim-dap.nvim", }
-  },
+	dependencies = {
+		{ "rcarriga/nvim-dap-ui", dependencies = { "nvim-neotest/nvim-nio" } },
+		"jay-babu/mason-nvim-dap.nvim",
+		"mfussenegger/nvim-dap-python",
+	},
 
   -- stylua: ignore
   keys = {
@@ -33,47 +30,33 @@ return {
     { "<leader>dw", function() require("dap.ui.widgets").hover() end,                                     desc = "Widgets" },
   },
 
-  config = function()
-    -- load mason-nvim-dap here, after all adapters have been setup
-    require("mason-nvim-dap")
+	config = function()
+		local dap = require("dap")
+		local dapui = require("dapui")
+		local dap_mason = require("mason-nvim-dap")
+		local dap_python = require("dap-python")
 
-    local dap = require("dap")
+		-- Ensure debuugers are installed
+		dap_mason.setup({
+			ensure_installed = { "python", "delve" },
+		})
 
-    -- *** Add this adapter definition ***
-    dap.adapters.python = {
-      type = "executable",
-      command = "/usr/bin/python3.8", -- adjust to your actual Python, e.g. venv
-      args = { "-m", "debugpy.adapter" },
-    }
+		-- For python had to run this command: "/usr/bin/python3 -m pip install --user debugpy"
+		-- Setup python debugger
+		dap_python.setup("python3")
 
-    -- Your existing configuration
-    dap.configurations.python = {
-      {
-        type = "python", -- links to dap.adapters.python
-        request = "launch",
-        name = "Launch file",
-        program = "${file}",
-        pythonPath = function()
-          return "/usr/bin/python3.8"
-        end,
-      },
-    }
-    vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
+		-- Dap ui enale and open on dap init
+		dapui.setup()
+		dap.listeners.after.event_initialized["dapui_config"] = function()
+			dapui.open()
+		end
 
+		dap.listeners.before.event_terminated["dapui_config"] = function()
+			dapui.close()
+		end
 
-    -- for name, sign in pairs(LazyVim.config.icons.dap) do
-    --   sign = type(sign) == "table" and sign or { sign }
-    --   vim.fn.sign_define(
-    --     "Dap" .. name,
-    --     { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
-    --   )
-    -- end
-
-    -- setup dap config by VsCode launch.json file
-    local vscode = require("dap.ext.vscode")
-    local json = require("plenary.json")
-    vscode.json_decode = function(str)
-      return vim.json.decode(json.json_strip_comments(str))
-    end
-  end,
+		dap.listeners.before.event_exited["dapui_config"] = function()
+			dapui.close()
+		end
+	end,
 }

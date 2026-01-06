@@ -1,6 +1,6 @@
 return {
 	-- { import = "plugins.biscuits" }, -- Better debugging
-	-- { import = "plugins.dap" },        -- Better debugging
+	{ import = "plugins.dap" }, -- Better debugging
 	-- { import = "plugins.dapMason" },
 	-- { import = "plugins.dapui" },
 	-- { import = "plugins.entireFile" }, -- For selecting entire file

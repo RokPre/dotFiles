@@ -19,6 +19,7 @@ M.opts = {
 		confirm_delete = true,
 		trash_folder = vim.fn.expand("~/sync/knowledgeVault/.trash"),
 	},
+	diary_folder = "Dnevnik", -- relative to notes_folder or absolute path if beggning with / or ~/
 }
 
 -- Check if the laod the required modules
