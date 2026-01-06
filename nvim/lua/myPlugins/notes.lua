@@ -679,7 +679,16 @@ local function delete_note()
 	end)
 end
 
+local diary_buf = nil
+local diary_win = nil
+
 local function floating_diary()
+	if diary_buf ~= nil and diary_win ~= nil and vim.api.nvim_buf_is_valid(diary_buf) and vim.api.nvim_win_is_valid(diary_win) then
+		vim.notify("Diary already open", vim.log.levels.INFO)
+		vim.api.nvim_set_current_win(diary_win)
+		return
+	end
+
 	local total_height = vim.o.lines
 	local total_width = vim.o.columns
 
@@ -690,9 +699,15 @@ local function floating_diary()
 	local row = math.floor((total_height - height) / 2)
 	local col = math.floor((total_width - width) / 2)
 
+	-- diary path
+	local date = os.date("%Y - %j")
+	local path = vim.fn.expand("~/sync/knowledgeVault/Dnevnik/" .. date .. ".md")
+
+	-- Load diary file into buffer
+	diary_buf = vim.fn.bufadd(path)
+
 	-- create buffer and window
-	local diary_buf = vim.api.nvim_create_buf(false, true)
-	local diary_win = vim.api.nvim_open_win(diary_buf, true, {
+	diary_win = vim.api.nvim_open_win(diary_buf, true, {
 		relative = "editor",
 		width = width,
 		height = height,
@@ -701,49 +716,33 @@ local function floating_diary()
 		style = "minimal",
 		border = "rounded",
 	})
+	vim.api.nvim_set_option_value("filetype", "markdown", { buf = diary_buf })
 
-	-- buffer options
-	vim.bo[diary_buf].bufhidden = "wipe"
-	vim.bo[diary_buf].buftype = ""
-	vim.bo[diary_buf].swapfile = false
-
-	-- diary path
-	local date = os.date("%Y - %j")
-	local path = vim.fn.expand("~/sync/knowledgeVault/" .. date .. ".md")
-
-	-- load file if it exists
-	if vim.fn.filereadable(path) == 1 then
-		vim.api.nvim_buf_set_lines(diary_buf, 0, -1, false, vim.fn.readfile(path))
-	end
-
-	-- header
-	local header = os.date("%Y - %j")
-	vim.api.nvim_buf_set_lines(diary_buf, 0, 0, false, { "# " .. header, "" })
-
-	-- set filetype after content is loaded
-	vim.bo[diary_buf].filetype = "markdown"
-
-	-- write back on save
-	vim.api.nvim_create_autocmd("BufWriteCmd", {
-		buffer = diary_buf,
-		callback = function()
-			vim.fn.writefile(vim.api.nvim_buf_get_lines(diary_buf, 0, -1, false), path)
-			vim.bo[diary_buf].modified = false
-		end,
-	})
-
-	-- keymaps
+	-- keymaps to close the diary window
 	vim.keymap.set("n", "q", function()
 		if vim.api.nvim_win_is_valid(diary_win) then
 			vim.api.nvim_win_close(diary_win, true)
 		end
-	end, { buffer = diary_buf, nowait = true, silent = true })
+	end, {
+		buffer = diary_buf,
+		nowait = true,
+		silent = true,
+	})
 
-	vim.keymap.set("n", "<Esc>", function()
-		if vim.api.nvim_win_is_valid(diary_win) then
-			vim.api.nvim_win_close(diary_win, true)
-		end
-	end, { buffer = diary_buf, nowait = true, silent = true })
+	vim.api.nvim_create_autocmd("BufEnter", {
+		callback = function()
+			if diary_win ~= nil and vim.api.nvim_win_is_valid(diary_win) then
+				local current_buf = vim.api.nvim_win_get_buf(diary_win)
+				if current_buf and diary_buf and vim.api.nvim_buf_is_valid(diary_buf) and vim.api.nvim_buf_is_valid(current_buf) and current_buf ~= diary_buf then
+					vim.api.nvim_win_set_buf(diary_win, diary_buf)
+					vim.api.nvim_set_option_value("filetype", "markdown", { buf = diary_buf })
+					vim.api.nvim_win_set_config(diary_win, {
+						style = "minimal",
+					})
+				end
+			end
+		end,
+	})
 end
 
 -- CMP
