@@ -31,6 +31,8 @@ fg = "#c0caf5"
 fg_dark = "#a9b1d6"
 fg_gutter = "#3b4261"
 
+selection = "#283457"
+
 blue = "#7aa2f7"
 cyan = "#7dcfff"
 green = "#9ece6a"
@@ -39,7 +41,7 @@ orange = "#ff9e64"
 red = "#f7768e"
 magenta = "#bb9af7"
 purple = "#9d7cd8"
-comment = "#565f89"
+comment = "#656e94"
 
 ## My custom colors
 bg_lighter = "#20212c"

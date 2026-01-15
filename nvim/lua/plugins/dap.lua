@@ -45,6 +45,19 @@ return {
 		-- Setup python debugger
 		dap_python.setup("python3")
 
+		dap.configurations.python = {
+			{
+				type = "python",
+				request = "launch",
+				name = "Launch file",
+				program = "${file}",
+				console = "integratedTerminal",
+				justMyCode = false,
+				stopOnEntry = false,
+				exceptionBreakpoints = { "raised", "uncaught" },
+			},
+		}
+
 		-- Dap ui enale and open on dap init
 		dapui.setup()
 		dap.listeners.after.event_initialized["dapui_config"] = function()

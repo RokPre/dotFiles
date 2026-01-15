@@ -62,9 +62,13 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 			local bg = "#1a1b26"
 			local bg_dark = "#16161e"
+			local bg_light = "#20212c"
 
 			local fg = "#c0caf5"
 			local fg_dark = "#a9b1d6"
+			local fg_gutter = "#3b4261"
+
+			local comment = "#656e94"
 
 			local orange = "#ff9e64"
 			local orange_dim = "#d8a78b"
@@ -72,6 +76,11 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 			local red = "#ff0000"
 			local yellow = "#ffff00"
+
+			local green = "#9ece6a"
+			local green_dull = "#9db583"
+			local purple_dull = "#a493c1"
+			local magenta_dull = "#c1b1e0"
 
 			-- Small changes
 			-- Use :hi command to view the color goups.
@@ -98,6 +107,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 				vim.api.nvim_set_hl(0, "BufferLineDuplicateSelected", { fg = orange, bg = bg })
 				vim.api.nvim_set_hl(0, "BufferLineDuplicateVisible", { fg = fg, bg = bg })
 			end
+			vim.api.nvim_set_hl(0, "Comment", { fg = comment })
 		end)
 	end,
 })
