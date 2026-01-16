@@ -1,0 +1,18 @@
+set adjust-open "width"
+
+set selection-clipboard clipboard
+
+set highlight-color "rgba(40, 52, 87, 0.5)"
+set highlight-active-color "rgba(255, 158, 100, 0.5)"
+
+set recolor-keephue true
+
+map <C-f> focus_inputbar "/"
+map , search forward
+map ; search backward
+map <Esc> abort
+
+set recolor true
+set recolor-lightcolor "#1a1b26"
+set recolor-darkcolor  "#c0caf5"
+

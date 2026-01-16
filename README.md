@@ -14,10 +14,14 @@
 What programs do i use:
 
 Tiling window management: [i3](https://i3wm.org)
-
 Text editor: [nvim](https://github.com/neovim/neovim)
+Note taking: [nvim](https://github.com/neovim/neovim)
 File explorer: [oil.nvim](https://github.com/stevearc/oil.nvim)
-Note taking: [obsidian](https://obsidian.md)
+Browser: [qutebrowser](https://www.qutebrowser.org/)
+Terminal: [st](https://st.suckless.org/)
+Notifications: [dunst](https://dunst-project.org/)
+pdf_reader: [zathura](https://pwmt.org/projects/zathura/)
+Program menu: [rofi](https://github.com/davatorium/rofi)
 
 
 # Colorsheme tokyo-night
@@ -89,17 +93,14 @@ Focused tab fg: orange
 Focused tab bg: bg
 
 # TODO
-- [ ] TODO: Image to latex
+- [ ] TODO: Image to latex (nvim/lua/myPlugins/notes.lua)
 - [ ] TODO: Add folders to linking.lua
-- [ ] TODO: Add precognition plugin and inside it add treesiter objects
 - [ ] TODO: Add spell checker for english and slovene
-- [ ] TODO: Remove obsidian plugin and make your own alternativs (nvim/lua/myPlugins/myObsidian.lua)
+- [ ] TODO: Remove obsidian plugin and make your own alternativs (nvim/lua/myPlugins/notes.lua)
 - [ ] TODO: Rewrite linking.lua
 - [ ] TODO: community.lua
 - [ ] TODO: Make your own jump list that supports jumping on the same line. (normal jump list does not allow this)
-- [ ] TODO: Fix oil not allowing to move files between folders. Need to save before going to new folder breaks move.
 - [ ] TODO: Rewrite UFO folding. Looks like a mess. Should be relatively simple.
-- [ ] TODO: Nvim: Fix yank around everything, sometimes goes to antoher buffer.
 
 
 
