@@ -144,7 +144,12 @@ keymap("n", "<leader>md", "<Cmd>messages clear<CR>", { silent = true, noremap = 
 keymap("n", "<leader>mc", messages_close, { silent = true, noremap = true, desc = "Close messages" })
 keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>", { silent = true, noremap = true, desc = "Yank messages" })
 
-keymap("n", "yae", "ggVGy<C-o>", { silent = true, noremap = true, desc = "Yank entire file" })
+local function yank_entire_file()
+  local cursor_line = vim.api.nvim_win_get_cursor(0)
+  vim.cmd("normal! ggVGy")
+  vim.api.nvim_win_set_cursor(0, cursor_line)
+end
+keymap("n", "yae", yank_entire_file, { silent = true, noremap = true, desc = "Yank entire file" })
 keymap("n", "dae", 'ggVG"0d', { silent = true, noremap = true, desc = "Delete entire file" })
 keymap("n", "vae", "ggVG", { silent = true, noremap = true, desc = "Select entire file" })
 
