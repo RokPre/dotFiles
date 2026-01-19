@@ -19,7 +19,7 @@ patch < ../st-patches/st-hidecursor-0.8.3.diff
 patch < ../st-patches/st-kitty-graphics-20240922-a0274bc.diff
 # patch < ../st-patches/st-keyboard_select-20200617-9ba7ecf.diff
 ```
+# Potential future additions
 st-boxdraw_v2-0.8.5.diff
 st-keyboard_select-20200617-9ba7ecf.diff
-st-kitty-graphics-20240922-a0274bc.diff
 st-meta-vim-full-20210425-43a395a.diff
