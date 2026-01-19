@@ -103,6 +103,11 @@ typedef struct {
 	Draw draw;
 	Visual *vis;
 	XSetWindowAttributes attrs;
+	/* Here, we use the term *pointer* to differentiate the cursor
+	 * one sees when hovering the mouse over the terminal from, e.g.,
+	 * a green rectangle where text would be entered. */
+	Cursor vpointer, bpointer; /* visible and hidden pointers */
+	int pointerisvisible;
 	int scr;
 	int isfixed; /* is fixed geometry? */
 	int l, t; /* left and top offset */
@@ -703,6 +708,13 @@ brelease(XEvent *e)
 void
 bmotion(XEvent *e)
 {
+	if (!xw.pointerisvisible) {
+		XDefineCursor(xw.dpy, xw.win, xw.vpointer);
+		xw.pointerisvisible = 1;
+		if (!IS_SET(MODE_MOUSEMANY))
+			xsetpointermotion(0);
+	}
+
 	if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forcemousemod)) {
 		mousereport(e);
 		return;
@@ -1212,10 +1224,10 @@ void
 xinit(int cols, int rows)
 {
 	XGCValues gcvalues;
-	Cursor cursor;
 	Window parent;
 	pid_t thispid = getpid();
 	XColor xmousefg, xmousebg;
+	Pixmap blankpm;
 
 	if (!(xw.dpy = XOpenDisplay(NULL)))
 		die("can't open display\n");
@@ -1282,8 +1294,9 @@ xinit(int cols, int rows)
 	}
 
 	/* white cursor, black outline */
-	cursor = XCreateFontCursor(xw.dpy, mouseshape);
-	XDefineCursor(xw.dpy, xw.win, cursor);
+	xw.pointerisvisible = 1;
+	xw.vpointer = XCreateFontCursor(xw.dpy, mouseshape);
+	XDefineCursor(xw.dpy, xw.win, xw.vpointer);
 
 	if (XParseColor(xw.dpy, xw.cmap, colorname[mousefg], &xmousefg) == 0) {
 		xmousefg.red   = 0xffff;
@@ -1297,7 +1310,10 @@ xinit(int cols, int rows)
 		xmousebg.blue  = 0x0000;
 	}
 
-	XRecolorCursor(xw.dpy, cursor, &xmousefg, &xmousebg);
+	XRecolorCursor(xw.dpy, xw.vpointer, &xmousefg, &xmousebg);
+	blankpm = XCreateBitmapFromData(xw.dpy, xw.win, &(char){0}, 1, 1);
+	xw.bpointer = XCreatePixmapCursor(xw.dpy, blankpm, blankpm,
+					  &xmousefg, &xmousebg, 0, 0);
 
 	xw.xembed = XInternAtom(xw.dpy, "_XEMBED", False);
 	xw.wmdeletewin = XInternAtom(xw.dpy, "WM_DELETE_WINDOW", False);
@@ -1373,8 +1389,8 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 		if (glyphidx) {
 			specs[numspecs].font = font->match;
 			specs[numspecs].glyph = glyphidx;
-			specs[numspecs].x = (short)xp;
-			specs[numspecs].y = (short)yp;
+			specs[numspecs].x = (short)xp + cxoffset;
+			specs[numspecs].y = (short)yp + cyoffset;
 			xp += runewidth;
 			numspecs++;
 			continue;
@@ -1497,10 +1513,6 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 		bg = &dc.col[base.bg];
 	}
 
-	/* Change basic system colors [0-7] to bright system colors [8-15] */
-	if ((base.mode & ATTR_BOLD_FAINT) == ATTR_BOLD && BETWEEN(base.fg, 0, 7))
-		fg = &dc.col[base.fg + 8];
-
 	if (IS_SET(MODE_REVERSE)) {
 		if (fg == &dc.col[defaultfg]) {
 			fg = &dc.col[defaultbg];
@@ -1605,6 +1617,7 @@ void
 xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 {
 	Color drawcol;
+	XRenderColor colbg;
 
 	/* remove the old cursor */
 	if (selected(ox, oy))
@@ -1634,10 +1647,24 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 			g.fg = defaultfg;
 			g.bg = defaultrcs;
 		} else {
+			/** this is the main part of the dynamic cursor color patch */
+			g.bg = g.fg;
 			g.fg = defaultbg;
-			g.bg = defaultcs;
 		}
-		drawcol = dc.col[g.bg];
+
+		/**
+		 * and this is the second part of the dynamic cursor color patch.
+		 * it handles the `drawcol` variable
+		*/
+		if (IS_TRUECOL(g.bg)) {
+			colbg.alpha = 0xffff;
+			colbg.red = TRUERED(g.bg);
+			colbg.green = TRUEGREEN(g.bg);
+			colbg.blue = TRUEBLUE(g.bg);
+			XftColorAllocValue(xw.dpy, xw.vis, xw.cmap, &colbg, &drawcol);
+		} else {
+			drawcol = dc.col[g.bg];
+		}
 	}
 
 	/* draw the new one */
@@ -1727,6 +1754,8 @@ xsettitle(char *p)
 int
 xstartdraw(void)
 {
+	if (IS_SET(MODE_VISIBLE))
+		XCopyArea(xw.dpy, xw.win, xw.buf, dc.gc, 0, 0, win.w, win.h, 0, 0);
 	return IS_SET(MODE_VISIBLE);
 }
 
@@ -1806,6 +1835,8 @@ unmap(XEvent *ev)
 void
 xsetpointermotion(int set)
 {
+	if (!set && !xw.pointerisvisible)
+		return;
 	MODBIT(xw.attrs.event_mask, set, PointerMotionMask);
 	XChangeWindowAttributes(xw.dpy, xw.win, CWEventMask, &xw.attrs);
 }
@@ -1888,10 +1919,16 @@ kmap(KeySym k, uint state)
 		if (mappedkeys[i] == k)
 			break;
 	}
-	if (i == LEN(mappedkeys)) {
-		if ((k & 0xFFFF) < 0xFD00)
-			return NULL;
-	}
+
+  /* This block of code interferes with Ctrl+shift+<Key> combination. */
+  /* The terminal does not have a special string for the Ctrl+shift+<Key> combination. */
+  /* So if i want to make it work, i have to modify the code in config.h key[] array. */
+  /* I have XK_H and XK_L with the Ctrl Shift masks. And the output ħ and ł. */
+  /* This way i can use this keys in tmux. */
+	/* if (i == LEN(mappedkeys)) { */
+	/* 	if ((k & 0xFFFF) < 0xFD00) */
+	/* 		return NULL; */
+	/* } */
 
 	for (kp = key; kp < key + LEN(key); kp++) {
 		if (kp->k != k)
@@ -1924,6 +1961,12 @@ kpress(XEvent *ev)
 	Rune c;
 	Status status;
 	Shortcut *bp;
+
+	if (xw.pointerisvisible) {
+		XDefineCursor(xw.dpy, xw.win, xw.bpointer);
+		xsetpointermotion(1);
+		xw.pointerisvisible = 0;
+	}
 
 	if (IS_SET(MODE_KBDLOCK))
 		return;

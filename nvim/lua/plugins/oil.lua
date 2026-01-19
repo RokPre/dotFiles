@@ -55,6 +55,7 @@ return {
 					callback = function()
 						local connections = {
 							{ name = "turtlebot3", uri = "ubuntu@192.168.9.111" },
+							{ name = "pcdc", uri = "rok@100.99.106.70" },
 							-- add more connections here if you want
 						}
 						vim.ui.select(connections, {

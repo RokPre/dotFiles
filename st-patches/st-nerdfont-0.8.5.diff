@@ -1,0 +1,18 @@
+--- config.def.h	2026-01-16 19:37:42.848399221 +0100
++++ config.def.h	2026-01-16 19:41:49.263413221 +0100
+@@ -5,11 +5,12 @@
+  *
+  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
+  */
+-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
++static char *font = "Cousine Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:autohint=true";
+ /* Spare fonts */
+ static char *font2[] = {
+-/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */
+-/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */
++  "Cousine Nerd Font Mono:h16:antialias=true:autohint=true",
++  "Symbola:pixelsize=16:antialias=true:autohint=true",
++  "Noto Sans:pixelsize=16:antialias=true:autohint=true",
+ };
+
+ static int borderpx = 2;

@@ -27,5 +27,6 @@ return {
 	{ "gmr458/vscode_modern_theme.nvim" },
 	{ "Mofiqul/vscode.nvim" },
 	{ "serhez/teide.nvim" },
-  { "oskarnurm/koda.nvim" }
+	{ "oskarnurm/koda.nvim" },
+	{ "bluz71/vim-moonfly-colors" },
 }

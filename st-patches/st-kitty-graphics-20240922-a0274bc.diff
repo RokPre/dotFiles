@@ -44,23 +44,23 @@ index 15db421..e79b89e 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -4,7 +4,7 @@
- 
+
  include config.mk
- 
+
 -SRC = st.c x.c
 +SRC = st.c x.c rowcolumn_diacritics_helpers.c graphics.c
  OBJ = $(SRC:.c=.o)
- 
+
  all: st
 @@ -16,7 +16,7 @@ config.h:
  	$(CC) $(STCFLAGS) -c $<
- 
+
  st.o: config.h st.h win.h
 -x.o: arg.h config.h st.h win.h
 +x.o: arg.h config.h st.h win.h graphics.h
- 
+
  $(OBJ): config.h config.mk
- 
+
 diff --git a/config.def.h b/config.def.h
 index 2cd740a..4aadbbc 100644
 --- a/config.def.h
@@ -68,7 +68,7 @@ index 2cd740a..4aadbbc 100644
 @@ -8,6 +8,13 @@
  static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
  static int borderpx = 2;
- 
+
 +/* How to align the content in the window when the size of the terminal
 + * doesn't perfectly match the size of the window. The values are percentages.
 + * 50 means center, 0 means flush left/top, 100 means flush right/bottom.
@@ -81,18 +81,18 @@ index 2cd740a..4aadbbc 100644
   * 1: program passed with -e
 @@ -23,7 +30,8 @@ char *scroll = NULL;
  char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
- 
+
  /* identification sequence returned in DA and DECID */
 -char *vtiden = "\033[?6c";
 +/* By default, use the same one as kitty. */
 +char *vtiden = "\033[?62c";
- 
+
  /* Kerning / character bounding-box multipliers */
  static float cwscale = 1.0;
 @@ -163,6 +171,28 @@ static unsigned int mousebg = 0;
   */
  static unsigned int defaultattr = 11;
- 
+
 +/*
 + * Graphics configuration
 + */
@@ -121,7 +121,7 @@ index 2cd740a..4aadbbc 100644
 @@ -170,12 +200,18 @@ static unsigned int defaultattr = 11;
   */
  static uint forcemousemod = ShiftMask;
- 
+
 +/* Internal keyboard shortcuts. */
 +#define MODKEY Mod1Mask
 +#define TERMMOD (ControlMask|ShiftMask)
@@ -140,7 +140,7 @@ index 2cd740a..4aadbbc 100644
 @@ -183,10 +219,6 @@ static MouseShortcut mshortcuts[] = {
  	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
  };
- 
+
 -/* Internal keyboard shortcuts. */
 -#define MODKEY Mod1Mask
 -#define TERMMOD (ControlMask|ShiftMask)
@@ -157,14 +157,14 @@ index 2cd740a..4aadbbc 100644
 +	{ TERMMOD,              XK_F7,          unloadimages,   {.i =  0} },
 +	{ TERMMOD,              XK_F8,          toggleimages,   {.i =  0} },
  };
- 
+
  /*
 diff --git a/config.mk b/config.mk
 index fdc29a7..cb2875c 100644
 --- a/config.mk
 +++ b/config.mk
 @@ -14,9 +14,12 @@ PKG_CONFIG = pkg-config
- 
+
  # includes and libs
  INCS = -I$(X11INC) \
 +       `$(PKG_CONFIG) --cflags imlib2` \
@@ -176,7 +176,7 @@ index fdc29a7..cb2875c 100644
 +       `$(PKG_CONFIG) --libs zlib` \
         `$(PKG_CONFIG) --libs fontconfig` \
         `$(PKG_CONFIG) --libs freetype2`
- 
+
 diff --git a/graphics.c b/graphics.c
 new file mode 100644
 index 0000000..64e6fe0
@@ -6046,17 +6046,17 @@ index 57c6e96..f1c5299 100644
 --- a/st.c
 +++ b/st.c
 @@ -19,6 +19,7 @@
- 
+
  #include "st.h"
  #include "win.h"
 +#include "graphics.h"
- 
+
  #if   defined(__linux)
   #include <pty.h>
 @@ -36,6 +37,10 @@
  #define STR_BUF_SIZ   ESC_BUF_SIZ
  #define STR_ARG_SIZ   ESC_ARG_SIZ
- 
+
 +/* PUA character used as an image placeholder */
 +#define IMAGE_PLACEHOLDER_CHAR 0x10EEEE
 +#define IMAGE_PLACEHOLDER_CHAR_OLD 0xEEEE
@@ -6076,15 +6076,15 @@ index 57c6e96..f1c5299 100644
 @@ -213,7 +220,6 @@ static Rune utf8decodebyte(char, size_t *);
  static char utf8encodebyte(Rune, size_t);
  static size_t utf8validate(Rune *, size_t);
- 
+
 -static char *base64dec(const char *);
  static char base64dec_getc(const char **);
- 
+
  static ssize_t xwrite(int, const char *, size_t);
 @@ -232,6 +238,10 @@ static const uchar utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
  static const Rune utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
  static const Rune utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
- 
+
 +/* Converts a diacritic to a row/column/etc number. The result is 1-base, 0
 + * means "couldn't convert". Defined in rowcolumn_diacritics_helpers.c */
 +uint16_t diacritic_to_num(uint32_t code);
@@ -6095,7 +6095,7 @@ index 57c6e96..f1c5299 100644
 @@ -616,6 +626,12 @@ getsel(void)
  			if (gp->mode & ATTR_WDUMMY)
  				continue;
- 
+
 +			if (gp->mode & ATTR_IMAGE) {
 +				// TODO: Copy diacritics as well
 +				ptr += utf8encode(IMAGE_PLACEHOLDER_CHAR, ptr);
@@ -6104,7 +6104,7 @@ index 57c6e96..f1c5299 100644
 +
  			ptr += utf8encode(gp->u, ptr);
  		}
- 
+
 @@ -819,7 +835,11 @@ ttyread(void)
  {
  	static char buf[BUFSIZ];
@@ -6115,7 +6115,7 @@ index 57c6e96..f1c5299 100644
 +
 +	if (buflen >= LEN(buf))
 +		return 0;
- 
+
  	/* append read bytes to unprocessed bytes */
  	ret = read(cmdfd, buf+buflen, LEN(buf)-buflen);
 @@ -831,7 +851,24 @@ ttyread(void)
@@ -6149,7 +6149,7 @@ index 57c6e96..f1c5299 100644
  	ssize_t r;
  	size_t lim = 256;
 +	int retries_left = 100;
- 
+
  	/*
  	 * Remember that we are using a pty, which might be a modem line.
 @@ -882,6 +920,9 @@ ttywriteraw(const char *s, size_t n)
@@ -6163,13 +6163,13 @@ index 57c6e96..f1c5299 100644
  		FD_ZERO(&rfd);
  		FD_SET(cmdfd, &wfd);
 @@ -923,11 +964,16 @@ ttywriteraw(const char *s, size_t n)
- 
+
  write_error:
  	die("write error on tty: %s\n", strerror(errno));
 +too_many_retries:
 +	fprintf(stderr, "Could not write %zu bytes to tty\n", n);
  }
- 
+
  void
  ttyresize(int tw, int th)
  {
@@ -6177,7 +6177,7 @@ index 57c6e96..f1c5299 100644
 +	term.pixh = th;
 +
  	struct winsize w;
- 
+
  	w.ws_row = term.row;
 @@ -1015,7 +1061,8 @@ treset(void)
  	term.c = (TCursor){{
@@ -6187,7 +6187,7 @@ index 57c6e96..f1c5299 100644
 +		.bg = defaultbg,
 +		.decor = DECOR_DEFAULT_COLOR
  	}, .x = 0, .y = 0, .state = CURSOR_DEFAULT};
- 
+
  	memset(term.tabs, 0, term.col * sizeof(*term.tabs));
 @@ -1038,7 +1085,9 @@ treset(void)
  void
@@ -6203,7 +6203,7 @@ index 57c6e96..f1c5299 100644
 @@ -1215,9 +1264,24 @@ tsetchar(Rune u, const Glyph *attr, int x, int y)
  		term.line[y][x-1].mode &= ~ATTR_WIDE;
  	}
- 
+
 +	if (u == ' ' && term.line[y][x].mode & ATTR_IMAGE &&
 +	    tgetisclassicplaceholder(&term.line[y][x])) {
 +		// This is a workaround: don't overwrite classic placement
@@ -6223,7 +6223,7 @@ index 57c6e96..f1c5299 100644
 +		term.line[y][x].mode |= ATTR_IMAGE;
 +	}
  }
- 
+
  void
 @@ -1244,12 +1308,104 @@ tclearregion(int x1, int y1, int x2, int y2)
  				selclear();
@@ -6235,7 +6235,7 @@ index 57c6e96..f1c5299 100644
  		}
  	}
  }
- 
+
 +/// Fills a rectangle area with an image placeholder. The starting point is the
 +/// cursor. Adds empty lines if needed. The placeholder will be marked as
 +/// classic.
@@ -6420,7 +6420,7 @@ index 57c6e96..f1c5299 100644
 +		break;
  	}
  }
- 
+
 @@ -1962,8 +2174,26 @@ strhandle(void)
  	case 'k': /* old title set compatibility */
  		xsettitle(strescseq.args[0]);
@@ -6452,7 +6452,7 @@ index 57c6e96..f1c5299 100644
 @@ -2469,6 +2699,33 @@ check_control_code:
  	if (selected(term.c.x, term.c.y))
  		selclear();
- 
+
 +	if (width == 0) {
 +		// It's probably a combining char. Combining characters are not
 +		// supported, so we just ignore them, unless it denotes the row and
@@ -6486,7 +6486,7 @@ index 57c6e96..f1c5299 100644
 @@ -2635,6 +2892,8 @@ drawregion(int x1, int y1, int x2, int y2)
  {
  	int y;
- 
+
 +	xstartimagedraw(term.dirty, term.row);
 +
  	for (y = y1; y < y2; y++) {
@@ -6499,7 +6499,7 @@ index 57c6e96..f1c5299 100644
 +
 +	xfinishimagedraw();
  }
- 
+
  void
 @@ -2676,3 +2937,9 @@ redraw(void)
  	tfulldirt();
@@ -6527,7 +6527,7 @@ index fd3b0d8..c5dd731 100644
 @@ -20,6 +20,10 @@
  #define TRUECOLOR(r,g,b)	(1 << 24 | (r) << 16 | (g) << 8 | (b))
  #define IS_TRUECOL(x)		(1 << 24 & (x))
- 
+
 +// This decor color indicates that the fg color should be used. Note that it's
 +// not a 24-bit color because the 25-th bit is not set.
 +#define DECOR_DEFAULT_COLOR	0x0ffffff
@@ -6541,12 +6541,12 @@ index fd3b0d8..c5dd731 100644
  	ATTR_BOLD_FAINT = ATTR_BOLD | ATTR_FAINT,
 +	ATTR_IMAGE      = 1 << 14,
  };
- 
+
  enum selection_mode {
 @@ -52,6 +57,14 @@ enum selection_snap {
  	SNAP_LINE = 2
  };
- 
+
 +enum underline_style {
 +	UNDERLINE_STRAIGHT = 1,
 +	UNDERLINE_DOUBLE = 2,
@@ -6564,16 +6564,16 @@ index fd3b0d8..c5dd731 100644
  	uint32_t bg;      /* background  */
 +	uint32_t decor;   /* decoration (like underline) */
  } Glyph;
- 
+
  typedef Glyph *Line;
 @@ -105,6 +119,8 @@ void selextend(int, int, int, int);
  int selected(int, int);
  char *getsel(void);
- 
+
 +Glyph getglyphat(int, int);
 +
  size_t utf8encode(Rune, char *);
- 
+
  void *xmalloc(size_t);
 @@ -124,3 +140,69 @@ extern unsigned int tabspaces;
  extern unsigned int defaultfg;
@@ -6654,7 +6654,7 @@ index efab2cf..ded76c1 100644
  	Se=\E[2 q,
  	Ss=\E[%p1%d q,
 +	Smulx=\E[4:%p1%dm,
- 
+
  st| simpleterm,
  	use=st-mono,
 @@ -215,6 +216,11 @@ st-256color| simpleterm with 256 colors,
@@ -6666,7 +6666,7 @@ index efab2cf..ded76c1 100644
 +	Setulc=\E[58:2:%p1%{65536}%/%d:%p1%{256}%/%{255}%&%d:%p1%{255}%&%d%;m,
 +	Setulc1=\E[58:5:%p1%dm,
 +	ol=\E[59m,
- 
+
  st-meta| simpleterm with meta key,
  	use=st,
 diff --git a/win.h b/win.h
@@ -6698,7 +6698,7 @@ index d73152b..6f1bf8c 100644
  #include "st.h"
  #include "win.h"
 +#include "graphics.h"
- 
+
  /* types used in config.h */
  typedef struct {
 @@ -59,6 +62,12 @@ static void zoom(const Arg *);
@@ -6711,7 +6711,7 @@ index d73152b..6f1bf8c 100644
 +static void dumpgrstate(const Arg *);
 +static void unloadimages(const Arg *);
 +static void toggleimages(const Arg *);
- 
+
  /* config.h for applying patches and the configuration. */
  #include "config.h"
 @@ -81,6 +90,7 @@ typedef XftGlyphFontSpec GlyphFontSpec;
@@ -6736,13 +6736,13 @@ index d73152b..6f1bf8c 100644
  static XSelection xsel;
  static TermWindow win;
 +static unsigned int mouse_col = 0, mouse_row = 0;
- 
+
  /* Font Ring Cache */
  enum {
 @@ -328,10 +341,72 @@ ttysend(const Arg *arg)
  	ttywrite(arg->s, strlen(arg->s), 1);
  }
- 
+
 +void
 +previewimage(const Arg *arg)
 +{
@@ -6825,7 +6825,7 @@ index d73152b..6f1bf8c 100644
 @@ -452,6 +527,9 @@ mouseaction(XEvent *e, uint release)
  	/* ignore Button<N>mask for Button<N> - it's set on release */
  	uint state = e->xbutton.state & ~buttonmask(e->xbutton.button);
- 
+
 +	mouse_col = evcol(e);
 +	mouse_row = evrow(e);
 +
@@ -6835,7 +6835,7 @@ index d73152b..6f1bf8c 100644
 @@ -739,6 +817,9 @@ cresize(int width, int height)
  	col = MAX(1, col);
  	row = MAX(1, row);
- 
+
 +	win.hborderpx = (win.w - col * win.cw) * anysize_halign / 100;
 +	win.vborderpx = (win.h - row * win.ch) * anysize_valign / 100;
 +
@@ -6861,7 +6861,7 @@ index d73152b..6f1bf8c 100644
 +		if (defaultfontsize <= 0)
 +			defaultfontsize = usedfontsize;
  	}
- 
+
  	if (xloadfont(&dc.font, pattern))
 @@ -1024,7 +1106,7 @@ xloadfonts(const char *fontstr, double fontsize)
  		FcPatternGetDouble(dc.font.match->pattern,
@@ -6871,10 +6871,10 @@ index d73152b..6f1bf8c 100644
 +		if (defaultfontsize <= 0 && fontsize == 0)
  			defaultfontsize = fontval;
  	}
- 
+
 @@ -1152,8 +1234,8 @@ xinit(int cols, int rows)
  	xloadcols();
- 
+
  	/* adjust fixed window geometry */
 -	win.w = 2 * borderpx + cols * win.cw;
 -	win.h = 2 * borderpx + rows * win.ch;
@@ -6891,7 +6891,7 @@ index d73152b..6f1bf8c 100644
 +	// Initialize the graphics (image display) module.
 +	gr_init(xw.dpy, xw.vis, xw.cmap);
  }
- 
+
  int
  xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x, int y)
  {
@@ -6903,7 +6903,7 @@ index d73152b..6f1bf8c 100644
 @@ -1267,6 +1352,11 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
  		if (mode == ATTR_WDUMMY)
  			continue;
- 
+
 +		/* Draw spaces for image placeholders (images will be drawn
 +		 * separately). */
 +		if (mode & ATTR_IMAGE)
@@ -6915,7 +6915,7 @@ index d73152b..6f1bf8c 100644
 @@ -1374,11 +1464,61 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
  	return numspecs;
  }
- 
+
 +/* Draws a horizontal dashed line of length `w` starting at `(x, y)`. `wavelen`
 + * is the length of the dash plus the length of the gap. `fraction` is the
 + * fraction of the dash length compared to `wavelen`. */
@@ -6976,7 +6976,7 @@ index d73152b..6f1bf8c 100644
  	Color *fg, *bg, *temp, revfg, revbg, truefg, truebg;
  	XRenderColor colfg, colbg;
 @@ -1468,17 +1608,17 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
- 
+
  	/* Intelligent cleaning up of the borders. */
  	if (x == 0) {
 -		xclear(0, (y == 0)? 0 : winy, borderpx,
@@ -6997,12 +6997,12 @@ index d73152b..6f1bf8c 100644
 +		xclear(winx, 0, winx + width, win.vborderpx);
 +	if (winy + win.ch >= win.vborderpx + win.th)
  		xclear(winx, winy + win.ch, winx + width, win.h);
- 
+
  	/* Clean up the region we want to draw to. */
 @@ -1491,18 +1631,68 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
  	r.width = width;
  	XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
- 
+
 -	/* Render the glyphs. */
 -	XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
 -
@@ -7037,7 +7037,7 @@ index d73152b..6f1bf8c 100644
 +
 +	/* Render the underline before the glyphs. */
  	if (base.mode & ATTR_UNDERLINE) {
--		XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent * chscale + 1,
+-		XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent + 1,
 -				width, 1);
 +		uint32_t style = tgetdecorstyle(&base);
 +		int liney = winy + dc.font.ascent + gap;
@@ -7063,21 +7063,21 @@ index d73152b..6f1bf8c 100644
 +			XftDrawRect(xw.draw, &decor, winx, liney, width, thick);
 +		}
  	}
- 
+
 +	/* Render the glyphs. */
 +	XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
 +
 +	/* Render strikethrough. Alway use the fg color. */
  	if (base.mode & ATTR_STRUCK) {
--		XftDrawRect(xw.draw, fg, winx, winy + 2 * dc.font.ascent * chscale / 3,
+-		XftDrawRect(xw.draw, fg, winx, winy + 2 * dc.font.ascent / 3,
 -				width, 1);
 +		XftDrawRect(xw.draw, fg, winx, winy + 2 * dc.font.ascent / 3,
 +			    width, thick);
  	}
- 
+
  	/* Reset clip to none. */
 @@ -1517,6 +1707,11 @@ xdrawglyph(Glyph g, int x, int y)
- 
+
  	numspecs = xmakeglyphfontspecs(&spec, &g, 1, x, y);
  	xdrawglyphfontspecs(&spec, g, numspecs, x, y);
 +	if (g.mode & ATTR_IMAGE) {
@@ -7086,12 +7086,12 @@ index d73152b..6f1bf8c 100644
 +		gr_finish_drawing(xw.buf);
 +	}
  }
- 
+
  void
 @@ -1532,6 +1727,10 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
  	if (IS_SET(MODE_HIDE))
  		return;
- 
+
 +	// If it's an image, just draw a ballot box for simplicity.
 +	if (g.mode & ATTR_IMAGE)
 +		g.u = 0x2610;
@@ -7147,7 +7147,7 @@ index d73152b..6f1bf8c 100644
  				win.cw, 1);
  	}
  }
- 
+
 +/* Draw (or queue for drawing) image cells between columns x1 and x2 assuming
 + * that they have the same attributes (and thus the same lower 24 bits of the
 + * image ID and the same placement ID). */
@@ -7295,7 +7295,7 @@ index d73152b..6f1bf8c 100644
 +	if (i > 0 && base.mode & ATTR_IMAGE)
 +		xdrawimages(base, line, ox, y1, x);
  }
- 
+
  void
 @@ -1907,6 +2238,7 @@ cmessage(XEvent *e)
  		}
@@ -7308,7 +7308,7 @@ index d73152b..6f1bf8c 100644
 @@ -1957,6 +2289,13 @@ run(void)
  		if (XPending(xw.dpy))
  			timeout = 0;  /* existing events might not set xfd */
- 
+
 +		/* Decrease the timeout if there are active animations. */
 +		if (graphics_next_redraw_delay != INT_MAX &&
 +		    IS_SET(MODE_VISIBLE))
@@ -7319,6 +7319,6 @@ index d73152b..6f1bf8c 100644
  		seltv.tv_sec = timeout / 1E3;
  		seltv.tv_nsec = 1E6 * (timeout - 1E3 * seltv.tv_sec);
  		tv = timeout >= 0 ? &seltv : NULL;
--- 
+--
 2.43.0
 

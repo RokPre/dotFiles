@@ -1,0 +1,97 @@
+--- config.def.h	2026-01-18 22:12:24.285934286 +0100
++++ config.def.h	2026-01-18 22:13:01.306436385 +0100
+@@ -228,7 +228,34 @@
+  * If you want keys other than the X11 function keys (0xFD00 - 0xFFFF)
+  * to be mapped below, add them to this array.
+  */
+-static KeySym mappedkeys[] = { -1 };
++static KeySym mappedkeys[] = {
++  XK_a,
++  XK_b,
++  XK_c,
++  XK_d,
++  XK_e,
++  XK_f,
++  XK_g,
++  XK_h,
++  XK_i,
++  XK_j,
++  XK_k,
++  XK_l,
++  XK_m,
++  XK_n,
++  XK_o,
++  XK_p,
++  XK_r,
++  XK_s,
++  XK_t,
++  XK_u,
++  XK_v,
++  XK_z,
++  XK_y,
++  XK_x,
++  XK_q,
++  XK_w,
++};
+
+ /*
+  * State bits to ignore when matching key or button events.  By default,
+@@ -365,6 +392,34 @@
+ 	{ XK_Next,          ControlMask,    "\033[6;5~",     0,    0},
+ 	{ XK_Next,          ShiftMask,      "\033[6;2~",     0,    0},
+ 	{ XK_Next,          XK_ANY_MOD,     "\033[6~",       0,    0},
++  { XK_a,      ControlMask|ShiftMask, "\033[65;6u",    0,    0},
++  { XK_b,      ControlMask|ShiftMask, "\033[66;6u",    0,    0},
++  { XK_c,      ControlMask|ShiftMask, "\033[67;6u",    0,    0},
++  { XK_d,      ControlMask|ShiftMask, "\033[68;6u",    0,    0},
++  { XK_e,      ControlMask|ShiftMask, "\033[69;6u",    0,    0},
++  { XK_f,      ControlMask|ShiftMask, "\033[70;6u",    0,    0},
++  { XK_g,      ControlMask|ShiftMask, "\033[71;6u",    0,    0},
++  { XK_h,      ControlMask|ShiftMask, "\033[72;6u",    0,    0},
++  { XK_i,      ControlMask|ShiftMask, "\033[73;6u",    0,    0},
++  { XK_j,      ControlMask|ShiftMask, "\033[74;6u",    0,    0},
++  { XK_k,      ControlMask|ShiftMask, "\033[75;6u",    0,    0},
++  { XK_l,      ControlMask|ShiftMask, "\033[76;6u",    0,    0},
++  { XK_m,      ControlMask|ShiftMask, "\033[77;6u",    0,    0},
++  { XK_n,      ControlMask|ShiftMask, "\033[78;6u",    0,    0},
++  { XK_o,      ControlMask|ShiftMask, "\033[79;6u",    0,    0},
++  { XK_p,      ControlMask|ShiftMask, "\033[80;6u",    0,    0},
++  { XK_q,      ControlMask|ShiftMask, "\033[81;6u",    0,    0},
++  { XK_r,      ControlMask|ShiftMask, "\033[82;6u",    0,    0},
++  { XK_s,      ControlMask|ShiftMask, "\033[83;6u",    0,    0},
++  { XK_t,      ControlMask|ShiftMask, "\033[84;6u",    0,    0},
++  { XK_u,      ControlMask|ShiftMask, "\033[85;6u",    0,    0},
++  { XK_v,      ControlMask|ShiftMask, "\033[86;6u",    0,    0},
++  { XK_w,      ControlMask|ShiftMask, "\033[87;6u",    0,    0},
++  { XK_x,      ControlMask|ShiftMask, "\033[88;6u",    0,    0},
++  { XK_y,      ControlMask|ShiftMask, "\033[89;6u",    0,    0},
++  { XK_z,      ControlMask|ShiftMask, "\033[90;6u",    0,    0},
++  { XK_H,      ControlMask|ShiftMask, "ħ",             0,    0},
++  { XK_L,      ControlMask|ShiftMask, "ł",             0,    0},
+ 	{ XK_F1,            XK_NO_MOD,      "\033OP" ,       0,    0},
+ 	{ XK_F1, /* F13 */  ShiftMask,      "\033[1;2P",     0,    0},
+ 	{ XK_F1, /* F25 */  ControlMask,    "\033[1;5P",     0,    0},
+
+--- x.c	2026-01-19 08:49:59.829017667 +0100
++++ x.c	2026-01-18 22:32:57.884182689 +0100
+@@ -1899,10 +1884,16 @@
+ 		if (mappedkeys[i] == k)
+ 			break;
+ 	}
+-	if (i == LEN(mappedkeys)) {
+-		if ((k & 0xFFFF) < 0xFD00)
+-			return NULL;
+-	}
++
++  /* This block of code interferes with Ctrl+shift+<Key> combination. */
++  /* The terminal does not have a special string for the Ctrl+shift+<Key> combination. */
++  /* So if i want to make it work, i have to modify the code in config.h key[] array. */
++  /* I have XK_H and XK_L with the Ctrl Shift masks. And the output ħ and ł. */
++  /* This way i can use this keys in tmux. */
++	/* if (i == LEN(mappedkeys)) { */
++	/* 	if ((k & 0xFFFF) < 0xFD00) */
++	/* 		return NULL; */
++	/* } */
+
+ 	for (kp = key; kp < key + LEN(key); kp++) {
+ 		if (kp->k != k)

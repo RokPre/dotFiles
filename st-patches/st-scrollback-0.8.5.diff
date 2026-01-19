@@ -6,8 +6,8 @@ index 91ab8ca..e3b469b 100644
  	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
  	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
  	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
-+	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
-+	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
++	{ Mod1Mask,             XK_d,           kscrollup,      {.i =  5} },
++	{ Mod1Mask,             XK_f,           kscrolldown,    {.i =  5} },
  };
 
  /*
@@ -40,7 +40,7 @@ index 51049ba..cd750f2 100644
 +	Line hist[HISTSIZE]; /* history buffer */
 +	int histi;    /* history index */
 +	int scr;      /* scroll back */
- 	int *dirty;   /* dirtiness of lines */
+ 	int *dirty;   /* dirtyness of lines */
  	TCursor c;    /* cursor */
  	int ocx;      /* old cursor col */
 @@ -184,8 +191,8 @@ static void tnewline(int);

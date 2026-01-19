@@ -6,13 +6,21 @@
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
 static char *font = "Cousine Nerd Font Mono:style=Regular:pixelsize=16:antialias=true:autohint=true";
+/* Spare fonts */
 static char *font2[] = {
   "Cousine Nerd Font Mono:h16:antialias=true:autohint=true",
-  // "Symbola:pixlesize=16:antialias=true:autohint=true",
-  // "Noto Sans:pixlesize=16:antialias=true:autohint=true",
-  /*TODO: Add font for special characters*/
+  "Symbola:pixelsize=16:antialias=true:autohint=true",
+  "Noto Sans:pixelsize=16:antialias=true:autohint=true",
 };
+
 static int borderpx = 2;
+
+/* How to align the content in the window when the size of the terminal
+ * doesn't perfectly match the size of the window. The values are percentages.
+ * 50 means center, 0 means flush left/top, 100 means flush right/bottom.
+ */
+static int anysize_halign = 50;
+static int anysize_valign = 50;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -29,11 +37,15 @@ char *scroll = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 
 /* identification sequence returned in DA and DECID */
-char *vtiden = "\033[?6c";
+/* By default, use the same one as kitty. */
+char *vtiden = "\033[?62c";
 
 /* Kerning / character bounding-box multipliers */
 static float cwscale = 1.0;
 static float chscale = 1.0;
+/* Character rendering offsets in pixels */
+static short cxoffset = 0;
+static short cyoffset = 0;
 
 /*
  * word delimiter string
@@ -170,11 +182,37 @@ static unsigned int mousebg = 0;
 static unsigned int defaultattr = 11;
 
 /*
+ * Graphics configuration
+ */
+
+/// The template for the cache directory.
+const char graphics_cache_dir_template[] = "/tmp/st-images-XXXXXX";
+/// The max size of a single image file, in bytes.
+unsigned graphics_max_single_image_file_size = 20 * 1024 * 1024;
+/// The max size of the cache, in bytes.
+unsigned graphics_total_file_cache_size = 300 * 1024 * 1024;
+/// The max ram size of an image or placement, in bytes.
+unsigned graphics_max_single_image_ram_size = 100 * 1024 * 1024;
+/// The max total size of all images loaded into RAM.
+unsigned graphics_max_total_ram_size = 300 * 1024 * 1024;
+/// The max total number of image placements and images.
+unsigned graphics_max_total_placements = 4096;
+/// The ratio by which limits can be exceeded. This is to reduce the frequency
+/// of image removal.
+double graphics_excess_tolerance_ratio = 0.05;
+/// The minimum delay between redraws caused by animations, in milliseconds.
+unsigned graphics_animation_min_delay = 20;
+
+/*
  * Force mouse select/shortcuts while mask is active (when MODE_MOUSE is set).
  * Note that if you want to use ShiftMask with selmasks, set this to an other
  * modifier, set to 0 to not use it.
  */
 static uint forcemousemod = ShiftMask;
+
+/* Internal keyboard shortcuts. */
+#define MODKEY Mod1Mask
+#define TERMMOD (ControlMask|ShiftMask)
 
 /*
  * Internal mouse shortcuts.
@@ -182,16 +220,14 @@ static uint forcemousemod = ShiftMask;
  */
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
+	{ TERMMOD,              Button3, previewimage,   {.s = "feh"} },
+	{ TERMMOD,              Button2, showimageinfo,  {},            1 },
 	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
 };
-
-/* Internal keyboard shortcuts. */
-#define MODKEY Mod1Mask
-#define TERMMOD (ControlMask|ShiftMask)
 
 static Shortcut shortcuts[] = {
 	/* mask                 keysym          function        argument */
@@ -202,15 +238,16 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
 	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
 	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
+	{ ControlMask,          XK_plus,        zoom,           {.f = +1} },
+	{ ControlMask,          XK_minus,       zoom,           {.f = -1} },
+	{ ControlMask,          XK_equal,       zoomreset,      {.f =  0} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
-	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
-	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
-  { Mod1Mask, XK_f, kscrolldown, {.i = 5} },
-  { Mod1Mask, XK_d, kscrollup,   {.i = 5} },
+	{ Mod1Mask,             XK_d,           kscrollup,      {.i =  5} },
+	{ Mod1Mask,             XK_f,           kscrolldown,    {.i =  5} },
 };
 
 /*
@@ -238,7 +275,34 @@ static Shortcut shortcuts[] = {
  * If you want keys other than the X11 function keys (0xFD00 - 0xFFFF)
  * to be mapped below, add them to this array.
  */
-static KeySym mappedkeys[] = { -1 };
+static KeySym mappedkeys[] = {
+  XK_a,
+  XK_b,
+  XK_c,
+  XK_d,
+  XK_e,
+  XK_f,
+  XK_g,
+  XK_h,
+  XK_i,
+  XK_j,
+  XK_k,
+  XK_l,
+  XK_m,
+  XK_n,
+  XK_o,
+  XK_p,
+  XK_r,
+  XK_s,
+  XK_t,
+  XK_u,
+  XK_v,
+  XK_z,
+  XK_y,
+  XK_x,
+  XK_q,
+  XK_w,
+};
 
 /*
  * State bits to ignore when matching key or button events.  By default,
@@ -288,7 +352,7 @@ static Key key[] = {
 	{ XK_KP_Delete,     ControlMask,    "\033[3;5~",    +1,    0},
 	{ XK_KP_Delete,     ShiftMask,      "\033[2K",      -1,    0},
 	{ XK_KP_Delete,     ShiftMask,      "\033[3;2~",    +1,    0},
-	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[P",       -1,    0},
+	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[3~",       -1,    0},
 	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[3~",      +1,    0},
 	{ XK_KP_Multiply,   XK_ANY_MOD,     "\033Oj",       +2,    0},
 	{ XK_KP_Add,        XK_ANY_MOD,     "\033Ok",       +2,    0},
@@ -356,12 +420,10 @@ static Key key[] = {
 	{ XK_Delete,        ControlMask,    "\033[3;5~",    +1,    0},
 	{ XK_Delete,        ShiftMask,      "\033[2K",      -1,    0},
 	{ XK_Delete,        ShiftMask,      "\033[3;2~",    +1,    0},
-	{ XK_Delete,        XK_ANY_MOD,     "\033[P",       -1,    0},
+	{ XK_Delete,        XK_ANY_MOD,     "\033[3~",       -1,    0},
 	{ XK_Delete,        XK_ANY_MOD,     "\033[3~",      +1,    0},
 	{ XK_BackSpace,     XK_NO_MOD,      "\177",          0,    0},
-	{ XK_BackSpace,     ShiftMask,      "\177",          0,    0},
 	{ XK_BackSpace,     Mod1Mask,       "\033\177",      0,    0},
-	{ XK_BackSpace,     ControlMask,    "\033\177",      0,    0},
 	{ XK_Home,          ShiftMask,      "\033[2J",       0,   -1},
 	{ XK_Home,          ShiftMask,      "\033[1;2H",     0,   +1},
 	{ XK_Home,          XK_ANY_MOD,     "\033[H",        0,   -1},
@@ -377,6 +439,34 @@ static Key key[] = {
 	{ XK_Next,          ControlMask,    "\033[6;5~",     0,    0},
 	{ XK_Next,          ShiftMask,      "\033[6;2~",     0,    0},
 	{ XK_Next,          XK_ANY_MOD,     "\033[6~",       0,    0},
+  { XK_a,      ControlMask|ShiftMask, "\033[65;6u",    0,    0},
+  { XK_b,      ControlMask|ShiftMask, "\033[66;6u",    0,    0},
+  { XK_c,      ControlMask|ShiftMask, "\033[67;6u",    0,    0},
+  { XK_d,      ControlMask|ShiftMask, "\033[68;6u",    0,    0},
+  { XK_e,      ControlMask|ShiftMask, "\033[69;6u",    0,    0},
+  { XK_f,      ControlMask|ShiftMask, "\033[70;6u",    0,    0},
+  { XK_g,      ControlMask|ShiftMask, "\033[71;6u",    0,    0},
+  { XK_h,      ControlMask|ShiftMask, "\033[72;6u",    0,    0},
+  { XK_i,      ControlMask|ShiftMask, "\033[73;6u",    0,    0},
+  { XK_j,      ControlMask|ShiftMask, "\033[74;6u",    0,    0},
+  { XK_k,      ControlMask|ShiftMask, "\033[75;6u",    0,    0},
+  { XK_l,      ControlMask|ShiftMask, "\033[76;6u",    0,    0},
+  { XK_m,      ControlMask|ShiftMask, "\033[77;6u",    0,    0},
+  { XK_n,      ControlMask|ShiftMask, "\033[78;6u",    0,    0},
+  { XK_o,      ControlMask|ShiftMask, "\033[79;6u",    0,    0},
+  { XK_p,      ControlMask|ShiftMask, "\033[80;6u",    0,    0},
+  { XK_q,      ControlMask|ShiftMask, "\033[81;6u",    0,    0},
+  { XK_r,      ControlMask|ShiftMask, "\033[82;6u",    0,    0},
+  { XK_s,      ControlMask|ShiftMask, "\033[83;6u",    0,    0},
+  { XK_t,      ControlMask|ShiftMask, "\033[84;6u",    0,    0},
+  { XK_u,      ControlMask|ShiftMask, "\033[85;6u",    0,    0},
+  { XK_v,      ControlMask|ShiftMask, "\033[86;6u",    0,    0},
+  { XK_w,      ControlMask|ShiftMask, "\033[87;6u",    0,    0},
+  { XK_x,      ControlMask|ShiftMask, "\033[88;6u",    0,    0},
+  { XK_y,      ControlMask|ShiftMask, "\033[89;6u",    0,    0},
+  { XK_z,      ControlMask|ShiftMask, "\033[90;6u",    0,    0},
+  { XK_H,      ControlMask|ShiftMask, "ħ",             0,    0},
+  { XK_L,      ControlMask|ShiftMask, "ł",             0,    0},
 	{ XK_F1,            XK_NO_MOD,      "\033OP" ,       0,    0},
 	{ XK_F1, /* F13 */  ShiftMask,      "\033[1;2P",     0,    0},
 	{ XK_F1, /* F25 */  ControlMask,    "\033[1;5P",     0,    0},
@@ -463,8 +553,6 @@ static Key key[] = {
 	{ XK_F33,           XK_NO_MOD,      "\033[20;5~",    0,    0},
 	{ XK_F34,           XK_NO_MOD,      "\033[21;5~",    0,    0},
 	{ XK_F35,           XK_NO_MOD,      "\033[23;5~",    0,    0},
-  { XK_H, ControlMask | ShiftMask, "ħ", 0, 0 },
-  { XK_L, ControlMask | ShiftMask, "ł", 0, 0 },
 };
 
 /*
