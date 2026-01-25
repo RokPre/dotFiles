@@ -2,11 +2,8 @@ local keymap = vim.keymap.set
 local opts = { silent = true, noremap = true }
 
 -- Navigation
--- This was moved to ufo as it also works as a folding keymap ../plugins/ufo.lua
--- keymap("v", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
--- keymap("v", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
--- keymap("o", "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
--- keymap("o", "gl", "$", { silent = true, noremap = true, desc = "End of line" })
+keymap({ "n", "v", "o" }, "gh", "^", { silent = true, noremap = true, desc = "Beginning of line" })
+keymap({ "n", "v", "o" }, "gl", "$", { silent = true, noremap = true, desc = "End of line" })
 
 -- Scroll
 -- Vertical scroll is handled by neoscroll pluginkey
@@ -34,8 +31,7 @@ keymap("i", "<C-s>", "<Esc><Cmd>w<CR>", opts)
 keymap("n", "<C-s>", "<Cmd>w<CR>", opts)
 
 -- search
-keymap("n", "f", "*", opts)
-keymap("v", "f", '"zy/<C-R>z<CR>', opts)
+keymap({ "n", "v" }, "f", "*", opts)
 keymap({ "n", "v" }, "<C-f>", "/", opts)
 keymap("x", "f", "<Esc>/\\%V") -- Search visual selection
 keymap("n", "<Esc>", ":noh<CR>", opts) -- Search highlight hide
@@ -145,9 +141,9 @@ keymap("n", "<leader>mc", messages_close, { silent = true, noremap = true, desc 
 keymap("n", "<leader>my", "<Cmd>let @+ = execute('messages')<CR>", { silent = true, noremap = true, desc = "Yank messages" })
 
 local function yank_entire_file()
-  local cursor_line = vim.api.nvim_win_get_cursor(0)
-  vim.cmd("normal! ggVGy")
-  vim.api.nvim_win_set_cursor(0, cursor_line)
+	local cursor_line = vim.api.nvim_win_get_cursor(0)
+	vim.cmd("normal! ggVGy")
+	vim.api.nvim_win_set_cursor(0, cursor_line)
 end
 keymap("n", "yae", yank_entire_file, { silent = true, noremap = true, desc = "Yank entire file" })
 keymap("n", "dae", 'ggVG"0d', { silent = true, noremap = true, desc = "Delete entire file" })

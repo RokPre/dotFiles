@@ -1,12 +1,9 @@
-vim.opt.termguicolors = true
-
 return {
-  {
-    "norcalli/nvim-colorizer.lua",
-    config = function()
-      require("colorizer").setup({
-        "*", -- Enable for all file types
-      })
-    end,
-  },
+	"norcalli/nvim-colorizer.lua",
+	config = function()
+		vim.opt.termguicolors = true
+		require("colorizer").setup({
+			"*", -- Enable for all file types
+		})
+	end,
 }

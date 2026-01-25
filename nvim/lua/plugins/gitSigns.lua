@@ -1,7 +1,3 @@
--- vim.api.nvim_set_hl(0, "GitSignsAdd", { fg = Green })
--- vim.api.nvim_set_hl(0, "GitSignsChange", { fg = Blue })
--- vim.api.nvim_set_hl(0, "GitSignsDelete", { fg = Red })
-
 return {
 	"lewis6991/gitsigns.nvim",
 	config = function()

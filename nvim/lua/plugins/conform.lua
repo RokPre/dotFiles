@@ -1,51 +1,45 @@
 return {
-	"stevearc/conform.nvim",
-	config = function()
-		require("conform").setup({
-			-- Map of filetype to formatters
-			formatters_by_ft = {
-				lua = { "stylua" },
-				python = { "ruff", "black" },
-				xml = { "xmlformatter" },
-				markdown = { "doctoc" },
-				["_"] = { "trim_whitespace" },
-			},
+  "stevearc/conform.nvim",
+  config = function()
+    local ok, mason = pcall(require, "mason")
+    if ok then
+      local cfg = require("mason.settings").current
+      local ensure = cfg.ensure_installed or {}
 
-			formatters = {
-				prettier = { command = false },
-				black = {
-					prepend_args = { "--line-length", "1000" },
-				},
-				xmlformatter = {
-					command = "/home/rok/.local/share/nvim/mason/bin/xmlformat",
-					args = { "--indent", "2", "--blanks", "-" },
-					stdin = true,
-				},
-				-- Add this to the markdown file where you want the TOC to be generated
-				-- <!-- START doctoc -->
-				-- <!-- END doctoc -->
-				doctoc = {
-					command = "doctoc",
-					args = { "$FILENAME", "--update-only", "--maxlevel", "3" },
-				},
-			},
+      vim.list_extend(ensure, {
+        "stylua",
+        "autopep8",
+        "autoflake",
+        "reorder-python-imports",
+        "xmlformatter",
+        "shfmt"
+      })
 
-			default_format_opts = {
-				lsp_format = "fallback",
-			},
+      cfg.ensure_installed = ensure
 
-			format_on_save = {
-				lsp_format = "fallback",
-				timeout_ms = 500,
-			},
+      local mr_ok, mr = pcall(require,"mason-registry")
+      if mr_ok then
+        vim.defer_fn(function()
+          mr.refresh(function()
+            for _, tool in ipairs(cfg.ensure_installed) do
+              local p = mr.get_package(tool)
+              if not p:is_installed() then
+                p:install()
+              end
+            end
+          end)
+        end, 100)
+      end
+    end
 
-			format_after_save = {
-				lsp_format = "fallback",
-			},
-
-			log_level = vim.log.levels.DEBUG,
-			notify_on_error = true,
-			notify_no_formatters = true,
-		})
-	end,
+    require("conform").setup({
+      formatters_by_ft = {
+        lua = { "stylua" },
+        python = { "autopep8", "autoflake", "reorder-python-imports" },
+        xml = { "xmlformatter" },
+        bash = {"shfmt"},
+        ["_"] = { "trim_whitespace" },
+      },
+    })
+  end,
 }

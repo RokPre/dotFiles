@@ -1,9 +1,8 @@
 return {
 	"akinsho/bufferline.nvim",
+  dependencies = { "nvim-tree/nvim-web-devicons" },
 	event = "VeryLazy",
 	keys = {
-		-- { "", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
-		-- { "", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
 		{ "<C-S-h>", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
 		{ "<C-S-l>", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
 		{ "<A-e>", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
@@ -42,7 +41,7 @@ return {
 		vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
 			callback = function()
 				vim.schedule(function()
-					pcall(require, "bufferLine")
+					pcall(require, "bufferline")
 				end)
 			end,
 		})

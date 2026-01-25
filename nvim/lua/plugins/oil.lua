@@ -13,45 +13,41 @@ return {
 			view_options = {
 				show_hidden = false,
 			},
-			-- buf_options = {
-			-- 	buflisted = true,
-			-- 	bufhidden = "wipe",
-			-- },
 			delete_to_trash = true,
 			skip_confirm_for_simple_edits = true,
 			prompt_save_on_select_new_entry = true,
 			use_default_keymaps = false,
 			keymaps = {
-				["gh"] = "actions.show_help",
+				["<leader>h"] = "actions.show_help",
 				["l"] = "actions.select",
-				["gv"] = {
+				["<leader>v"] = {
 					"actions.select",
 					opts = { vertical = true },
 					desc = "Open the entry in a vertical split",
 				},
-				["gb"] = {
+				["<leader>b"] = {
 					"actions.select",
 					opts = { horizontal = true },
 					desc = "Open the entry in a horizontal split",
 				},
-				["gt"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
-				["gp"] = {
+				["<leader>t"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
+				["<leader>p"] = {
 					callback = function()
 						local oil = require("oil")
 						oil.open_preview({ vertical = true, split = "botright" }, function(err) end)
 					end,
 				},
 				["q"] = "actions.close",
-				["gr"] = "actions.refresh",
+				["<leader>r"] = "actions.refresh",
 				["h"] = "actions.parent",
-				["gc"] = "actions.open_cwd",
-				["gd"] = "actions.cd",
-				["gs"] = "actions.change_sort",
-				["gx"] = "actions.open_external",
-				["g."] = "actions.toggle_hidden",
-				["gY"] = "actions.copy_to_system_clipboard",
-				["gP"] = "actions.paste_from_system_clipboard",
-				["gS"] = {
+				["<leader>c"] = "actions.open_cwd",
+				["<leader>d"] = "actions.cd",
+				["<leader>s"] = "actions.change_sort",
+				["<leader>x"] = "actions.open_external",
+				["<leader>."] = "actions.toggle_hidden",
+				["<leader>Y"] = "actions.copy_to_system_clipboard",
+				["<leader>P"] = "actions.paste_from_system_clipboard",
+				["<leader>S"] = {
 					callback = function()
 						local connections = {
 							{ name = "turtlebot3", uri = "ubuntu@192.168.9.111" },

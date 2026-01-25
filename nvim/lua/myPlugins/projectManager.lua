@@ -1,7 +1,7 @@
 local M = {}
 
 M.opts = {
-	search_folder = vim.fn.expand("~"),
+	search_folder = vim.fn.expand("~/sync"),
 	run_on_startup = true,
 	run_on_startup_delay = 1000,
 	ignore_file = vim.fn.stdpath("config") .. "/.project_manager_ignores",

@@ -1,4 +1,5 @@
 -- TODO: Paste image
+-- TODO: Automatic TOC
 -- TODO: Embed excalidraw
 -- TODO: Obsidian daily note
 -- TODO: Tags
@@ -814,16 +815,18 @@ function source:execute(completion_item, callback)
 end
 
 ---Register your source to nvim-cmp.
-local cmp = require("cmp")
-cmp.register_source("notes", source)
+local cmp_ok, cmp = pcall(require,"cmp")
+if cmp_ok then
+	cmp.register_source("notes", source)
 
--- Ativate the source
-local sources_to_activate = {}
-for _, s in ipairs(cmp.get_registered_sources()) do
-	table.insert(sources_to_activate, { name = s.name })
+	-- Ativate the source
+	local sources_to_activate = {}
+	for _, s in ipairs(cmp.get_registered_sources()) do
+		table.insert(sources_to_activate, { name = s.name })
+	end
+
+	cmp.setup({ sources = cmp.config.sources(sources_to_activate) })
 end
-
-cmp.setup({ sources = cmp.config.sources(sources_to_activate) })
 
 -- Keymaps
 vim.keymap.set("n", "<leader>n", "<Nop>", { desc = "Notes" })

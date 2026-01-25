@@ -163,12 +163,12 @@ local function paste_relative_path()
 	vim.api.nvim_put({ link }, "c", true, true)
 end
 
-local builtin = require("telescope.builtin")
-local actions = require("telescope.actions")
-local action_state = require("telescope.actions.state")
+local b_ok, builtin = pcall(require, "telescope.builtin")
+local a_ok, actions = pcall(require, "telescope.actions")
+local as_ok, action_state = pcall(require,"telescope.actions.state")
 
 -- Import your utils module
-local utils = require("myPlugins.utils")
+local u_ok, utils = pcall(require,"myPlugins.utils")
 
 local function find_file_and_link()
 	local current_file_path = vim.api.nvim_buf_get_name(0)
@@ -217,4 +217,6 @@ keymap("n", "<leader>lM", function()
 end, { desc = "Embed markdown link" })
 keymap("n", "<leader>lr", paste_relative_path, { desc = "Paste relative path" })
 keymap("n", "<leader>ly", copy_file_path, { desc = "Copy file path" })
-keymap("n", "<leader>ll", find_file_and_link, { desc = "Find file" })
+if b_ok and u_ok  and a_ok and as_ok then
+	keymap("n", "<leader>ll", find_file_and_link, { desc = "Find file" })
+end

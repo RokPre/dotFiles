@@ -1,86 +1,100 @@
-local ts_utils = require("nvim-treesitter.ts_utils")
-local ls = require("luasnip")
+local ok_ls, ls = pcall(require, "luasnip")
+if not ok_ls then
+  return
+end
+
+local ok_tsu, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
+
+local ok_fmt, fmt_mod = pcall(require, "luasnip.extras.fmt")
+if not ok_fmt then
+  return
+end
+
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
-local fmt = require("luasnip.extras.fmt").fmt
+local fmt = fmt_mod.fmt
 
 local function in_math()
-	local node = ts_utils.get_node_at_cursor()
-	while node do
-		local type = node:type()
-		if type == "inline_formula" or type == "displayed_equation" then
-			return true
-		end
-		node = node:parent()
-	end
-	return false
+  if not ok_tsu then
+    return false
+  end
+
+  local node = ts_utils.get_node_at_cursor()
+  if not node then
+    return false
+  end
+
+  while node do
+    local tp = node:type()
+    if tp == "inline_formula" or tp == "displayed_equation" then
+      return true
+    end
+    node = node:parent()
+  end
+
+  return false
 end
 
--- Utility function to format links
 local function link_for_day(offset, label)
-	local time = os.time() + (offset or 0)
-	local day_str = os.date("%Y - %j", time)
-	if label then
-		return "[[" .. day_str .. "|" .. label .. "]]"
-	else
-		return "[[" .. day_str .. "]]"
-	end
+  local time = os.time() + (offset or 0)
+  local day_str = os.date("%Y - %j", time)
+  if label then
+    return "[[" .. day_str .. "|" .. label .. "]]"
+  end
+  return "[[" .. day_str .. "]]"
 end
 
--- Named variants
-local function today()
-	return link_for_day(0, "today")
-end
-local function danes()
-	return link_for_day(0, "danes")
-end
-local function yesterday()
-	return link_for_day(-86400)
-end
-local function uceraj()
-	return link_for_day(-86400)
-end
-local function tomorrow()
-	return link_for_day(86400)
-end
-local function jutri()
-	return link_for_day(86400)
-end
+local function today() return link_for_day(0, "today") end
+local function danes() return link_for_day(0, "danes") end
+local function yesterday() return link_for_day(-86400) end
+local function uceraj() return link_for_day(-86400) end
+local function tomorrow() return link_for_day(86400) end
+local function jutri() return link_for_day(86400) end
 
 local function make_matrix(rows, cols)
-	local matrix_text = "\\begin{{bmatrix}}\n"
-	local matrix_input = {}
-	local trigger = "m" .. rows .. "x" .. cols
-	local index = 1
-	for r = 1, rows do
-		for c = 1, cols do
-			if c == cols then
-				matrix_text = matrix_text .. "{}"
-			else
-				matrix_text = matrix_text .. "{} & "
-			end
+  if not ok_tsu then
+    return nil
+  end
 
-			table.insert(matrix_input, i(index))
-			index = index + 1
-		end
-		if r == rows then
-			matrix_text = matrix_text .. "\n"
-		else
-			matrix_text = matrix_text .. "\\\\\n"
-		end
-	end
+  local text = "\\begin{{bmatrix}}\n"
+  local nodes = {}
+  local idx = 1
 
-	matrix_text = matrix_text .. "\\end{{bmatrix}}"
+  for r = 1, rows do
+    for c = 1, cols do
+      text = text .. "{}"
+      if c < cols then
+        text = text .. " & "
+      end
+      nodes[idx] = i(idx)
+      idx = idx + 1
+    end
+    if r < rows then
+      text = text .. "\\\\\n"
+    else
+      text = text .. "\n"
+    end
+  end
 
-	return s({ trig = trigger, wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt(matrix_text, matrix_input))
+  text = text .. "\\end{{bmatrix}}"
+
+  return s(
+    { trig = "m" .. rows .. "x" .. cols, wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+    fmt(text, nodes)
+  )
 end
 
-for r = 1, 10, 1 do
-	for c = 1, 10, 1 do
-		ls.add_snippets("markdown", { make_matrix(r, c) })
-	end
+if ok_tsu then
+  for r = 1, 10 do
+    for c = 1, 10 do
+      local snip = make_matrix(r, c)
+      if snip then
+        ls.add_snippets("markdown", { snip })
+      end
+    end
+  end
 end
 
 ls.add_snippets("markdown", {

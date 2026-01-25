@@ -1,9 +1,8 @@
 return {
 	"hrsh7th/nvim-cmp",
-	version = false, -- last release is way too old
+	version = false,
 	event = "InsertEnter",
 	dependencies = {
-		"neovim/nvim-lspconfig",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
@@ -15,10 +14,6 @@ return {
 	},
 
 	config = function()
-		-- Diagnostic signs off
-		vim.diagnostic.config({ signs = false })
-
-		-- nvim-cmp setup
 		local cmp = require("cmp")
 		cmp.setup({
 			snippet = {
@@ -33,58 +28,15 @@ return {
 				["<CR>"] = cmp.mapping.confirm({ select = false }),
 			}),
 			sources = cmp.config.sources({
+        { name = "luasnip" },
+        { name = "path" },
 				{ name = "buffer" },
 				{ name = "calc" },
-				-- { name = "cmdline" },
 				{ name = "emoji" },
-				{ name = "luasnip" },
 				{ name = "nerdfont" },
-				{ name = "obsidian" },
-				{ name = "obsidian_new" },
-				{ name = "obsidian_tags" },
-				{ name = "path" },
 			}, {
 				-- fallback sources
 			}),
 		})
-
-		local version = vim.version()
-		if version.major > 0 or (version.major == 0 and version.minor >= 11) then
-			-- Capabilities for completion
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-			-- ✅ NEW LSP CONFIG STYLE
-			vim.lsp.config["pyright"] = {
-				capabilities = capabilities,
-			}
-
-			vim.lsp.config["matlab_ls"] = {
-				capabilities = capabilities,
-			}
-
-			vim.lsp.config["lua_ls"] = {
-				capabilities = capabilities,
-				settings = {
-					Lua = {
-						runtime = { version = "LuaJIT" },
-						diagnostics = { globals = { "vim", "require" } },
-						workspace = { library = vim.api.nvim_get_runtime_file("", true) },
-						telemetry = { enable = false },
-					},
-				},
-			}
-
-			-- Enable the servers
-			vim.lsp.enable("pyright")
-			vim.lsp.enable("matlab_ls")
-			vim.lsp.enable("lua_ls")
-
-			-- Ativate the source
-			local sources_to_activate = {}
-			for _, s in ipairs(cmp.get_registered_sources()) do
-				table.insert(sources_to_activate, { name = s.name })
-			end
-
-			cmp.setup({ sources = cmp.config.sources(sources_to_activate) })
-		end
 	end,
 }

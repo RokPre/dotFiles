@@ -1,7 +1,10 @@
-local ls = require("luasnip")
-local s  = ls.snippet
-local t  = ls.text_node
-local f  = ls.function_node
+local ok_ls, ls = pcall(require, "luasnip")
+if not ok_ls then
+  return
+end
+
+local s = ls.snippet
+local f = ls.function_node
 
 local function f_date()
   return os.date("%Y-%m-%d")
@@ -16,13 +19,14 @@ local function f_datetime()
 end
 
 ls.add_snippets("all", {
-  s("date", {
-    f(f_date, {}) }
-  ),
-  s("time", {
-    f(f_time, {}) }
-  ),
-  s("datetime", {
-    f(f_datetime, {}) }
-  ),
+  s({ trig = "date", wordTrig = true }, {
+    f(f_date, {})
+  }),
+  s({ trig = "time", wordTrig = true }, {
+    f(f_time, {})
+  }),
+  s({ trig = "datetime", wordTrig = true }, {
+    f(f_datetime, {})
+  }),
 })
+

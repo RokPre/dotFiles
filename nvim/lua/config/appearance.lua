@@ -112,4 +112,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	end,
 })
 
-vim.cmd("colorscheme tokyonight-night")
+tn_ok, _ = pcall(require, "tokyonight")
+if tn_ok then
+	vim.cmd("colorscheme tokyonight-night")
+end

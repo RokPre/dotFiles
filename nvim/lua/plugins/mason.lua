@@ -1,13 +1,8 @@
 return {
 	"williamboman/mason.nvim",
 	opts = {
+    -- Look at: conform.lua
 		ensure_installed = {
-			"shfmt",
-			"pyright",
-			"stylua",
-			"black",
-			"xmlformatter",
-			"doctoc",
 		},
 	},
 	---@param opts MasonSettings | {ensure_installed: string[]}
