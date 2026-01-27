@@ -96,12 +96,7 @@ Focused tab bg: bg
 - [ ] TODO: Image to latex (nvim/lua/myPlugins/notes.lua)
 - [ ] TODO: Add folders to linking.lua
 - [ ] TODO: Add spell checker for english and slovene
-- [ ] TODO: Remove obsidian plugin and make your own alternativs (nvim/lua/myPlugins/notes.lua)
 - [ ] TODO: Rewrite linking.lua
 - [ ] TODO: community.lua
-- [ ] TODO: Make your own jump list that supports jumping on the same line. (normal jump list does not allow this)
-- [ ] TODO: Rewrite UFO folding. Looks like a mess. Should be relatively simple.
-
-
 
 [Official markdown spec](https://spec.commonmark.org)

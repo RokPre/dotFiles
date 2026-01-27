@@ -20,3 +20,4 @@ jellyfin https://193.77.150.218:8920/web/#/home
 sonarr http://localhost:8989/
 radarr http://localhost:7878/
 qbittorrent http://localhost:8080/
+studis https://studisfe.uni-lj.si/DashboardStudent

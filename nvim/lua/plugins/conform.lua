@@ -1,7 +1,7 @@
 return {
 	"stevearc/conform.nvim",
 	config = function()
-		local ok, mason = pcall(require, "mason")
+		local ok, _ = pcall(require, "mason")
 		if ok then
 			local cfg = require("mason.settings").current
 			local ensure = cfg.ensure_installed or {}

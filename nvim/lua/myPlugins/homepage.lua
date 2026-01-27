@@ -1,6 +1,3 @@
--- TODO: https://chatgpt.com/g/g-p-68f6214d376c8191bab3c705a7729b6f-dotfiles/shared/c/69051466-f370-8328-b194-330e80e68d28?owner_user_id=user-zAOyDfoGfoo7lCKjae2iBIwx
--- TODO: When seting the opts for the homepage window and buffer, get the current user config, and the when unseting them revert tot he original user config.
--- TODO: Use global homepage win in all functions
 local M = {}
 
 M.home_buf = vim.api.nvim_create_buf(false, true)
@@ -99,6 +96,7 @@ table.insert(M.opts.actions, {
 })
 
 local function get_homepage_win()
+  -- Returns the window that contains the homepage buffer. Else return nil.
 	local wins = vim.api.nvim_tabpage_list_wins(0)
 
 	for _, win in ipairs(wins) do
@@ -315,6 +313,7 @@ end, { noremap = true, silent = true })
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
 		vim.schedule(function()
+      -- If vim was opened without any arguments and is not in "lazy".
 			if #vim.fn.argv() == 0 and vim.bo.filetype ~= "lazy" then
 				-- Unlist buffers
 				local buffers = vim.api.nvim_list_bufs()

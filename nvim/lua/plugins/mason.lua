@@ -1,8 +1,11 @@
 return {
 	"williamboman/mason.nvim",
 	opts = {
-    -- Look at: conform.lua
+		-- Look at: conform.lua
 		ensure_installed = {
+			"lua-language-server",
+			"basedpyright",
+			"bash-language-server",
 		},
 	},
 	---@param opts MasonSettings | {ensure_installed: string[]}
