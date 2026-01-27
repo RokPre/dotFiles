@@ -42,6 +42,8 @@ return {
 	-- { import = "plugins.webDevIcons" }, -- Web icons
 	-- { import = "plugins.winShift" }, -- Window management
 	-- { import = "plugins.zen" }, -- Zen mode
+
+	{ import = "plugins.lsp" }, -- LSP
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
 	{ import = "plugins.cmp" }, -- Text completion
 	{ import = "plugins.colorizer" }, -- Colorcode highlight
