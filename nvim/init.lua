@@ -8,6 +8,7 @@ require("myPlugins.notes") -- ✅
 require("myPlugins.projectManager") -- ✅
 require("myPlugins.quickToggle") -- ✅
 require("myPlugins.reopenBuffer") -- ✅
+require("myPlugins.bufferClosing") -- ✅
 require("myPlugins.sessionManager") -- ✅
 require("myPlugins.todoList") -- ❌
 require("myPlugins.precognitionTreesitter") -- ✅

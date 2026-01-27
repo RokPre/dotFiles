@@ -1,14 +1,15 @@
 return {
-	-- SUNSETED { import = "plugins.superMaven" }, -- AI code completion
 	-- { import = "plugins.aerial" }, -- Keymaps menu
 	-- { import = "plugins.betterGoToFile" }, -- Browser like buffers
 	-- { import = "plugins.bigfile" },
 	-- { import = "plugins.biscuits" }, -- Better debugging
 	-- { import = "plugins.codex" }, -- Codex
+	-- { import = "plugins.copilot" }, -- Supermaven replement
 	-- { import = "plugins.dap" }, -- Better debugging
 	-- { import = "plugins.dapMason" },
 	-- { import = "plugins.dapui" },
 	-- { import = "plugins.entireFile" }, -- For selecting entire file
+	-- { import = "plugins.flash" }, -- Better navigation
 	-- { import = "plugins.lazyGit" }, -- Lazy git
 	-- { import = "plugins.livePreview" },
 	-- { import = "plugins.markdownPreview" }, -- Markdown redenring
@@ -29,9 +30,9 @@ return {
 	-- { import = "plugins.pywal16" },               -- Colorscheme
 	-- { import = "plugins.remote" }, -- ssh remote
 	-- { import = "plugins.snacks" },      -- Many small plugins
+	-- { import = "plugins.superMaven" }, -- SUNSETED AI code completion
 	-- { import = "plugins.todoComments" }, -- Todo comments
 	-- { import = "plugins.toggleCheckboxes" }, -- Checkboxes
-	-- { import = "plugins.treeSitter" }, -- Code parser
 	-- { import = "plugins.treeSitterTextObjects" }, -- Code parser
 	-- { import = "plugins.undoTree" }, -- Better undos
 	-- { import = "plugins.venn" }, -- Better debugging
@@ -45,9 +46,7 @@ return {
 	{ import = "plugins.cmp" }, -- Text completion
 	{ import = "plugins.colorizer" }, -- Colorcode highlight
 	{ import = "plugins.conform" }, -- Code formatter
-	{ import = "plugins.copilot" }, -- Supermaven replement
 	{ import = "plugins.dressing" }, -- Ui enhancements
-	{ import = "plugins.flash" }, -- Better navigation
 	{ import = "plugins.gitSigns" }, -- Github signs in file
 	{ import = "plugins.luaLine" }, -- Status line
 	{ import = "plugins.luasnip" }, -- Snippets
@@ -58,6 +57,7 @@ return {
 	{ import = "plugins.tabOut" }, -- Use tab for navigation
 	{ import = "plugins.telescope" }, -- Fuzzy finder
 	{ import = "plugins.theme" }, -- Theme
+	{ import = "plugins.treeSitter" }, -- Code parser
 	{ import = "plugins.treesj" },
 	{ import = "plugins.ufo" }, -- Code folding
 	{ import = "plugins.whichKey" }, -- Keymaps menu

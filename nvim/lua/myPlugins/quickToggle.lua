@@ -1,3 +1,4 @@
+-- ✅ feature complete
 local quickToggle = function()
   local word = vim.fn.expand("<cword>")
 

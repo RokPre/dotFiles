@@ -1,112 +1,33 @@
 return {
-	{
-		"nvim-treesitter/nvim-treesitter",
-		branch = "master",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
-			"nvim-treesitter/playground",
-		},
-		config = function()
-			vim.filetype.add({
-				extension = {
-					launch = "xml",
-				},
-			})
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = {
-					"css",
-					"html",
-					"javascript",
-					"python",
-					"latex",
-					"scss",
-					"tsx",
-					"markdown",
-					"xml",
-				},
-				fold = { enable = true },
-				sync_install = true,
-				auto_install = true,
-				ignore_install = { "" },
-				modules = {},
-				highlight = {
-					enable = true,
-				},
-				textobjects = {
-					select = {
-						enable = true,
-						lookahead = true,
-						keymaps = {
-							["af"] = "@function.outer",
-							["ac"] = "@class.outer",
-							["al"] = "@loop.outer",
-							["ap"] = "@parameter.outer",
-							["ai"] = "@conditional.outer",
-							["ar"] = "@return.outer",
-							["aa"] = "@assignment.outer",
-							["am"] = "@comment.outer",
-							["ab"] = "@block.outer",
-							["if"] = "@function.inner",
-							["ic"] = "@class.inner",
-							["il"] = "@loop.inner",
-							["ip"] = "@parameter.inner",
-							["ii"] = "@conditional.inner",
-							["ir"] = "@return.inner",
-							["ia"] = "@assignment.inner",
-							["im"] = "@comment.inner",
-							["ib"] = "@block.inner",
-						},
-					},
-					move = {
-						enable = true,
-						set_jumps = true,
-						goto_next_start = {
-							["]f"] = "@function.outer",
-							["]c"] = "@class.outer",
-							["]l"] = "@loop.outer",
-							["]p"] = "@parameter.outer",
-							["]i"] = "@conditional.outer",
-							["]r"] = "@return.outer",
-							["]a"] = "@assignment.outer",
-							["]b"] = "@block.outer",
-							["]C"] = "@comment.outer",
-						},
-						goto_previous_start = {
-							["[f"] = "@function.outer",
-							["[c"] = "@class.outer",
-							["[l"] = "@loop.outer",
-							["[p"] = "@parameter.outer",
-							["[i"] = "@conditional.outer",
-							["[r"] = "@return.outer",
-							["[a"] = "@assignment.outer",
-							["[b"] = "@block.outer",
-							["[C"] = "@comment.outer",
-						},
-						goto_next_end = {
-							["}f"] = "@function.outer",
-							["}c"] = "@class.outer",
-							["}l"] = "@loop.outer",
-							["}p"] = "@parameter.outer",
-							["}i"] = "@conditional.outer",
-							["}r"] = "@return.outer",
-							["}a"] = "@assignment.outer",
-							["}b"] = "@block.outer",
-							["}C"] = "@comment.outer",
-						},
-						goto_previous_end = {
-							["{f"] = "@function.outer",
-							["{c"] = "@class.outer",
-							["{l"] = "@loop.outer",
-							["{p"] = "@parameter.outer",
-							["{i"] = "@conditional.outer",
-							["{r"] = "@return.outer",
-							["{a"] = "@assignment.outer",
-							["{b"] = "@block.outer",
-							["{C"] = "@comment.outer",
-						},
-					},
-				},
-			})
-		end,
-	},
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    branch = "master",
+    config = function()
+      vim.filetype.add({
+        extension = {
+          launch = "xml",
+        },
+      })
+
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = {
+          "css",
+          "html",
+          "javascript",
+          "python",
+          "latex",
+          "scss",
+          "tsx",
+          "markdown",
+          "markdown_inline",
+          "xml",
+        },
+        auto_install = true,
+        highlight = {
+          enable = true,
+        },
+      })
+    end,
+  },
 }

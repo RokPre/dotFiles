@@ -1,3 +1,4 @@
+-- ✅ feature complete
 -- Session name: cwd path replaced with %%
 -- Sessions saved in vim.fn.stdpath("data"): ~/.local/state/nvim/sessions/
 
