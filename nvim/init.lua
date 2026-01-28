@@ -4,14 +4,13 @@ require("config.lazy") -- lua/config/lazy.lua
 -- My plugins
 require("myPlugins.homepage") -- ✅
 require("myPlugins.linking") -- ✅
-require("myPlugins.notes") -- ✅
+-- require("myPlugins.notes") -- ❌
 require("myPlugins.projectManager") -- ✅
 require("myPlugins.quickToggle") -- ✅
 require("myPlugins.reopenBuffer") -- ✅
 require("myPlugins.bufferClosing") -- ✅
 require("myPlugins.sessionManager") -- ✅
-require("myPlugins.todoList") -- ❌
-require("myPlugins.precognitionTreesitter") -- ✅
+require("myPlugins.todoList") -- ✅
 
 -- Config
 require("config.appearance")

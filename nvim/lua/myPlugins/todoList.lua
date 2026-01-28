@@ -68,7 +68,7 @@ function M.buffer()
 	})
 end
 
-function M.folder()
+function M.cwd()
 	M.search_todos({ cwd = vim.fn.getcwd() })
 end
 
@@ -84,7 +84,7 @@ end
 -- Keymaps
 vim.keymap.set("n", "<Leader>ta", M.all, { desc = "Search all TODOs" })
 vim.keymap.set("n", "<Leader>tt", M.buffer, { desc = "Search TODOs in file's folder" })
-vim.keymap.set("n", "<Leader>tf", M.folder, { desc = "Search TODOs in cwd" })
+vim.keymap.set("n", "<Leader>tc", M.cwd, { desc = "Search TODOs in cwd" })
 vim.keymap.set("n", "<Leader>tg", M.git, { desc = "Search TODOs in git repo" })
 vim.keymap.set("n", "<Leader>ti", function()
 	vim.cmd("e " .. M.opts.ignore_file)

@@ -1,6 +1,6 @@
 return {
 	"akinsho/bufferline.nvim",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
+	dependencies = { "nvim-tree/nvim-web-devicons" },
 	event = "VeryLazy",
 	keys = {
 		{ "<C-S-h>", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
@@ -42,6 +42,21 @@ return {
 			callback = function()
 				vim.schedule(function()
 					pcall(require, "bufferline")
+					local ok, a = pcall(require, "config.appearance")
+					if ok then
+						vim.api.nvim_set_hl(0, "BufferLineFill", { bg = a.bg_dark })
+						vim.api.nvim_set_hl(0, "BufferLineBackground", { fg = a.fg_dark, bg = a.bg_dark })
+						vim.api.nvim_set_hl(0, "BufferLineBufferSelected", { fg = a.orange, bg = a.bg })
+						vim.api.nvim_set_hl(0, "BufferLineBufferVisible", { fg = a.orange_dull, bg = a.bg })
+
+						vim.api.nvim_set_hl(0, "BufferLineSeparator", { fg = a.bg_dark, bg = a.bg_dark })
+						vim.api.nvim_set_hl(0, "BufferLineSeparatorSelected", { fg = a.bg_dark, bg = a.bg })
+						vim.api.nvim_set_hl(0, "BufferLineSeparatorVisible", { fg = a.bg_dark, bg = a.bg })
+
+						vim.api.nvim_set_hl(0, "BufferLineDuplicate", { fg = a.fg, bg = a.bg })
+						vim.api.nvim_set_hl(0, "BufferLineDuplicateSelected", { fg = a.orange, bg = a.bg })
+						vim.api.nvim_set_hl(0, "BufferLineDuplicateVisible", { fg = a.fg, bg = a.bg })
+					end
 				end)
 			end,
 		})
