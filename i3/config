@@ -185,6 +185,7 @@ assign [class="Vivaldi-stable"] $ws2
 assign [class="st-256color"] $ws3
 assign [class="Zotero"] $ws4
 assign [class="Zathura"] $ws4
+assign [class="xournalpp"] $ws4
 assign [class=".*"] $ws0
 
 for_window [class="st-256color" instance="qutebrowser"] move to workspace $ws2
@@ -195,6 +196,7 @@ exec_always --no-startup-id i3-msg '[class="Vivaldi-stable"] move to workspace $
 exec_always --no-startup-id i3-msg '[class="st-256color"] move to workspace $ws3'
 exec_always --no-startup-id i3-msg '[class="Zotero"] move to workspace $ws4'
 exec_always --no-startup-id i3-msg '[class="Zathura"] move to workspace $ws4'
+exec_always --no-startup-id i3-msg '[class="xournalpp"] move to workspace $ws4'
 
 # Keyboard shortcut for manual laucnh
 # Here are the parameters that are os specific

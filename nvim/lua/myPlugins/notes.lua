@@ -815,7 +815,7 @@ function source:execute(completion_item, callback)
 end
 
 ---Register your source to nvim-cmp.
-local cmp_ok, cmp = pcall(require,"cmp")
+local cmp_ok, cmp = pcall(require, "cmp")
 if cmp_ok then
 	cmp.register_source("notes", source)
 
