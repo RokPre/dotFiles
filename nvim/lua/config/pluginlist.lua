@@ -34,22 +34,20 @@ return {
 	-- { import = "plugins.todoComments" }, -- Todo comments
 	-- { import = "plugins.toggleCheckboxes" }, -- Checkboxes
 	-- { import = "plugins.treeSitterTextObjects" }, -- Code parser
-	-- { import = "plugins.undoTree" }, -- Better undos
 	-- { import = "plugins.venn" }, -- Better debugging
-	-- { import = "plugins.vimTex" }, -- Tex support
 	-- { import = "plugins.vsnip" }, -- Snippets
 	-- { import = "plugins.w3m" }, -- Web browser
 	-- { import = "plugins.webDevIcons" }, -- Web icons
 	-- { import = "plugins.winShift" }, -- Window management
 	-- { import = "plugins.zen" }, -- Zen mode
 
-	{ import = "plugins.lsp" }, -- LSP
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
 	{ import = "plugins.cmp" }, -- Text completion
 	{ import = "plugins.colorizer" }, -- Colorcode highlight
 	{ import = "plugins.conform" }, -- Code formatter
 	{ import = "plugins.dressing" }, -- Ui enhancements
 	{ import = "plugins.gitSigns" }, -- Github signs in file
+	{ import = "plugins.lsp" }, -- LSP
 	{ import = "plugins.luaLine" }, -- Status line
 	{ import = "plugins.luasnip" }, -- Snippets
 	{ import = "plugins.mason" }, -- install lsp
@@ -63,4 +61,6 @@ return {
 	{ import = "plugins.treesj" },
 	{ import = "plugins.ufo" }, -- Code folding
 	{ import = "plugins.whichKey" }, -- Keymaps menu
+	{ import = "plugins.undoTree" }, -- Better undos
+	{ import = "plugins.vimTex" }, -- Tex support
 }
