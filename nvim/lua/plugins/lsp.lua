@@ -1,5 +1,17 @@
 local version = vim.version()
 
+-- Diagnostics config
+vim.diagnostic.config({
+  virtual_text = {
+    spacing = 2,
+    prefix = "●",
+  },
+  signs = false,
+  underline = true,
+  update_in_insert = false,
+})
+
+
 local ok, _ = pcall(require, "mason")
 if ok then
   local cfg = require("mason.settings").current
@@ -79,17 +91,6 @@ if version.major > 0 or (version.major == 0 and version.minor >= 11) then
   }
 
   vim.lsp.enable("bashls")
-
-  -- Diagnostics config
-  vim.diagnostic.config({
-    virtual_text = {
-      spacing = 2,
-      prefix = "●",
-    },
-    signs = false,
-    underline = true,
-    update_in_insert = false,
-  })
 
   return {}
 else
