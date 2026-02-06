@@ -26,7 +26,7 @@ return {
     vim.keymap.set('n', '<leader>g', "<Nop>", { desc = 'Live grep' })
     vim.keymap.set('n', '<leader>gh', function() builtin.live_grep({ cwd = os.getenv("HOME") }) end, { desc = 'Home' })
     vim.keymap.set('n', '<leader>gc', builtin.live_grep, { desc = 'Cwd' })
-    vim.keymap.set('n', '<leader>gg', builtin.git_files, {desc = "Git"})
+    vim.keymap.set('n', '<leader>gg', function() builtin.live_grep({cwd = require("myPlugins.utils").get_git_repo()})end , {desc = "Git"})
     vim.keymap.set('n', '<leader>gb', function() builtin.live_grep({ grep_open_files = true }) end, { desc = 'Live grep in open buffers' })
 
     -- TreeSitter

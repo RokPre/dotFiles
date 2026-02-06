@@ -56,7 +56,6 @@ M = {
 
 vim.api.nvim_create_autocmd("ColorScheme", {
 	callback = function()
-		vim.print("test")
 		vim.api.nvim_set_hl(0, "LineNr", { fg = M.orange })
 		vim.api.nvim_set_hl(0, "CursorLineNr", { fg = M.orange })
 		vim.api.nvim_set_hl(0, "LineNrAbove", { fg = M.orange_dull })

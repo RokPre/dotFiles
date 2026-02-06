@@ -180,3 +180,10 @@ fi
 if [ ! -f "$HOME/sync/knowledgeVault/Dnevnik/$(date +"%Y - %j").md" ]; then
   echo "⚠️ Write in your daily note!"
 fi
+
+# Node and npm
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  \. "$HOME/.nvm/nvm.sh"
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+fi

@@ -44,6 +44,7 @@ return {
 				["<leader>d"] = "actions.cd",
 				["<leader>s"] = "actions.change_sort",
 				["<leader>x"] = "actions.open_external",
+				["gx"] = "actions.open_external",
 				["<leader>."] = "actions.toggle_hidden",
 				["<leader>Y"] = "actions.copy_to_system_clipboard",
 				["<leader>P"] = "actions.paste_from_system_clipboard",

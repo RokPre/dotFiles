@@ -15,6 +15,7 @@ alias slam="roslaunch turtlebot3_slam turtlebot3_slam.launch"
 alias saveMap="rosrun map_server map_saver -f ~/sync/2.\ Diplomsko\ delo/ros/map.yaml"
 alias rosKill="rosnode kill -a && killall -9 rosmaster rosout roslaunch gzserver gzclient"
 alias tfTreeView="rosrun tf view_frames && zathura frames.pdf"
+alias turtlebot3Sync="rsync -av --delete ~/catkin_ws/src/pametna_tovarna/ ubuntu@192.168.9.140:~/catkin_ws/src/pametna_tovarna/"
 
 alias cm='cd ~/catkin_ws && catkin_make'
 
@@ -22,6 +23,9 @@ alias cm='cd ~/catkin_ws && catkin_make'
 alias mainserver-suspend="ssh mainservercontroller@100.64.70.128 'mainserver-suspend'"
 alias mainserver-wake="ssh mainservercontroller@100.64.70.128 'mainserver-wake'"
 alias mainserver-ssh="ssh roksmainserver@193.77.150.218 -L 8080:localhost:8080 -L 7878:localhost:7878 -L 9696:localhost:9696 -L 8686:localhost:8686 -L 8989:localhost:8989"
+
+# Other
+alias open="xdg-open"
 
 # Tmux
 if command -v tmux >/dev/null 2>&1; then

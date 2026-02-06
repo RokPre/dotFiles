@@ -147,8 +147,7 @@ bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui -r | xclip -selection cli
 
 # Set background
 # exec_always --no-startup-id sh -c 'feh --bg-fill $HOME/sync/rice/wallpapers/getherCrop.jpg'
-# exec_always --no-startup-id sh -c 'feh --bg-fill "$(find ~/sync/rice/wallpapers/chromebookWallpapers -type f | shuf -n1)"'
-exec_always --no-startup-id feh --bg-fill ~/sync/rice/wallpapers/tokyoNightCowboyBipBop.png
+exec_always --no-startup-id sh -c 'feh --bg-fill "$(find ~/cloud/images/paintingsImpressionisemNaturalGaleryOfArt -type f | shuf -n1)"'
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1
@@ -181,7 +180,7 @@ bindsym $mod+shift+z move container to workspace $ws4 workspace $ws4
 
 assign [class="neovide"] $ws1
 assign [class="qutebrowser"] $ws2
-assign [class="Vivaldi-stable"] $ws2
+assign [class="Vivaldi*"] $ws2
 assign [class="st-256color"] $ws3
 assign [class="Zotero"] $ws4
 assign [class="Zathura"] $ws4
@@ -192,7 +191,7 @@ for_window [class="st-256color" instance="qutebrowser"] move to workspace $ws2
 
 exec_always --no-startup-id i3-msg '[class="neovide"] move to workspace $ws1'
 exec_always --no-startup-id i3-msg '[class="qutebrowser"] move to workspace $ws2'
-exec_always --no-startup-id i3-msg '[class="Vivaldi-stable"] move to workspace $ws2'
+exec_always --no-startup-id i3-msg '[class="Vivaldi*"] move to workspace $ws2'
 exec_always --no-startup-id i3-msg '[class="st-256color"] move to workspace $ws3'
 exec_always --no-startup-id i3-msg '[class="Zotero"] move to workspace $ws4'
 exec_always --no-startup-id i3-msg '[class="Zathura"] move to workspace $ws4'
