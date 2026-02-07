@@ -4,6 +4,8 @@ M = {
 	bg = "#1a1b26",
 	bg_dark = "#16161e",
 	bg_darker = "#0C0E14",
+	bg_light = "#20212c",
+	bg_lighter = "#242837",
 	bg_highlight = "#292e42",
 
 	fg = "#c0caf5",
@@ -23,8 +25,6 @@ M = {
 	magenta = "#bb9af7",
 	purple = "#9d7cd8",
 	comment = "#656e94",
-
-	bg_lighter = "#20212c",
 
 	blue_light = "#9fc3ff",
 	cyan_light = "#b8edff",
