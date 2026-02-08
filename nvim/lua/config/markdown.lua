@@ -1,13 +1,13 @@
 local ok_ls, ls = pcall(require, "luasnip")
 if not ok_ls then
-  return
+	return
 end
 
 local ok_tsu, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
 
 local ok_fmt, fmt_mod = pcall(require, "luasnip.extras.fmt")
 if not ok_fmt then
-  return
+	return
 end
 
 local s = ls.snippet
@@ -17,84 +17,93 @@ local f = ls.function_node
 local fmt = fmt_mod.fmt
 
 local function in_math()
-  if not ok_tsu then
-    return false
-  end
+	if not ok_tsu then
+		return false
+	end
 
-  local node = ts_utils.get_node_at_cursor()
-  if not node then
-    return false
-  end
+	local node = ts_utils.get_node_at_cursor()
+	if not node then
+		return false
+	end
 
-  while node do
-    local tp = node:type()
-    if tp == "inline_formula" or tp == "displayed_equation" then
-      return true
-    end
-    node = node:parent()
-  end
+	while node do
+		local tp = node:type()
+		if tp == "inline_formula" or tp == "displayed_equation" then
+			return true
+		end
+		node = node:parent()
+	end
 
-  return false
+	return false
 end
 
 local function link_for_day(offset, label)
-  local time = os.time() + (offset or 0)
-  local day_str = os.date("%Y - %j", time)
-  if label then
-    return "[[" .. day_str .. "|" .. label .. "]]"
-  end
-  return "[[" .. day_str .. "]]"
+	local time = os.time() + (offset or 0)
+	local day_str = os.date("%Y - %j", time)
+	if label then
+		return "[[" .. day_str .. "|" .. label .. "]]"
+	end
+	return "[[" .. day_str .. "]]"
 end
 
-local function today() return link_for_day(0, "today") end
-local function danes() return link_for_day(0, "danes") end
-local function yesterday() return link_for_day(-86400) end
-local function uceraj() return link_for_day(-86400) end
-local function tomorrow() return link_for_day(86400) end
-local function jutri() return link_for_day(86400) end
+local function today()
+	return link_for_day(0, "today")
+end
+local function danes()
+	return link_for_day(0, "danes")
+end
+local function yesterday()
+	return link_for_day(-86400)
+end
+local function uceraj()
+	return link_for_day(-86400)
+end
+local function tomorrow()
+	return link_for_day(86400)
+end
+local function jutri()
+	return link_for_day(86400)
+end
 
 local function make_matrix(rows, cols)
-  if not ok_tsu then
-    return nil
-  end
+	if not ok_tsu then
+		return nil
+	end
 
-  local text = "\\begin{{bmatrix}}\n"
-  local nodes = {}
-  local idx = 1
+	local text = "\\begin{{bmatrix}}\n"
+	local nodes = {}
+	local idx = 1
 
-  for r = 1, rows do
-    for c = 1, cols do
-      text = text .. "{}"
-      if c < cols then
-        text = text .. " & "
-      end
-      nodes[idx] = i(idx)
-      idx = idx + 1
-    end
-    if r < rows then
-      text = text .. "\\\\\n"
-    else
-      text = text .. "\n"
-    end
-  end
+	for r = 1, rows do
+		for c = 1, cols do
+			text = text .. "{}"
+			if c < cols then
+				text = text .. " & "
+			end
+			nodes[idx] = i(idx)
+			idx = idx + 1
+		end
+		if r < rows then
+			text = text .. "\\\\\n"
+		else
+			text = text .. "\n"
+		end
+	end
 
-  text = text .. "\\end{{bmatrix}}"
+	text = text .. "\\end{{bmatrix}}"
 
-  return s(
-    { trig = "m" .. rows .. "x" .. cols, wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-    fmt(text, nodes)
-  )
+	return s({ trig = "m" .. rows .. "x" .. cols, wordTrig = true, condition = in_math, snippetType = "autosnippet" }, fmt(text, nodes))
 end
 
 if ok_tsu then
-  for r = 1, 10 do
-    for c = 1, 10 do
-      local snip = make_matrix(r, c)
-      if snip then
-        ls.add_snippets("markdown", { snip })
-      end
-    end
-  end
+	for r = 1, 10 do
+		for c = 1, 10 do
+			local snip = make_matrix(r, c)
+			if snip then
+				ls.add_snippets("markdown", { snip })
+			end
+		end
+	end
 end
 
 ls.add_snippets("markdown", {
