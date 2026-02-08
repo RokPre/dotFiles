@@ -3,6 +3,7 @@ local M = {}
 
 M.opts = {
 	search_folder = vim.fn.expand("~/"),
+	search_depth = 5,
 	run_on_startup = true,
 	run_on_startup_delay = 1000,
 	ignore_file = vim.fn.stdpath("config") .. "/.project_manager_ignores",
@@ -60,9 +61,11 @@ function M.update_cache_async()
 	if M.opts.search_folder == nil then
 		M.opts.search_folder = vim.fn.expand("~")
 	end
-	vim.system({ "find", M.opts.search_folder, "-type", "d", "-name", ".git" }, { text = true }, function(obj)
+	vim.notify("Started updating the cache.")
+	vim.system({ "find", M.opts.search_folder, "-maxdepth", M.opts.search_depth, "-type", "d", "-name", ".git" }, { text = true }, function(obj)
 		vim.schedule(function()
 			utils.write_table_to_file(vim.split(obj.stdout, "\n"), cache_file)
+			vim.notify("Updated the project cache")
 		end)
 	end)
 end
