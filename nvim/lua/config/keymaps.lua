@@ -8,8 +8,8 @@ keymap({ "n", "v", "o" }, "gl", "$", { silent = true, noremap = true, desc = "En
 -- Scroll
 vim.keymap.set({ "n", "i", "v", "t" }, "<A-s>", "<Esc>:normal! 5zh<CR>", opts) -- Scroll left
 vim.keymap.set({ "n", "i", "v", "t" }, "<A-g>", "<Esc>:normal! 5zl<CR>", opts) -- Scroll right
-vim.keymap.set({ "n", "i", "v", "t" }, "<A-d>", function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("5<C-e>", true, false, true), "n", false) end, opts) -- Scroll down
-vim.keymap.set({ "n", "i", "v", "t" }, "<A-f>", function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("5<C-y>", true, false, true), "n", false) end, opts) -- Scroll up
+vim.keymap.set({ "n", "i", "v", "t" }, "<A-f>", function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("5<C-e>", true, false, true), "n", false) end, opts) -- Scroll down
+vim.keymap.set({ "n", "i", "v", "t" }, "<A-d>", function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("5<C-y>", true, false, true), "n", false) end, opts) -- Scroll up
 
 -- Move highlighted text between lines
 keymap("n", "<C-j>", ":m .+1<CR>==", opts) -- move line up
