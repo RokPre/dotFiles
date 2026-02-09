@@ -96,7 +96,7 @@ bindsym $mod+Delete exec i3lock -c 1a1b26
 
 # Borders
 default_border pixel 4
-hide_edge_borders both
+# hide_edge_borders both
 
 # Gaps
 gaps inner 10
@@ -112,7 +112,8 @@ client.focused #ff9e64 #ff9e64 #ff9e64 #ff9e64 #ff9e64
 client.unfocused #565f89 #565f89 #565f89 #565f89 #565f89
 
 # Focused inactive window (another window in the same workspace)
-client.focused_inactive #7aa2f7 #7aa2f7 #7aa2f7 #7aa2f7 #7aa2f7
+# client.focused_inactive #7aa2f7 #7aa2f7 #7aa2f7 #7aa2f7 #7aa2f7
+client.focused_inactive #565f89 #565f89 #565f89 #565f89 #565f89
 
 # Picom (gray out unfocused)
 # exec --no-startup-id ~/.config/i3/scripts/picom.sh
