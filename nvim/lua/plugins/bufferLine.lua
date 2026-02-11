@@ -17,7 +17,10 @@ return {
 			show_close_icon = false,
 			show_buffer_close_icons = false,
 			separator_style = "slope",
-			truncate_names = false,
+			truncate_names = true,
+      tab_size = 18, -- Default
+      left_trunc_marker = '󰁎',
+      right_trunc_marker = '󰁕',
 			offsets = {
 				{
 					filetype = "neo-tree",
@@ -56,6 +59,8 @@ return {
 						vim.api.nvim_set_hl(0, "BufferLineDuplicate", { fg = a.fg, bg = a.bg })
 						vim.api.nvim_set_hl(0, "BufferLineDuplicateSelected", { fg = a.orange, bg = a.bg })
 						vim.api.nvim_set_hl(0, "BufferLineDuplicateVisible", { fg = a.fg, bg = a.bg })
+
+            vim.api.nvim_set_hl(0, "BufferLineTruncMarker", { fg = a.fg_darker, bg = a.bg_dark })
 					end
 				end)
 			end,
