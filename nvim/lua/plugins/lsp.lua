@@ -95,9 +95,20 @@ if version.major > 0 or (version.major == 0 and version.minor >= 11) then
 else
 	return {
 		"neovim/nvim-lspconfig",
-		dependencies = "folke/lazydev.nvim",
-		config = function()
-			require("lspconfig").lua_ls.setup({})
+    dependencies = "folke/lazydev.nvim",
+    config = function()
+      require("lspconfig").lua_ls.setup({
+        settings= {
+          Lua = {
+            diagnostics = {
+              globals = { "vim", "require" },
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true)
+            }
+          }
+        }
+      })
 			require("lspconfig").pyrefly.setup({})
 		end,
 	}
