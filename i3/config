@@ -17,6 +17,7 @@ font pango:Cousine Nerd Font Mono 16
 # Launch a program
 bindsym Mod1+space exec --no-startup-id rofi -show drun
 bindsym $mod+space exec --no-startup-id rofi -show window
+bindsym $mod+period exec --no-startup-id /usr/bin/rofimoji
 
 # kill focused window
 bindsym $mod+q kill
@@ -125,7 +126,7 @@ client.focused_inactive #565f89 #565f89 #565f89 #565f89 #565f89
 bindsym $mod+Ctrl+m exec --no-startup-id ~/.config/i3/scripts/toggleMouse.sh
 
 # CapsLock
-exec_always --no-startup-id ~/.config/i3/scripts/capsLock.sh
+exec --no-startup-id ~/.config/i3/scripts/capsLock.sh
 exec_always --no-startup-id /usr/bin/numlockx on
 
 # Volumen control
@@ -147,8 +148,7 @@ bindsym Print exec --no-startup-id flameshot screen
 bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui -r | xclip -selection clipboard -t image/png
 
 # Set background
-# exec_always --no-startup-id sh -c 'feh --bg-fill $HOME/sync/rice/wallpapers/getherCrop.jpg'
-exec_always --no-startup-id sh -c 'feh --bg-fill "$(find ~/cloud/images/paintingsImpressionisemNaturalGaleryOfArt -type f | shuf -n1)"'
+exec_always --no-startup-id feh --bg-fill --randomize ~/cloud/images/wallpapers/oilPaintings
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1
