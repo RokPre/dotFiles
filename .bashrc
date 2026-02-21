@@ -177,6 +177,9 @@ if [[ $- == *i* ]]; then
     fi
 fi
 
+# Configure manpages
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
 if [ ! -f "$HOME/sync/knowledgeVault/Dnevnik/$(date +"%Y - %j").md" ]; then
   echo "⚠️ Write in your daily note!"
 fi
