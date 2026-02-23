@@ -93,7 +93,8 @@ bindsym $mod+Ctrl+k resize shrink height 10 px or 10 ppt
 bindsym $mod+Ctrl+l resize grow width 10 px or 10 ppt
 
 # Lock the screen
-bindsym $mod+Delete exec i3lock -c 1a1b26
+# bindsym $mod+Delete exec i3lock -c 1a1b26
+bindsym $mod+Delete exec ~/.config/i3/scripts/lock.sh
 
 # Borders
 default_border pixel 4
