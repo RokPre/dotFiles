@@ -6,7 +6,6 @@
 
 config_version: 2
 settings:
-  content.notifications.enabled:
-    https://calendar.google.com: true
-  content.register_protocol_handler:
-    https://calendar.google.com?cid=%25s: true
+  content.headers.user_agent:
+    https://accounts.google.com/*: Mozilla/5.0 ({os_info}; rv:130.0) Gecko/20100101
+      Firefox/130
