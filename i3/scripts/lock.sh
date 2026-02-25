@@ -10,20 +10,24 @@ amixer set Master mute > /dev/null
 
 # Waits for i3lock to die or valid fingerprint to kill i3lock
 wait_fingerprint() {
-    while pidof i3lock > /dev/null; do
-        if (fprintd-verify | grep -q verify-match); then
-            pkill i3lock
-        fi
-    done
+  if (fprintd-verify | grep -q verify-match); then
+    pkill i3lock
+  fi
+}
+
+wait_unlock() {
+  if pgrep -x i3lock >/dev/null && echo "running" || echo "not running"
+    kill $(pgrep fprintd-verify)
+  fi
 }
 
 # Code taken from xss-lock transfer sleep lock example
 if [[ -e /dev/fd/${XSS_SLEEP_LOCK_FD:--1} ]]; then
-    kill_i3lock() {
-        pkill -xu $EUID "$@" i3lock
-    }
+  kill_i3lock() {
+    pkill -xu $EUID "$@" i3lock
+  }
 
-    trap kill_i3lock TERM INT
+trap kill_i3lock TERM INT
 
     # we have to make sure the locker does not inherit a copy of the lock fd
     i3lock -i /tmp/screenshot.png {XSS_SLEEP_LOCK_FD}<&-
@@ -32,9 +36,10 @@ if [[ -e /dev/fd/${XSS_SLEEP_LOCK_FD:--1} ]]; then
     exec {XSS_SLEEP_LOCK_FD}<&-
 
     wait_fingerprint
-else
+  else
     trap 'kill %%' TERM INT
-    i3lock -nui /tmp/screenshot.png &
+    i3lock -ni /tmp/screenshot.png &
+    (wait_unlock) &
     wait_fingerprint
 fi
 

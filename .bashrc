@@ -190,3 +190,7 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 fi
+
+# Created by `pipx` on 2026-02-25 10:47:04
+export PATH="$PATH:/home/rok/.local/bin"
+. "$HOME/.cargo/env"

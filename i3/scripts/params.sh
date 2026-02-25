@@ -2,31 +2,17 @@
 
 . /etc/os-release
 
-params=~/.config/i3/params
+params="$HOME/.config/i3/params"
 
-case "$ID" in
-  ubuntu)
-    nvim_bin="/opt/nvim-linux-x86_64/bin/nvim"
-    browser_cmd="/usr/bin/vivaldi"
-    ;;
-  arch)
-    nvim_bin="/usr/bin/nvim"
-    browser_cmd="/usr/bin/qutebrowser"
-    ;;
-  *)
-    nvim_bin="$(command -v nvim)"
-    browser_cmd="$(command -v qutebrowser)"
-    ;;
-esac
+browser_cmd="$(command -v qutebrowser 2>/dev/null || command -v vivaldi 2>/dev/null || true)"
 
-# overwrite the params file each time (not append!)
+[ -n "$browser_cmd" ] || { echo "qutebrowser or vivaldi not found in PATH" >&2; exit 1; }
+
 cat > "$params" <<EOF
 # Look at scripts/params.sh
 exec_always --no-startup-id ~/.config/i3/scripts/params.sh
 
-set \$nvim_bin $nvim_bin
 set \$browser_cmd $browser_cmd
 
-bindsym \$mod+Ctrl+n exec --no-startup-id /usr/bin/neovide --neovim-bin $nvim_bin; workspace \$ws1
-bindsym \$mod+Ctrl+i exec --no-startup-id sh -c '$browser_cmd'; workspace \$ws2
+bindsym \$mod+Ctrl+i exec --no-startup-id \$browser_cmd; workspace \$ws2
 EOF
