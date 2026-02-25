@@ -11,7 +11,7 @@ amixer set Master mute > /dev/null
 # Waits for i3lock to die or valid fingerprint to kill i3lock
 wait_fingerprint() {
     while pidof i3lock > /dev/null; do
-        if (timeout 5 fprintd-verify | grep -q verify-match); then
+        if (fprintd-verify | grep -q verify-match); then
             pkill i3lock
         fi
     done
