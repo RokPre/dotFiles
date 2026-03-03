@@ -149,7 +149,9 @@ bindsym Print exec --no-startup-id flameshot screen
 bindsym $mod+Ctrl+s exec --no-startup-id flameshot gui -r | xclip -selection clipboard -t image/png
 
 # Set background
-exec_always --no-startup-id feh --bg-fill --randomize ~/cloud/images/wallpapers/oilPaintings
+# Sets different wallpapers for different monitors
+# exec_always --no-startup-id feh --bg-fill --randomize ~/cloud/images/wallpapers/oilPaintings
+exec_always --no-startup-id feh --bg-fill $(find ~/cloud/images/wallpapers/oilPaintings -type f | shuf -n 1)
 
 # Change eDP-1 for different display mapping(HDMI-1, DP-1, etc.). Use xrandr to view available outputs.
 exec_always --no-startup-id xsetwacom set "Wacom Intuos BT M Pen stylus" MapToOutput eDP-1
@@ -193,7 +195,8 @@ exec_always --no-startup-id i3-msg '[class="Zotero|Zathura|xournalpp"] move to w
 
 # Keyboard shortcut for manual laucnh
 # Here are the parameters that are os specific
-include ~/.config/i3/params
+exec_always --no-startup-id ~/.config/i3/scripts/params.sh
+include /tmp/params
 
 bindsym $mod+Ctrl+n exec --no-startup-id st -c nvim -e nvim; workspace $ws1
 # bindsym $mod+Ctrl+i exec --no-startup-id $qute_command; workspace $ws2
