@@ -121,15 +121,15 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-# Ros
+# Ros1
 # export IP=192.168.9.115
 # export ROS_MASTER=$IP
 # export ROS_MASTER_URI=http://$IP:11311
 # export TURTLEBOT3_MODEL="waffle_pi"
 # export ROS_IP=192.168.9.115
-export ROS_IP=192.168.222.15
-export ROS_MASTER_URI=http://192.168.222.15:11311
-export TURTLEBOT3_MODEL="waffle_pi"
+# export ROS_IP=192.168.222.15
+# export ROS_MASTER_URI=http://192.168.222.15:11311
+# export TURTLEBOT3_MODEL="waffle_pi"
 
 
 if [ -f /opt/ros/noetic/setup.bash ]; then
@@ -142,6 +142,15 @@ fi
 
 if [ -f ~/catkin_ws/devel/setup.bash ]; then
   source ~/catkin_ws/devel/setup.bash
+fi
+
+# Ros2
+if [ -f /opt/ros/jazzy/setup.bash ]; then
+  source /opt/ros/jazzy/setup.bash
+fi
+
+if [ -f ~/bookros2_ws/src/install/setup.bash ]; then
+  source ~/bookros2_ws/install/setup.bash
 fi
 
 if [ -d /opt/zotero ]; then
