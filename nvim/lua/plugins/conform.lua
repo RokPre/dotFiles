@@ -13,6 +13,7 @@ return {
 				"reorder-python-imports",
 				"xmlformatter",
 				"shfmt",
+				"clang-format",
 			})
 
 			cfg.ensure_installed = ensure
@@ -38,6 +39,7 @@ return {
 				python = { "autopep8", "autoflake", "reorder-python-imports" },
 				xml = { "xmlformatter" },
 				bash = { "shfmt" },
+				cpp = { "clang-format" },
 				["*"] = { "trim_whitespace" },
 			},
 			format_on_save = {

@@ -26,6 +26,10 @@ if ok then
 		})
 	end
 
+	vim.list_extend(ensure, {
+		"clangd",
+	})
+
 	cfg.ensure_installed = ensure
 
 	local mr_ok, mr = pcall(require, "mason-registry")
@@ -91,24 +95,33 @@ if version.major > 0 or (version.major == 0 and version.minor >= 11) then
 
 	vim.lsp.enable("bashls")
 
+	-- Cpp lsp
+	vim.lsp.config["clangd"] = {
+		cmd = { "clangd" },
+		filetypes = { "c", "cpp" },
+		root_markers = { ".clangd", ".clang-tidy", ".clang-format", "compile_commands.json", "compile_flags.txt", "configure.ac", ".git" },
+	}
+
+	vim.lsp.enable("clangd")
+
 	return {}
 else
 	return {
 		"neovim/nvim-lspconfig",
-    dependencies = "folke/lazydev.nvim",
-    config = function()
-      require("lspconfig").lua_ls.setup({
-        settings= {
-          Lua = {
-            diagnostics = {
-              globals = { "vim", "require" },
-            },
-            workspace = {
-              library = vim.api.nvim_get_runtime_file("", true)
-            }
-          }
-        }
-      })
+		dependencies = "folke/lazydev.nvim",
+		config = function()
+			require("lspconfig").lua_ls.setup({
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = { "vim", "require" },
+						},
+						workspace = {
+							library = vim.api.nvim_get_runtime_file("", true),
+						},
+					},
+				},
+			})
 			require("lspconfig").pyrefly.setup({})
 		end,
 	}
