@@ -30,7 +30,6 @@ return {
 	-- { import = "plugins.pywal16" },               -- Colorscheme
 	-- { import = "plugins.remote" }, -- ssh remote
 	-- { import = "plugins.snacks" },      -- Many small plugins
-	-- { import = "plugins.superMaven" }, -- SUNSETED AI code completion
 	-- { import = "plugins.todoComments" }, -- Todo comments
 	-- { import = "plugins.toggleCheckboxes" }, -- Checkboxes
 	-- { import = "plugins.treeSitterTextObjects" }, -- Code parser
@@ -41,6 +40,7 @@ return {
 	-- { import = "plugins.winShift" }, -- Window management
 	-- { import = "plugins.zen" }, -- Zen mode
 
+	{ import = "plugins.avante" },
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
 	{ import = "plugins.cmp" }, -- Text completion
 	{ import = "plugins.colorizer" }, -- Colorcode highlight
@@ -54,13 +54,14 @@ return {
 	{ import = "plugins.oil" }, -- File explorer
 	{ import = "plugins.rainbowDelimiters" }, -- Rainbow delimiters
 	{ import = "plugins.renderMarkdown" },
+	{ import = "plugins.superMaven" }, -- SUNSETED AI code completion
 	{ import = "plugins.tabOut" }, -- Use tab for navigation
 	{ import = "plugins.telescope" }, -- Fuzzy finder
 	{ import = "plugins.theme" }, -- Theme
 	{ import = "plugins.treeSitter" }, -- Code parser
 	{ import = "plugins.treesj" },
 	{ import = "plugins.ufo" }, -- Code folding
-	{ import = "plugins.whichKey" }, -- Keymaps menu
 	{ import = "plugins.undoTree" }, -- Better undos
 	{ import = "plugins.vimTex" }, -- Tex support
+	{ import = "plugins.whichKey" }, -- Keymaps menu
 }

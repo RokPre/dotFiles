@@ -1,75 +1,42 @@
 return {
 	"yetone/avante.nvim",
-	event = "VeryLazy",
-	version = false, -- Never set this value to "*"! Never!
-	opts = {
-		-- add any opts here
-		-- for example
-		provider = "ollama",
-		ollama = {
-			endpoint = "http://100.96.164.112:11434",
-			model = "qwen2.5-coder:7b", -- your desired model (or use gpt-4o, etc.)
-			timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-			temperature = 0,
-			max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-			--reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
-		},
-		deepseek14 = {
-			endpoint = "http://100.96.164.112:11434",
-			model = "deepseek-r1:14b", -- your desired model (or use gpt-4o, etc.)
-			timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-			temperature = 0,
-			max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-			--reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
-		},
-		deepseek8 = {
-			endpoint = "http://100.96.164.112:11434",
-			model = "deepseek-r1:8b", -- your desired model (or use gpt-4o, etc.)
-			timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-			temperature = 0,
-			max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-			--reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
-		},
-	},
-	-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-	build = "make",
-	-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+	event = "VeryLazy", -- Load only when needed, not at startup
+	version = false,
+
 	dependencies = {
-		"nvim-treesitter/nvim-treesitter",
-		"stevearc/dressing.nvim",
-		"nvim-lua/plenary.nvim",
-		"MunifTanjim/nui.nvim",
-		--- The below dependencies are optional,
-		"echasnovski/mini.pick", -- for file_selector provider mini.pick
-		"nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-		"hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-		"ibhagwan/fzf-lua", -- for file_selector provider fzf
-		"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-		"zbirenbaum/copilot.lua", -- for providers='copilot'
-		{
-			-- support for image pasting
-			"HakonHarnes/img-clip.nvim",
-			event = "VeryLazy",
-			opts = {
-				-- recommended settings
-				default = {
-					embed_image_as_base64 = false,
-					prompt_for_file_name = false,
-					drag_and_drop = {
-						insert_mode = true,
-					},
-					-- required for Windows users
-					use_absolute_path = true,
-				},
+		"nvim-tree/nvim-web-devicons", -- File icons
+		"stevearc/dressing.nvim", -- Better UI inputs
+		"nvim-lua/plenary.nvim", -- Utility functions
+		"MunifTanjim/nui.nvim", -- UI components
+
+		-- Optional but recommended
+		"nvim-treesitter/nvim-treesitter", -- Better syntax understanding
+	},
+
+	opts = {
+		provider = "codex",
+		acp_providers = {
+			["codex"] = {
+				command = "npx",
+				args = { "-y", "-g", "@zed-industries/codex-acp" },
 			},
 		},
-		{
-			-- Make sure to set this up properly if you have lazy=true
-			"MeanderingProgrammer/render-markdown.nvim",
-			opts = {
-				file_types = { "markdown", "Avante" },
+
+		-- UI behavior
+		behaviour = {
+			auto_suggestions = false, -- Enable inline suggestions
+			auto_set_highlight_group = true,
+			auto_apply_diff_after_generation = false, -- Review before applying
+		},
+
+		-- What to send as context
+		windows = {
+			wrap = true, -- Wrap long lines in chat
+			width = 40, -- Sidebar width (% of screen)
+			sidebar_header = {
+				align = "center",
+				rounded = true,
 			},
-			ft = { "markdown", "Avante" },
 		},
 	},
 }
