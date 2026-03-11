@@ -16,6 +16,8 @@ alias saveMap="rosrun map_server map_saver -f ~/sync/2.\ Diplomsko\ delo/ros/map
 alias rosKill="rosnode kill -a && killall -9 rosmaster rosout roslaunch gzserver gzclient"
 alias tfTreeView="rosrun tf view_frames && zathura frames.pdf"
 alias turtlebot3Sync="rsync -av --delete ~/catkin_ws/src/pametna_tovarna/ ubuntu@192.168.9.140:~/catkin_ws/src/pametna_tovarna/"
+alias rostopic="ros2 topic"
+alias rosnode="ros2 node"
 
 alias cm='cd ~/catkin_ws && catkin_make'
 
