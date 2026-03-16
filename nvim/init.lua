@@ -19,6 +19,7 @@ require("config.latex")
 require("config.markdown")
 require("config.other")
 require("config.python")
+require("config.shell_messages")
 require("config.snippets")
 require("config.terminal")
 
