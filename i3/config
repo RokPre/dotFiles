@@ -8,7 +8,7 @@ bindsym $mod+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 bindsym $mod+Ctrl+r restart
 
 # Automatically change the display layout based on current connected monitors.
-exec --no-startup-id autorandr --change
+exec_always --no-startup-id autorandr --change
 exec --no-startup-id dunst
 
 # Set the font
@@ -169,29 +169,34 @@ set $ws1 "1. Nvim"
 set $ws2 "2. Web"
 set $ws3 "3. Term"
 set $ws4 "4. PDF"
+set $ws5 "5. Codex"
 
 bindsym $mod+a workspace $ws0
 bindsym $mod+n workspace $ws1
 bindsym $mod+i workspace $ws2
 bindsym $mod+t workspace $ws3
 bindsym $mod+z workspace $ws4
+bindsym $mod+c workspace $ws5
 
 bindsym $mod+shift+a move container to workspace $ws0 workspace $ws0
 bindsym $mod+shift+n move container to workspace $ws1 workspace $ws1
 bindsym $mod+shift+i move container to workspace $ws2 workspace $ws2
 bindsym $mod+shift+t move container to workspace $ws3 workspace $ws3
 bindsym $mod+shift+z move container to workspace $ws4 workspace $ws4
+bindsym $mod+shift+c move container to workspace $ws5 workspace $ws5
 
 assign [class="nvim|neovide"] $ws1
 assign [class="qutebrowser|Vivaldi*|firefox*"] $ws2
 assign [class="st-256color"] $ws3
 assign [class="Zotero|Zathura|xournalpp"] $ws4
+assign [class="codex"] $ws5
 assign [class=".*"] $ws0
 
 exec_always --no-startup-id i3-msg '[class="nvim|neovide"] move to workspace $ws1'
 exec_always --no-startup-id i3-msg '[class="qutebrowser|Vivaldi*|firefox*"] move to workspace $ws2'
 exec_always --no-startup-id i3-msg '[class="st-256color"] move to workspace $ws3'
 exec_always --no-startup-id i3-msg '[class="Zotero|Zathura|xournalpp"] move to workspace $ws4'
+exec_always --no-startup-id i3-msg '[class="codex"] move to workspace $ws4'
 
 # Keyboard shortcut for manual laucnh
 # Here are the parameters that are os specific
@@ -201,7 +206,7 @@ include /tmp/params
 bindsym $mod+Ctrl+n exec --no-startup-id st -c nvim -e nvim; workspace $ws1
 # bindsym $mod+Ctrl+i exec --no-startup-id $qute_command; workspace $ws2
 bindsym $mod+Ctrl+t exec --no-startup-id st; workspace $ws3
-bindsym $mod+Ctrl+x exec --no-startup-id st tmux; workspace $ws3
+bindsym $mod+Ctrl+c exec --no-startup-id st -c codex -e codex; workspace $ws5
 
 # Mount server, should be last for timout reasons.
 exec_always --no-startup-id ~/.config/i3/scripts/serverMount.sh
