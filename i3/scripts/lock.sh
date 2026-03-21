@@ -15,4 +15,4 @@ i3lock -n -i /tmp/screenshot.png
 # Unmute
 amixer set Master unmute > /dev/null
 # Resume
-playerctl play
+# playerctl play
