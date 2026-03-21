@@ -199,3 +199,9 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 fi
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# OPENRCT2
+export DISPLAY=:0
+export XAUTHORITY="$HOME/.Xauthority"
+export SDL_VIDEODRIVER=x11
