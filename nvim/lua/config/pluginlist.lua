@@ -45,6 +45,7 @@ return {
 	{ import = "plugins.cmp" }, -- Text completion
 	{ import = "plugins.colorizer" }, -- Colorcode highlight
 	{ import = "plugins.conform" }, -- Code formatter
+	{ import = "plugins.csvview" }, -- CSV viewer
 	{ import = "plugins.dressing" }, -- Ui enhancements
 	{ import = "plugins.gitSigns" }, -- Github signs in file
 	{ import = "plugins.lsp" }, -- LSP

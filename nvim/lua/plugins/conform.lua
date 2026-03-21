@@ -40,6 +40,7 @@ return {
 				xml = { "xmlformatter" },
 				bash = { "shfmt" },
 				cpp = { "clang-format" },
+				c = { "clang-format" },
 				["*"] = { "trim_whitespace" },
 			},
 			format_on_save = {
