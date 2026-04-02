@@ -26,6 +26,10 @@ alias mainserver-suspend="ssh mainservercontroller@100.64.70.128 'mainserver-sus
 alias mainserver-wake="ssh mainservercontroller@100.64.70.128 'mainserver-wake'"
 alias mainserver-ssh="ssh roksmainserver@193.77.150.218"
 
+# Tailscale
+alias ts="tailscale"
+alias tss="tailscale status"
+
 # Other
 alias open="xdg-open"
 

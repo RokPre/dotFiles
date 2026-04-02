@@ -205,3 +205,6 @@ fi
 export DISPLAY=:0
 export XAUTHORITY="$HOME/.Xauthority"
 export SDL_VIDEODRIVER=x11
+
+# Python?
+export PATH="$HOME/.local/bin:$PATH"
