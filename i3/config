@@ -170,6 +170,7 @@ set $ws2 "2. Web"
 set $ws3 "3. Term"
 set $ws4 "4. PDF"
 set $ws5 "5. Codex"
+set $ws6 "6. YouTube"
 
 bindsym $mod+a workspace $ws0
 bindsym $mod+n workspace $ws1
@@ -177,6 +178,7 @@ bindsym $mod+i workspace $ws2
 bindsym $mod+t workspace $ws3
 bindsym $mod+z workspace $ws4
 bindsym $mod+c workspace $ws5
+bindsym $mod+y workspace $ws6
 
 bindsym $mod+shift+a move container to workspace $ws0 workspace $ws0
 bindsym $mod+shift+n move container to workspace $ws1 workspace $ws1
@@ -184,19 +186,22 @@ bindsym $mod+shift+i move container to workspace $ws2 workspace $ws2
 bindsym $mod+shift+t move container to workspace $ws3 workspace $ws3
 bindsym $mod+shift+z move container to workspace $ws4 workspace $ws4
 bindsym $mod+shift+c move container to workspace $ws5 workspace $ws5
+bindsym $mod+shift+y move container to workspace $ws6 workspace $ws6
 
 assign [class="nvim|neovide"] $ws1
 assign [class="qutebrowser|Vivaldi*|firefox*"] $ws2
 assign [class="st-256color"] $ws3
 assign [class="Zotero|Zathura|xournalpp"] $ws4
 assign [class="codex"] $ws5
+assign [class="freetube|FreeTube"] $ws6
 assign [class=".*"] $ws0
 
 exec_always --no-startup-id i3-msg '[class="nvim|neovide"] move to workspace $ws1'
 exec_always --no-startup-id i3-msg '[class="qutebrowser|Vivaldi*|firefox*"] move to workspace $ws2'
 exec_always --no-startup-id i3-msg '[class="st-256color"] move to workspace $ws3'
 exec_always --no-startup-id i3-msg '[class="Zotero|Zathura|xournalpp"] move to workspace $ws4'
-exec_always --no-startup-id i3-msg '[class="codex"] move to workspace $ws4'
+exec_always --no-startup-id i3-msg '[class="codex"] move to workspace $ws5'
+exec_always --no-startup-id i3-msg '[class="freetube|FreeTube"] move to workspace $ws6'
 
 # Keyboard shortcut for manual laucnh
 # Here are the parameters that are os specific
@@ -206,7 +211,8 @@ include /tmp/params
 bindsym $mod+Ctrl+n exec --no-startup-id st -c nvim -e nvim; workspace $ws1
 # bindsym $mod+Ctrl+i exec --no-startup-id $qute_command; workspace $ws2
 bindsym $mod+Ctrl+t exec --no-startup-id st; workspace $ws3
-bindsym $mod+Ctrl+c exec --no-startup-id st -c codex -e codex; workspace $ws5
+bindsym $mod+Ctrl+c exec --no-startup-id st -c codex -e ~/.config/i3/scripts/codex.sh; workspace $ws5
+bindsym $mod+Ctrl+y exec --no-startup-id freetube; workspace $ws6
 
 # Mount server, should be last for timout reasons.
 exec_always --no-startup-id ~/.config/i3/scripts/serverMount.sh
