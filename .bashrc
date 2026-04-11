@@ -149,10 +149,6 @@ if [ -f /opt/ros/jazzy/setup.bash ]; then
   source /opt/ros/jazzy/setup.bash
 fi
 
-if [ -f ~/bookros2_ws/src/install/setup.bash ]; then
-  source ~/bookros2_ws/install/setup.bash
-fi
-
 if [ -d /opt/zotero ]; then
   PATH="$PATH:/opt/zotero"
 fi
@@ -163,12 +159,12 @@ if [ -d "$HOME/sync/bashUtils" ]; then
 fi
 
 # Tmux - terminal multiplexer
-if [[ $- == *i* ]]; then
-  if [[ -z "$TMUX" ]]; then
-    # Check if the server is running with tmux ls. If it is try to attach to it. If either the server is not running or the attach fails, start a new server.
-    (tmux ls > /dev/null 2>&1 && tmux attach -t $(tmux ls -F "#{session_created}:#{session_id}:Attached #{session_attached}" | sort -n | grep "Attached 0" | head -n 1 | cut -d: -f2)) || tmux
-  fi
-fi
+# if [[ $- == *i* ]]; then
+#   if [[ -z "$TMUX" ]]; then
+#     # Check if the server is running with tmux ls. If it is try to attach to it. If either the server is not running or the attach fails, start a new server.
+#     (tmux ls > /dev/null 2>&1 && tmux attach -t $(tmux ls -F "#{session_created}:#{session_id}:Attached #{session_attached}" | sort -n | grep "Attached 0" | head -n 1 | cut -d: -f2)) || tmux
+#   fi
+# fi
 
 
 # Atuin - better bash history

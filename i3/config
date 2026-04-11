@@ -10,6 +10,7 @@ bindsym $mod+Ctrl+r restart
 # Automatically change the display layout based on current connected monitors.
 exec_always --no-startup-id autorandr --change
 exec --no-startup-id dunst
+exec --no-startup-id caffeine
 
 # Set the font
 font pango:Cousine Nerd Font Mono 16
@@ -190,7 +191,7 @@ bindsym $mod+shift+y move container to workspace $ws6 workspace $ws6
 
 assign [class="nvim|neovide"] $ws1
 assign [class="qutebrowser|Vivaldi*|firefox*"] $ws2
-assign [class="st-256color"] $ws3
+assign [class="st-256color|tmux"] $ws3
 assign [class="Zotero|Zathura|xournalpp"] $ws4
 assign [class="codex"] $ws5
 assign [class="freetube|FreeTube"] $ws6
@@ -210,7 +211,7 @@ include /tmp/params
 
 bindsym $mod+Ctrl+n exec --no-startup-id st -c nvim -e nvim; workspace $ws1
 # bindsym $mod+Ctrl+i exec --no-startup-id $qute_command; workspace $ws2
-bindsym $mod+Ctrl+t exec --no-startup-id st; workspace $ws3
+bindsym $mod+Ctrl+t exec --no-startup-id st -c tmux -e ~/.config/i3/scripts/tmux.sh; workspace $ws3
 bindsym $mod+Ctrl+c exec --no-startup-id st -c codex -e ~/.config/i3/scripts/codex.sh; workspace $ws5
 bindsym $mod+Ctrl+y exec --no-startup-id freetube; workspace $ws6
 
