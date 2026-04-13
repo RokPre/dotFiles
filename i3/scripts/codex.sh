@@ -7,7 +7,7 @@ roots=(
   "$HOME/offline"
 )
 
-repo="$(
+repo_path="$(
   find "${roots[@]}" -maxdepth 4 -type d -name .git 2>/dev/null \
     | sed 's#/.git$##' \
     | sort -u \
@@ -29,4 +29,4 @@ if ! codex_path="$(command -v codex)"; then
 fi
 
 # exec tmux new-session -c "$repo" 'codex resume' -s "codex-$repo"
-exec tmux new-session -A -n "codex" -s "codex-$repo_name" -c "$repo" "$codex_path resume"
+exec tmux new-session -A -n "codex" -s "codex-$repo_name" -c "$repo_path" "$codex_path resume"

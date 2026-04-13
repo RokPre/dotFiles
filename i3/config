@@ -180,6 +180,7 @@ bindsym $mod+t workspace $ws3
 bindsym $mod+z workspace $ws4
 bindsym $mod+c workspace $ws5
 bindsym $mod+y workspace $ws6
+bindsym $mod+Tab workspace back_and_forth
 
 bindsym $mod+shift+a move container to workspace $ws0 workspace $ws0
 bindsym $mod+shift+n move container to workspace $ws1 workspace $ws1
@@ -199,7 +200,7 @@ assign [class=".*"] $ws0
 
 exec_always --no-startup-id i3-msg '[class="nvim|neovide"] move to workspace $ws1'
 exec_always --no-startup-id i3-msg '[class="qutebrowser|Vivaldi*|firefox*"] move to workspace $ws2'
-exec_always --no-startup-id i3-msg '[class="st-256color"] move to workspace $ws3'
+exec_always --no-startup-id i3-msg '[class="st-256color|tmux"] move to workspace $ws3'
 exec_always --no-startup-id i3-msg '[class="Zotero|Zathura|xournalpp"] move to workspace $ws4'
 exec_always --no-startup-id i3-msg '[class="codex"] move to workspace $ws5'
 exec_always --no-startup-id i3-msg '[class="freetube|FreeTube"] move to workspace $ws6'
