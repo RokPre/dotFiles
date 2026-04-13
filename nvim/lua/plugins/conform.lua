@@ -41,6 +41,7 @@ return {
 				bash = { "shfmt" },
 				cpp = { "clang-format" },
 				c = { "clang-format" },
+				markdown = { "prettier" },
 				["*"] = { "trim_whitespace" },
 			},
 			format_on_save = {

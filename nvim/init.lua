@@ -14,6 +14,7 @@ require("myPlugins.todoList") -- ✅
 
 -- Config
 require("config.appearance")
+require("config.bashUtils")
 require("config.keymaps")
 require("config.latex")
 require("config.markdown")

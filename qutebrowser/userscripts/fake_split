@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+import os
+import re
+import time
+
+# Set the current tab to be the tabs tab
+fifo = os.environ["QUTE_FIFO"]
+with open(fifo, "a", encoding="utf-8") as f:
+    f.write(":open -t qute://tabs")
+f.close()
+
+time.sleep(1)
+
+# Get the HTML of the page
+fifo = os.environ["QUTE_HTML"]
+with open(fifo, "r", encoding="utf-8") as f:
+    html = f.read()
+
+urls = re.findall(r'<td class="name"><a href="([^"]+)"', html)
+
+time.sleep(1)
+
+fifo = os.environ["QUTE_FIFO"]
+with open(fifo, "a", encoding="utf-8") as f:
+    for url in urls:
+        f.write(f":message-info {url}\n")
+        f.write(f":tab-select {url}\n")
+        f.write(":tab-clone\n")

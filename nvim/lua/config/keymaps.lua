@@ -8,8 +8,12 @@ keymap({ "n", "v", "o" }, "gl", "$", { silent = true, noremap = true, desc = "En
 -- Scroll
 vim.keymap.set({ "n", "i", "v", "t" }, "<A-s>", "<Esc>:normal! 5zh<CR>", opts) -- Scroll left
 vim.keymap.set({ "n", "i", "v", "t" }, "<A-g>", "<Esc>:normal! 5zl<CR>", opts) -- Scroll right
-vim.keymap.set({ "n", "i", "v", "t" }, "<A-f>", function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("5<C-e>", true, false, true), "n", false) end, opts) -- Scroll down
-vim.keymap.set({ "n", "i", "v", "t" }, "<A-d>", function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("5<C-y>", true, false, true), "n", false) end, opts) -- Scroll up
+vim.keymap.set({ "n", "i", "v", "t" }, "<A-f>", function()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("5<C-e>", true, false, true), "n", false)
+end, opts) -- Scroll down
+vim.keymap.set({ "n", "i", "v", "t" }, "<A-d>", function()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("5<C-y>", true, false, true), "n", false)
+end, opts) -- Scroll up
 
 -- Move highlighted text between lines
 keymap("n", "<C-j>", ":m .+1<CR>==", opts) -- move line up
@@ -32,6 +36,7 @@ keymap("n", "<C-s>", "<Cmd>w<CR>", opts)
 
 -- search
 keymap("n", "f", "*", opts) -- Search for word under cursor
+keymap("n", "F", "#", opts) -- Search for word under cursor
 keymap("n", "<C-f>", "/", opts) -- Search in normal mode
 keymap("x", "<C-f>", "<Esc>/\\%V") -- Search visual selection
 
@@ -48,6 +53,8 @@ keymap({ "n", "x" }, "d", '"0d', opts)
 keymap({ "n", "x" }, "D", '"0D', opts)
 keymap({ "n", "x" }, "c", '"0c', opts)
 keymap({ "n", "x" }, "C", '"0C', opts)
+keymap({ "n", "x" }, "x", '"0x', opts)
+keymap({ "n", "x" }, "X", '"0X', opts)
 
 keymap({ "n", "x" }, "p", '"0p', opts)
 keymap({ "n", "x" }, "P", '"0P', opts)
@@ -154,17 +161,17 @@ keymap("n", "<leader>d", "<Cmd>lua vim.diagnostic.open_float()<CR>", { silent = 
 
 -- Find and replace
 local function visual_replace()
-  local search = vim.fn.escape(vim.fn.input("Replace: "), [[\/]])
-  if search == "" then
-    return
-  end
+	local search = vim.fn.escape(vim.fn.input("Replace: "), [[\/]])
+	if search == "" then
+		return
+	end
 
-  local replace = vim.fn.escape(vim.fn.input("With: "), [[\/&]])
-  if replace == "" then
-    return
-  end
+	local replace = vim.fn.escape(vim.fn.input("With: "), [[\/&]])
+	if replace == "" then
+		return
+	end
 
-  vim.cmd(string.format("'<,'>s/%s/%s/g", search, replace))
+	vim.cmd(string.format("'<,'>s/%s/%s/g", search, replace))
 end
 
 keymap("n", "<C-r>", "#*zz:s//", { silent = true, noremap = true, desc = "Replace" })

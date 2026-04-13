@@ -64,6 +64,17 @@ if version.major > 0 or (version.major == 0 and version.minor >= 11) then
 
 	vim.lsp.enable("basedpyright")
 
+	vim.lsp.config["pyrefly"] = {
+		cmd = { "/home/rok/.local/bin/pyrefly", "lsp" },
+		on_exit = function(code, _, _)
+			vim.schedule(function()
+				vim.notify("Closing Pyrefly LSP exited with code: " .. code, vim.log.levels.INFO)
+			end)
+		end,
+	}
+
+	vim.lsp.enable("pyrefly")
+
 	-- Lua lsp
 	vim.lsp.config["luals"] = {
 		cmd = { "lua-language-server" },

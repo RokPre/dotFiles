@@ -25,6 +25,7 @@ alias cm='cd ~/catkin_ws && catkin_make'
 alias mainserver-suspend="ssh mainservercontroller@100.64.70.128 'mainserver-suspend'"
 alias mainserver-wake="ssh mainservercontroller@100.64.70.128 'mainserver-wake'"
 alias mainserver-ssh="ssh roksmainserver@193.77.150.218"
+alias mainserver-ping="ping 193.77.150.218"
 
 # Tailscale
 alias ts="tailscale"
@@ -64,7 +65,7 @@ fi
 
 # Rsync - better copy
 if command -v rsync &> /dev/null; then
-  alias cp='rsync -avh --progress --partial --append-verify'
+  alias cp='rsync -avhc --progress --partial --append-verify'
 else
   echo "Rsync not found"
 fi

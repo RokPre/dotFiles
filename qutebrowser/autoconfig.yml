@@ -6,6 +6,13 @@
 
 config_version: 2
 settings:
-  content.headers.user_agent:
-    https://accounts.google.com/*: Mozilla/5.0 ({os_info}; rv:131.0) Gecko/20100101
-      Firefox/131.0
+  colors.webpage.darkmode.enabled:
+    global: false
+  colors.webpage.darkmode.policy.page:
+    global: always
+  colors.webpage.darkmode.threshold.background:
+    global: 10
+  colors.webpage.darkmode.threshold.foreground:
+    global: 245
+  content.register_protocol_handler:
+    https://mail.google.com?extsrc=mailto&url=%25s: true

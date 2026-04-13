@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [My dot files](#my-dot-files)
 - [Colorsheme tokyo-night](#colorsheme-tokyo-night)
@@ -11,6 +12,7 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # My dot files
+
 What programs do i use:
 
 Tiling window management: [i3](https://i3wm.org)
@@ -23,8 +25,8 @@ Notifications: [dunst](https://dunst-project.org/)
 pdf_reader: [zathura](https://pwmt.org/projects/zathura/)
 Program menu: [rofi](https://github.com/davatorium/rofi)
 
-
 # Colorsheme tokyo-night
+
 bg = "#1a1b26"
 bg_dark = "#16161e"
 bg_darker = "#0C0E14"
@@ -48,12 +50,14 @@ purple = "#9d7cd8"
 comment = "#656e94"
 
 ## My custom colors
+
 bg_lighter = "#20212c"
 
 fg_darker = "#858db0"
 fg_lighter = "#d1dcff"
 
 <!-- OKLAB +0.1 lightness -->
+
 blue_light = "#9fc3ff"
 cyan_light = "#b8edff"
 green_light = "#beef8a"
@@ -64,6 +68,7 @@ magenta_light = "#d9beff"
 purple_light = "#bc9bfa"
 
 <!-- OKLAB -0.1 lightness -->
+
 blue_dark = "#5d83d5"
 cyan_dark = "#5dafdd"
 green_dark = "#80ae4a"
@@ -74,6 +79,7 @@ magenta_dark = "#9c7bd5"
 purple_dark = "#7f5eb7"
 
 <!-- HSL /2 saturation -->
+
 blue_dull = "#9aadd8"
 cyan_dull = "#9dc7de"
 green_dull = "#9db583"
@@ -83,8 +89,8 @@ red_dull = "#fb728b"
 magenta_dull = "#c1b1e0"
 purple_dull = "#a493c1"
 
-
 ## Tab bar
+
 Tab bar bg: bg_dark
 Tab bar fg: fg_dark
 Unfocused tab fg: fg_dark
@@ -93,6 +99,7 @@ Focused tab fg: orange
 Focused tab bg: bg
 
 # TODO
+
 - [ ] TODO: Image to latex (nvim/lua/myPlugins/notes.lua)
 - [ ] TODO: Add folders to linking.lua
 - [ ] TODO: Add spell checker for english and slovene

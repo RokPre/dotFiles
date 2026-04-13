@@ -1,7 +1,6 @@
 return {
 	-- { import = "plugins.aerial" }, -- Keymaps menu
 	-- { import = "plugins.betterGoToFile" }, -- Browser like buffers
-	-- { import = "plugins.bigfile" },
 	-- { import = "plugins.biscuits" }, -- Better debugging
 	-- { import = "plugins.codex" }, -- Codex
 	-- { import = "plugins.copilot" }, -- Supermaven replement
@@ -12,7 +11,6 @@ return {
 	-- { import = "plugins.flash" }, -- Better navigation
 	-- { import = "plugins.lazyGit" }, -- Lazy git
 	-- { import = "plugins.livePreview" },
-	-- { import = "plugins.markdownPreview" }, -- Markdown redenring
 	-- { import = "plugins.markdownTable" }, -- Markdown table formatter
 	-- { import = "plugins.marks" }, -- Marks
 	-- { import = "plugins.mdPdf" },                 -- Browser like buffers
@@ -39,6 +37,7 @@ return {
 	-- { import = "plugins.webDevIcons" }, -- Web icons
 	-- { import = "plugins.winShift" }, -- Window management
 	-- { import = "plugins.zen" }, -- Zen mode
+	-- { import = "plugins.nvimIpynb" },
 
 	{ import = "plugins.avante" },
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
@@ -65,4 +64,6 @@ return {
 	{ import = "plugins.undoTree" }, -- Better undos
 	{ import = "plugins.vimTex" }, -- Tex support
 	{ import = "plugins.whichKey" }, -- Keymaps menu
+	{ import = "plugins.bigfile" },
+	{ import = "plugins.markdownPreview" }, -- Markdown redenring
 }
