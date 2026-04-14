@@ -17,6 +17,7 @@ patch < ../st-patches/st-dynamic-cursor-color-0.8.4.diff
 patch < ../st-patches/st-w3m-0.8.3.diff
 patch < ../st-patches/st-hidecursor-0.8.3.diff
 patch < ../st-patches/st-boxdraw_v2-0.8.5.diff
+patch < ../st-patches/st-OSC11-DSR-response.diff
 # patch < ../st-patches/st-keyboard_select-20200617-9ba7ecf.diff
 ```
 
