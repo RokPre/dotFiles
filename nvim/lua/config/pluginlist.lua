@@ -30,7 +30,6 @@ return {
 	-- { import = "plugins.snacks" },      -- Many small plugins
 	-- { import = "plugins.todoComments" }, -- Todo comments
 	-- { import = "plugins.toggleCheckboxes" }, -- Checkboxes
-	-- { import = "plugins.treeSitterTextObjects" }, -- Code parser
 	-- { import = "plugins.venn" }, -- Better debugging
 	-- { import = "plugins.vsnip" }, -- Snippets
 	-- { import = "plugins.w3m" }, -- Web browser
@@ -40,6 +39,7 @@ return {
 	-- { import = "plugins.nvimIpynb" },
 
 	{ import = "plugins.avante" },
+	{ import = "plugins.bigfile" },
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
 	{ import = "plugins.cmp" }, -- Text completion
 	{ import = "plugins.colorizer" }, -- Colorcode highlight
@@ -50,6 +50,7 @@ return {
 	{ import = "plugins.lsp" }, -- LSP
 	{ import = "plugins.luaLine" }, -- Status line
 	{ import = "plugins.luasnip" }, -- Snippets
+	{ import = "plugins.markdownPreview" }, -- Markdown redenring
 	{ import = "plugins.mason" }, -- install lsp
 	{ import = "plugins.oil" }, -- File explorer
 	{ import = "plugins.rainbowDelimiters" }, -- Rainbow delimiters
@@ -64,6 +65,5 @@ return {
 	{ import = "plugins.undoTree" }, -- Better undos
 	{ import = "plugins.vimTex" }, -- Tex support
 	{ import = "plugins.whichKey" }, -- Keymaps menu
-	{ import = "plugins.bigfile" },
-	{ import = "plugins.markdownPreview" }, -- Markdown redenring
+	{ import = "plugins.treeSitterTextObjects" }, -- Code parser
 }
