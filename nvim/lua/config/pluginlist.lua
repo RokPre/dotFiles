@@ -38,6 +38,8 @@ return {
 	-- { import = "plugins.zen" }, -- Zen mode
 	-- { import = "plugins.nvimIpynb" },
 
+	{ import = "myPlugins.mermaid" },
+
 	{ import = "plugins.avante" },
 	{ import = "plugins.bigfile" },
 	{ import = "plugins.bufferLine" }, -- Browser like buffers
